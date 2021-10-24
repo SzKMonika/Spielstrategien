@@ -36,12 +36,9 @@ class NimGame:
                 self.checkMove(take)
                 self.__sticks = self.__sticks - take
                 self.__recordState((self.__nextMove, self.__nextPlayer, take, self.__sticks))
-                #print("Spieler " + str(self.__nextPlayer) + " nimmt " + str(take) + ".")
                 self.__nextPlayer = (self.__nextPlayer%2+1)
-            #print("Spieler " + str(self.__nextPlayer) + " hat gewonnen.")
             self.__recordState((self.__nextMove, -self.__nextPlayer, None, None))
         except ValueError as e:
-            #print("Spieler " + str(self.__nextPlayer) + " hat wegen ungültigem Zug verloren: " + str(e))            
             self.__recordState((self.__nextMove, -(self.__nextPlayer%2+1), take, self.__sticks))
         
     def checkMove(self, take):
