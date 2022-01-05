@@ -74,11 +74,10 @@ def human(game):
 
 # -------------------- Computer player callbacks --------------------   
 def computer1(game):
-    """Ein Callback für einen dummen Computerspieler."""
-    nextTake = random.randint(game.minTake, game.maxTake)
-    return (nextTake if nextTake < game.sticks else game.sticks)
+    """Callback für einen dummen Computerspieler."""
+    return random.randint(game.minTake, min(game.maxTake, game.sticks))
 
 def computer2(game):
-    """Ein Callback für den optimalen Computerspieler."""
+    """Callback für den optimalen Computerspieler."""
     nextTake = (game.sticks - 1) % (game.minTake + game.maxTake)
     return (nextTake if nextTake > 0 else 1)

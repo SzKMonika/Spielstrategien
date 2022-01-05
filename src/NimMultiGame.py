@@ -1,5 +1,4 @@
 import random
-from functools import reduce
 
 # -------------------- class NimMultiGame --------------------
 class NimMultiGame:
@@ -19,7 +18,7 @@ class NimMultiGame:
         return self.__nextMove
 
     def isNotFinished(self):
-        return reduce(lambda a, b: a + b, self.__sticksList) > 0
+        return sum(self.__sticksList) > 0
 
     def play(self):
         """Startet das Spiel und ruft alternierend beide Spieler-Strategien auf, bis eine gewinnt."""
@@ -49,7 +48,7 @@ class NimMultiGame:
         s = ""
         for record in self.__moveRecords:
             if (record[1] >= 0):
-                s += "(" + str(record[0]) + ") " + str(record[2]) + " => " + str(record[3]) + " / "
+                s += "(" + str(record[0]) + "/" + str(record[1]) + ") " + str(record[2]) + " => " + str(record[3]) + "\n"
             else:
                 s += " Spieler " + str(-record[1]) + " gewinnt nach " + str(record[0]) + " Zügen!"
         print (s)
@@ -61,8 +60,16 @@ def human(game):
         + "..."))
     return eval(n)
 
+# -------------------- Computer player callbacks --------------------   
+def computer1(game):
+    """Callback für einen dummen Computerspieler."""
+    lst = game.sticksList
+    nonEmptySticksList = [(i, lst[i]) for i in range(len(lst)) if lst[i] > 0]
+    row = random.randint(0, len(nonEmptySticksList)-1)
+    take = random.randint(1, nonEmptySticksList[row][1])
+    return (nonEmptySticksList[row][0] + 1, take)
 
 #-------------MAIN
-nimGame = NimMultiGame(human, human, [1,3,5,7])
+nimGame = NimMultiGame(computer1, computer1, [1,3,5,7])
 nimGame.play()
 nimGame.getMoveRecords()
