@@ -164,7 +164,7 @@ def computer2(game):
     maxCol = 7
     selectedCol = 0
     selectedValue = 0
-    for col in range(1, 7):
+    for col in range(1, maxCol+1):
         row = countTokensIn(game.getColumn(col)) + 1
         if row > maxRow:
             continue
@@ -206,6 +206,6 @@ def getPlaceValue(row, col, maxRow = 6, maxCol = 7):
     return min(row, maxRow+1-row) + min(col, maxCol+1-col) + diagonal1 + diagonal2
 
 #-------------MAIN
-game = VierGewinnt(human, computer2)
+game = VierGewinnt(computer2, human)
 game.play()
 #game.printAllStates()
