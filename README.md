@@ -17,7 +17,7 @@ In dieser Variante des Nim-Spiels gibt es mehrere Reihen von Hölzchen, und die 
 
 ### Nim-Multi - Strategien
 * Dumm: Man nimmt immer von einer zufälligen Reihe eine zufällige Anzahl an Streichhölzer weg.
-* Mittel: Aus der Reihe mit den meisten Streichhölzer wird immer so gezogen, dass im Anschluss möglichst mind. 1 und gerade (Standard) bzw. ungerade (Misère) Anzahl an Einser-Reihen und mind. zwei Reihen mit mehr als 1 Hölzchen stehen bleiben. Wenn die Stellung nicht erreicht werden kann, dann werden in dieser Reihe 2 Hölzchen stehen gelassen.
+* Mittel: Aus der Reihe mit den meisten Streichhölzer wird immer so gezogen, dass im Anschluss möglichst mind. 1 und gerade (Standard) bzw. ungerade (Misère) Anzahl an Einser-Reihen und 0 oder mind. 2 Reihen mit mehr als 1 Hölzchen stehen bleiben. Wenn die Stellung nicht erreicht werden kann, dann werden in dieser Reihe 2 Hölzchen stehen gelassen.
 * Smart: Man nimmt Streichhölzer so weg, dass nachher eine *Verluststellung* für den Gegner hinterlassen wird. Eine *Verluststellung* erkennt man so, dass die bitweise exklusiv-ODER-Summe der Anzahl Streichhölzer in den einzelnen Reihen 0 ist. Diese Strategie gilt bei der Standard-Variante bis zum Schluss. Bei der Misère-Variante gilt es am Anfang bis zum Zug wo es genau eine Reihe mit mehr als einem Hölzchen gibt. Bei diesem Zug muss man einfach entweder alle oder alle bis auf ein Hölzchen wegnehmen, so dass dem Gegner eine ungerade Anzahl von Einser-Reihen übergeben wird.
 
 ## Vier gewinnt (Four in a row)
@@ -33,6 +33,6 @@ Das Spiel wird auf einem senkrecht stehenden hohlen Spielbrett gespielt, in das 
 Das Kalaha-Spielbrett besteht aus zwei Muldenreihen mit jeweils sechs Spielmulden plus eine Gewinnmulde jeweils auf der rechten Seite des gegenübersitzenden Spielers. Am Anfang legt man in jede Spielmulde gleich viele, z.B. 4 (oder auch 3, oder 6) Steinchen. Die Spieler bewegen die Steinchen abwechselnd und am Ende gewinnt derjenige Spieler, der mehr Steinchen in seiner Gewinnmulde gesammelt hat.
 
 ### Kalaha - Strategien
-* Dumm: ...
+* Dumm: Die Steine aus einer zufällig gewählten Mulde werden weggenommen.
 * Mittel: ...
 * Smart: Zuerst schauen wir, ob es einen Zug gibt, der den letzten Stein gerade in den Kalah bringt. Dann schauen wir ob wir mit einem Zug gegnerische Steine erbeuten können. Sonst schauen wir ob auf der anderen Seite leere Mulden gibt und versuchen auf unserer Seite die Mulde mit den meisten Steinen dadurch zu schützen, dass wir unsere Steine von dieser wegbringen. Zuletzt, wenn kein Regel davor gegriffen hat, suchen wir den Zug, der die wenigsten Steine auf die andere Seite bringt.

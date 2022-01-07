@@ -8,8 +8,7 @@ def meineStrategie(game):
     return (nextTake if nextTake > 0 else 1)
 
 # -------------------- MAIN --------------------   
-for i in range(10):
-    nimGame = NimGame(meineStrategie, computer2, 8, 3)
+for i in range(5):
+    nimGame = NimGame(meineStrategie, computer2, 15, 3)
     nimGame.play()
-    nimGame.getMoveRecords()
-
+    nimGame.printAllStates()
