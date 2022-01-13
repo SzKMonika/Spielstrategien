@@ -1,65 +1,43 @@
+from Game import Game, human
 import copy
 from functools import reduce
 import random
 
 # -------------------- class VierGewinnt --------------------
-class VierGewinnt:
+class VierGewinnt(Game):
     __ROWS = 6
     __COLUMNS = 7
     def __init__(self, player1, player2):
+        super(VierGewinnt, self).__init__(player1, player2)
         self.__gamePanel = [[0]*self.__COLUMNS for _ in range(self.__ROWS)]
-        self.__playerCallback = (player1, player2)
-        self.__nextPlayer = 1
-        self.__nextMove = 0
-        self.__moveRecords = []
 
     @property
     def gamePanel(self):
         return copy.deepcopy(self.__gamePanel)    
 
-    @property
-    def nextMove(self):
-        return self.__nextMove
-
-    def play(self):
-        """Startet das Spiel und ruft alternierend beide Spieler-Strategien auf, bis eine gewinnt."""
-        try:
-            while self.__nextPlayer > 0:
-                self.__nextMove += 1
-                move = self.__playerCallback[self.__nextPlayer-1](self)
-                self.checkMove(move)
-                self.__doMove(move)
-        except ValueError as e:
-            self.__nextPlayer = -(self.__nextPlayer%2 + 1)
-            self.__recordState((self.__nextMove, self.__nextPlayer, move, self.__gamePanel))
-
     def checkMove(self, move):
         """Prüft, ob der gewählte Zug des aktuellen Spielers den Regeln und dem aktuellen Stand entspricht."""
+        if not isinstance(move, int):
+            raise ValueError("Es muss eine ganze Zahl angegeben werden!")
         if move < 1 or move > self.__COLUMNS:
             raise ValueError("Gewählte Spalte " + str(move) + " ist ungültig!")
         if countTokensIn(self.getColumn(move)) >= self.__ROWS:
             raise ValueError("Gewählte Spalte " + str(move) + " ist schon voll!")
 
-    def __doMove(self, column):
-        """Macht den aktuellen Zug und prüft ob der aktuelle Spieler gewonnen hat, oder sonst wird der nächste Zug vorbereitet."""
-        row = countTokensIn(self.getColumn(column)) + 1
-        self.__gamePanel[row-1][column-1] = self.getTokenForNextPlayer()
-        self.__recordState((self.__nextMove, self.__nextPlayer, column, copy.deepcopy(self.__gamePanel)))
-        # TODO: Es kann auch unentschieden werden, wenn alle Felder gefüllt sind!
-        if self.__checkEnd(row, column):
-            self.__nextPlayer = -self.__nextPlayer
-            self.__recordState((self.__nextMove, self.__nextPlayer, None, None))
-        else:
-            self.__nextPlayer = (self.__nextPlayer % 2 + 1)
+    def _doMove(self, move):
+        """Macht den aktuellen Zug und gibt zurück welcher Spieler als nächster kommt."""
+        row = countTokensIn(self.getColumn(move)) + 1
+        self.__gamePanel[row-1][move-1] = self.getTokenForNextPlayer()
+        return (self.nextPlayer % 2 + 1)
 
-    def __checkEnd(self, row, column):
-        """Gibt an ob das Spiel beendet ist (True) oder nicht (False)"""
-        if hasWinnerIn(self.getColumn(column), self.getRow(row), self.getDiagonalUpRight(row, column), self.getDiagonalUpLeft(row, column)):
-            return True
-        return self.countTokens() >= self.__ROWS * self.__COLUMNS
+    def _checkEnd(self, move):
+        """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)"""
+        row = countTokensIn(self.getColumn(move))
+        winner = getWinnerIn(self.getColumn(move), self.getRow(row), self.getDiagonalUpRight(row, move), self.getDiagonalUpLeft(row, move))
+        return winner if winner > 0 else 0 if self.countTokens() >= self.__ROWS * self.__COLUMNS else None
 
     def getTokenForNextPlayer(self):
-        return 1 if self.__nextPlayer == 1 else -1
+        return 1 if self.nextPlayer == 1 else -1
 
     def countTokens(self):
         count = 0
@@ -89,33 +67,20 @@ class VierGewinnt:
             line.append(self.__gamePanel[row - 1 - placesDownRight + i][column - 1 + placesDownRight - i])
         return line
 
-    def __recordState(self, state):
-        """Speichert den Zug und den Spielstand ab um am Ende des Spiels den Spielablauf sehen zu können."""
-        self.__moveRecords.append(state)
-        print(self.stateToString(state)) # TODO: Remove later
-
-    def stateToString(self, state):
-        """Gibt den Spielstand nach einem Zug in kompakter/ausdruckbarer Form zurück."""
+    def gamePanelToString(self, gamePanel, firstLine = ""):
         s = ""
-        if (state[1] >= 0):
-            s += gamePanelToString(state[3], "({:2d}/{:d}): {} => ".format(state[0], state[1], state[2]))
-        else:
-            s += "  Spieler {:d} gewinnt nach {:d} Zügen!".format(-state[1], state[0])
-            if (state[2] != None):
-                s += " Grund: Falscher Zug ({:d}) des anderen Spielers.".format(state[2])
-        return s
-
-    def printAllStates(self):
-        """Gibt alle Züge zurück bzw. in kompakter Form aus."""
-        for state in self.__moveRecords:
-            print(self.stateToString(state))
+        for row in gamePanel[::-1]:
+            if countTokensIn(row) > 0:
+                s += ("\n" + " "*len(firstLine) if len(s) > 0 else "") + reduce(lambda s, e: s + tokenToString(e), row, "")
+        return firstLine + s
 
 # -------------------- Utility methods --------------------   
-def hasWinnerIn(*lines):
+def getWinnerIn(*lines):
     for line in lines:
-        if abs(countSameTokensIn(line)) > 3:
-            return True
-    return False
+        countSame = countSameTokensIn(line)
+        if abs(countSame) > 3:
+            return 1 if countSame > 0 else 2
+    return 0
 
 def countSameTokensIn(line):
     """Gibt an wie viele gleiche Tokens benachbart in einer Reihe von Zahlen vorkommen."""
@@ -131,27 +96,6 @@ def countTokensIn(line):
 
 def tokenToString(token):
     return "X " if token == 1 else "O " if token == -1 else "  " if token == 0 else "? "
-
-def gamePanelToString(gamePanel, firstLine = ""):
-    s = ""
-    for row in gamePanel[::-1]:
-        if countTokensIn(row) > 0:
-            s += ("\n" + " "*len(firstLine) if len(s) > 0 else "") + reduce(lambda s, e: s + tokenToString(e), row, "")
-    return firstLine + s
-
-# -------------------- Human player callback --------------------   
-def human(game):
-    """Ein Callback für einen menschlichen Spieler, der den Benutzer um ihren Zug fragt."""
-    n = 0
-    exc = ""
-    while n == 0:
-        try:
-            n = int(input(exc + str(game.nextMove) + ". Zug kommt, in welcher Spalte möchtest du dein Token werfen? "))
-            game.checkMove(n)
-        except ValueError as e:
-            n = 0
-            exc = str(e) + "! "
-    return n
 
 # -------------------- Computer player callbacks --------------------   
 def computer1(game):
@@ -169,22 +113,22 @@ def computer2(game):
         if row > maxRow:
             continue
         # Zuerst prüfen wir ob wir hier gewinnen könnten
-        elif hasWinnerWithTokenIn(row, col, game.getTokenForNextPlayer()):
+        elif hasWinnerWithTokenIn(game, row, col, game.getTokenForNextPlayer()):
             return col
         # Dann prüfen wir ob der Gegner hier gewinnen könnte
-        elif hasWinnerWithTokenIn(row, col, -game.getTokenForNextPlayer()):
+        elif hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
             selectedCol = col
             selectedValue = 1000
         # TODO: Prüfen ob in der ersten Zeile eine beidseitig offener "2-er Reihe" schon gibt, und wenn ja, schliessen
         # Ansonsten merken wir die Stelle mit dem grössten Wert...
         elif selectedValue < getPlaceValue(row, col, maxRow, maxCol):
             # ...und prüfen, dass der Gegner im nächsten Zug in der gleichen Spalte nicht gewinnnen kann
-            if not(row < maxRow and hasWinnerWithTokenIn(row+1, col, -game.getTokenForNextPlayer())):
+            if not(row < maxRow and hasWinnerWithTokenIn(game, row+1, col, -game.getTokenForNextPlayer())):
                 selectedCol = col
                 selectedValue = getPlaceValue(row, col, maxRow, maxCol)
     return selectedCol
 
-def hasWinnerWithTokenIn(row, col, token, maxCol = 7):
+def hasWinnerWithTokenIn(game, row, col, token, maxCol = 7):
     lineCol = game.getColumn(col)
     lineRow = game.getRow(row)
     lineDiag1 = game.getDiagonalUpRight(row, col)
@@ -193,7 +137,7 @@ def hasWinnerWithTokenIn(row, col, token, maxCol = 7):
     lineRow[col-1] = token
     lineDiag1[min(row, col)-1] = token
     lineDiag2[min(row, maxCol+1-col)-1] = token
-    return hasWinnerIn(lineCol, lineRow, lineDiag1, lineDiag2)
+    return getWinnerIn(lineCol, lineRow, lineDiag1, lineDiag2) > 0
 
 def getPlaceValue(row, col, maxRow = 6, maxCol = 7):
     """Kalkuliert den Wert einer Stelle, also die Anzahl 4-er Ketten die über dieser Stelle laufen."""
@@ -206,6 +150,6 @@ def getPlaceValue(row, col, maxRow = 6, maxCol = 7):
     return min(row, maxRow+1-row) + min(col, maxCol+1-col) + diagonal1 + diagonal2
 
 #-------------MAIN
-game = VierGewinnt(computer2, human)
-game.play()
+mygame = VierGewinnt(computer1, human)
+mygame.play()
 #game.printAllStates()

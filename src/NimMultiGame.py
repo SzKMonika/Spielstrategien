@@ -1,96 +1,51 @@
+from Game import Game, human
 import random
 
 # -------------------- class NimMultiGame --------------------
-class NimMultiGame:
+class NimMultiGame(Game):
     def __init__(self, player1, player2, sticksList, lastOneLoses = False):
+        super(NimMultiGame, self).__init__(player1, player2)
         self.__sticksList = sticksList
         self.__lastOneLoses = lastOneLoses
-        self.__player = (player1, player2)
-        self.__nextPlayer = 1
-        self.__nextMove = 0
-        self.__moveRecords = []
 
     @property
-    def sticksList(self):
+    def gamePanel(self):
         return list(self.__sticksList)    
 
     @property
     def lastOneLoses(self):
         return self.__lastOneLoses
 
-    @property
-    def nextMove(self):
-        return self.__nextMove
-
-    def isNotFinished(self):
-        return sum(self.__sticksList) > 0
-
-    def play(self):
-        """Startet das Spiel und ruft alternierend beide Spieler-Strategien auf, bis eine gewinnt."""
-        try:
-            while self.isNotFinished():
-                self.__nextMove += 1
-                take = self.__player[self.__nextPlayer-1](self)
-                self.checkMove(take)
-                self.__sticksList[take[0]-1] = self.__sticksList[take[0]-1] - take[1]
-                self.__recordState((self.__nextMove, self.__nextPlayer, take, list(self.__sticksList)))
-                self.__nextPlayer = (self.__nextPlayer%2+1)
-            self.__nextPlayer = -self.__nextPlayer if self.__lastOneLoses else -(self.__nextPlayer%2+1)
-            self.__recordState((self.__nextMove, self.__nextPlayer, None, None))
-        except ValueError as e:
-            self.__recordState((self.__nextMove, -(self.__nextPlayer%2+1), take, self.__sticksList))
-        
-    def checkMove(self, take):
+    def checkMove(self, move):
         """Prüft, ob der gewählte Zug des aktuellen Spielers den Regeln und dem aktuellen Stand entspricht."""
-        if take[0] < 1 or take[0] > len(self.__sticksList) or take[1] < 1 or take[1] > self.__sticksList[take[0]-1]:
-            raise ValueError("Unmöglicher Zug: " + str(take))
+        if not isinstance(move, tuple):
+            raise ValueError("Es müssen zwei mit Komma getrennten ganze Zahlen angegeben werden!")
+        if move[0] < 1 or move[0] > len(self.__sticksList):
+            raise ValueError("Gewählte Reihe " + str(move[0]) + " ist ungültig!")
+        if move[1] < 1 or move[1] > self.__sticksList[move[0]-1]:
+            raise ValueError("In der gewählten Reihe " + str(move[0]) + " wollte man eine ungültige Anzahl " + str(move[1]) + " wegnehmen!")
 
-    def __recordState(self, state):
-        """Speichert den Zug und den Spielstand ab um am Ende des Spiels den Spielablauf sehen zu können."""
-        self.__moveRecords.append(state)
+    def _doMove(self, move):
+        """Macht den aktuellen Zug und gibt zurück welcher Spieler als nächster kommt."""
+        self.__sticksList[move[0]-1] = self.__sticksList[move[0]-1] - move[1]
+        return (self.nextPlayer % 2 + 1)
 
-    def stateToString(self, state):
-        """Gibt den Spielstand nach einem Zug in kompakter/ausdruckbarer Form zurück."""
-        s = ""
-        if (state[1] >= 0):
-            s += "({:2d}/{:d}): {} => {}".format(state[0], state[1], state[2], state[3])
-        else:
-            s += "  Spieler {:d} gewinnt nach {:d} Zügen!".format(-state[1], state[0])
-            if (state[2] != None):
-                s += " Grund: Falscher Zug ({:d}) des anderen Spielers.".format(state[2])
-        return s
-
-    def printAllStates(self):
-        """Gibt alle Züge zurück bzw. in kompakter Form aus."""
-        for state in self.__moveRecords:
-            print(self.stateToString(state))
-
-# -------------------- Human player callback --------------------   
-def human(game):
-    """Ein Callback für einen menschlichen Spieler, der den Benutzer um ihren Zug fragt."""
-    n = None
-    exc = ""
-    while n is None:
-        try:
-            n = str(input(exc + str(game.nextMove) + ". Zug kommt und es sind noch " + str(game.sticksList) + " Sticks da. Wie viel nimmst du weg? "))
-            game.checkMove(eval(n))
-        except ValueError as e:
-            n = None
-            exc = str(e) + "! "
-    return eval(n)
+    def _checkEnd(self, move):
+        """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)"""
+        return None if sum(self.__sticksList) > 0 else (self.nextPlayer%2+1) if self.__lastOneLoses else self.nextPlayer
 
 # -------------------- Computer player callbacks --------------------   
 def computer1(game):
     """Callback für einen dummen Computerspieler."""
-    sticksList = game.sticksList
+    sticksList = game.gamePanel
     nonEmptySticksList = [(i, sticksList[i]) for i in range(len(sticksList)) if sticksList[i] > 0]
     row = random.randint(0, len(nonEmptySticksList)-1)
-    take = random.randint(1, nonEmptySticksList[row][1])
-    return (nonEmptySticksList[row][0] + 1, take)
+    move = random.randint(1, nonEmptySticksList[row][1])
+    return (nonEmptySticksList[row][0] + 1, move)
 
 def computer2(game):
     """Callback für einen mittelmässigen Computerspieler."""
-    sticksList = game.sticksList
+    sticksList = game.gamePanel
     maxSticks = 0
     maxIndex = 0
     countRowOne = 0
@@ -119,4 +74,3 @@ def computer2(game):
 #-------------MAIN
 nimGame = NimMultiGame(human, computer2, [1,3,5,7])
 nimGame.play()
-nimGame.printAllStates()
