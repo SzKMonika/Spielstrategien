@@ -72,7 +72,7 @@ class VierGewinnt(Game):
         for row in gamePanel[::-1]:
             if countTokensIn(row) > 0:
                 s += ("\n" + " "*len(firstLine) if len(s) > 0 else "") + reduce(lambda s, e: s + tokenToString(e), row, "")
-        return firstLine + s
+        return firstLine + s + "\n"
 
 # -------------------- Utility methods --------------------   
 def getWinnerIn(*lines):
@@ -100,9 +100,32 @@ def tokenToString(token):
 # -------------------- Computer player callbacks --------------------   
 def computer1(game):
     """Ein Callback für einen dummen Computerspieler."""
-    return random.randint(1, 7)
+    maxRow = 6
+    maxCol = 7    
+    nonFullColList = [i for i in range(1, maxCol) if countTokensIn(game.getColumn(i)) < maxRow]
+    return nonFullColList[random.randint(0, len(nonFullColList)-1)]
 
 def computer2(game):
+    """Ein Callback für einen einfachen Computerspieler."""
+    maxRow = 6
+    maxCol = 7
+    selectedCol = 0
+    selectedValue = 0
+    for col in range(1, maxCol+1):
+        row = countTokensIn(game.getColumn(col)) + 1
+        if row > maxRow:
+            continue
+        # Zuerst prüfen wir ob wir hier gewinnen könnten
+        elif hasWinnerWithTokenIn(game, row, col, game.getTokenForNextPlayer()):
+            return col
+        # Dann prüfen wir ob der Gegner hier gewinnen könnte
+        elif hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
+            selectedCol = col
+            selectedValue = 1000
+            return selectedCol
+    return computer1(game)
+
+def computer3(game):
     """Ein Callback für einen smarten Computerspieler."""
     maxRow = 6
     maxCol = 7
@@ -150,6 +173,6 @@ def getPlaceValue(row, col, maxRow = 6, maxCol = 7):
     return min(row, maxRow+1-row) + min(col, maxCol+1-col) + diagonal1 + diagonal2
 
 #-------------MAIN
-mygame = VierGewinnt(computer1, human)
+mygame = VierGewinnt(computer2, computer3)
 mygame.play()
 #game.printAllStates()
