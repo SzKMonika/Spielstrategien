@@ -102,7 +102,7 @@ def computer1(game):
     """Ein Callback für einen dummen Computerspieler."""
     maxRow = 6
     maxCol = 7    
-    nonFullColList = [i for i in range(1, maxCol) if countTokensIn(game.getColumn(i)) < maxRow]
+    nonFullColList = [i for i in range(1, maxCol+1) if countTokensIn(game.getColumn(i)) < maxRow]
     return nonFullColList[random.randint(0, len(nonFullColList)-1)]
 
 def computer2a(game):
@@ -110,7 +110,7 @@ def computer2a(game):
     maxRow = 6
     maxCol = 7
     selectedCol = 0
-    selectedValue = 0
+
     for col in range(1, maxCol+1):
         row = countTokensIn(game.getColumn(col)) + 1
         if row > maxRow:
@@ -130,7 +130,7 @@ def computer2b(game):
     maxRow = 6
     maxCol = 7
     selectedCol = 0
-    selectedValue = 0
+
     for col in range(1, maxCol+1):
         row = countTokensIn(game.getColumn(col)) + 1
         if row > maxRow:
