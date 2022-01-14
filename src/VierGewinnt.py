@@ -105,7 +105,7 @@ def computer1(game):
     nonFullColList = [i for i in range(1, maxCol) if countTokensIn(game.getColumn(i)) < maxRow]
     return nonFullColList[random.randint(0, len(nonFullColList)-1)]
 
-def computer2(game):
+def computer2a(game):
     """Ein Callback für einen einfachen Computerspieler."""
     maxRow = 6
     maxCol = 7
@@ -124,6 +124,26 @@ def computer2(game):
             selectedValue = 1000
             return selectedCol
     return computer1(game)
+
+def computer2b(game):
+    """Ein Callback für einen einfachen Computerspieler."""
+    maxRow = 6
+    maxCol = 7
+    selectedCol = 0
+    selectedValue = 0
+    for col in range(1, maxCol+1):
+        row = countTokensIn(game.getColumn(col)) + 1
+        if row > maxRow:
+            continue
+        # Zuerst prüfen wir ob wir hier gewinnen könnten
+        elif hasWinnerWithTokenIn(game, row, col, game.getTokenForNextPlayer()):
+            return col
+        # Dann prüfen wir ob der Gegner hier gewinnen könnte
+        elif hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
+            selectedCol = col
+            selectedValue = 1000
+            return selectedCol
+    return (maxCol+1)//2 if countTokensIn(game.getColumn((maxCol+1)//2)) < maxRow else computer1(game)
 
 def computer3(game):
     """Ein Callback für einen smarten Computerspieler."""
@@ -173,6 +193,6 @@ def getPlaceValue(row, col, maxRow = 6, maxCol = 7):
     return min(row, maxRow+1-row) + min(col, maxCol+1-col) + diagonal1 + diagonal2
 
 #-------------MAIN
-mygame = VierGewinnt(computer2, computer3)
+mygame = VierGewinnt(computer2a, computer2b)
 mygame.play()
 #game.printAllStates()
