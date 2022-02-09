@@ -109,40 +109,34 @@ def computer2a(game):
     """Ein Callback für einen einfachen Computerspieler."""
     maxRow = 6
     maxCol = 7
-    selectedCol = 0
 
     for col in range(1, maxCol+1):
         row = countTokensIn(game.getColumn(col)) + 1
         if row > maxRow:
-            continue
+            pass
         # Zuerst prüfen wir ob wir hier gewinnen könnten
         elif hasWinnerWithTokenIn(game, row, col, game.getTokenForNextPlayer()):
             return col
         # Dann prüfen wir ob der Gegner hier gewinnen könnte
         elif hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
-            selectedCol = col
-            selectedValue = 1000
-            return selectedCol
+            return col
     return computer1(game)
 
 def computer2b(game):
     """Ein Callback für einen einfachen Computerspieler."""
     maxRow = 6
     maxCol = 7
-    selectedCol = 0
 
     for col in range(1, maxCol+1):
         row = countTokensIn(game.getColumn(col)) + 1
         if row > maxRow:
-            continue
+            pass
         # Zuerst prüfen wir ob wir hier gewinnen könnten
         elif hasWinnerWithTokenIn(game, row, col, game.getTokenForNextPlayer()):
             return col
         # Dann prüfen wir ob der Gegner hier gewinnen könnte
         elif hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
-            selectedCol = col
-            selectedValue = 1000
-            return selectedCol
+            return col
     return (maxCol+1)//2 if countTokensIn(game.getColumn((maxCol+1)//2)) < maxRow else computer1(game)
 
 def computer3(game):
@@ -154,7 +148,7 @@ def computer3(game):
     for col in range(1, maxCol+1):
         row = countTokensIn(game.getColumn(col)) + 1
         if row > maxRow:
-            continue
+            pass
         # Zuerst prüfen wir ob wir hier gewinnen könnten
         elif hasWinnerWithTokenIn(game, row, col, game.getTokenForNextPlayer()):
             return col
@@ -162,7 +156,6 @@ def computer3(game):
         elif hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
             selectedCol = col
             selectedValue = 1000
-        # TODO: Prüfen ob in der ersten Zeile eine beidseitig offener "2-er Reihe" schon gibt, und wenn ja, schliessen
         # Ansonsten merken wir die Stelle mit dem grössten Wert...
         elif selectedValue < getPlaceValue(row, col, maxRow, maxCol):
             # ...und prüfen, dass der Gegner im nächsten Zug in der gleichen Spalte nicht gewinnnen kann
@@ -180,7 +173,27 @@ def hasWinnerWithTokenIn(game, row, col, token, maxCol = 7):
     lineRow[col-1] = token
     lineDiag1[min(row, col)-1] = token
     lineDiag2[min(row, maxCol+1-col)-1] = token
-    return getWinnerIn(lineCol, lineRow, lineDiag1, lineDiag2) > 0
+    win = getWinnerIn(lineCol, lineRow, lineDiag1, lineDiag2) > 0
+    # In der ersten Zeile würde eine beidseitig offener "3-er Reihe" auch (im nächsten Zug) schon gewinnen
+    if row == 1 and countSameTokensIn(lineRow) == 3:
+        sameCountList = getSameCountList(lineRow, 0.4)
+        if token < 0 and min(sameCountList) < -3.5 or token > 0 and max(sameCountList) > 3.5:
+            win = True
+    return win
+
+def getSameCountList(line, extraForEmptyNeigbour = 0.4):
+    sameCountList = [line[0]]
+    for i in range(1, len(line)):
+        if sameCountList[-1] * line[i] > 0:
+            sameCountList[-1] += line[i]
+        elif sameCountList[-1] * line[i] < 0:
+            sameCountList.append(line[i])
+        elif sameCountList[-1] != 0 and line[i] == 0:
+            sameCountList[-1] += extraForEmptyNeigbour if sameCountList[-1] > 0 else -extraForEmptyNeigbour
+            sameCountList.append(line[i])
+        elif sameCountList[-1] == 0 and line[i] != 0:
+            sameCountList.append(line[i] * (1 + extraForEmptyNeigbour))
+    return sameCountList
 
 def getPlaceValue(row, col, maxRow = 6, maxCol = 7):
     """Kalkuliert den Wert einer Stelle, also die Anzahl 4-er Ketten die über dieser Stelle laufen."""
