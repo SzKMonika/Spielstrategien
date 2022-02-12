@@ -7,8 +7,8 @@ import random
 class VierGewinnt(Game):
     __ROWS = 6
     __COLUMNS = 7
-    def __init__(self, player1, player2):
-        super(VierGewinnt, self).__init__(player1, player2)
+    def __init__(self, player1, player2, player1name = "Spieler 1", player2name = "Spieler 2"):
+        super(VierGewinnt, self).__init__(player1, player2, player1name, player2name)
         self.__gamePanel = [[0]*self.__COLUMNS for _ in range(self.__ROWS)]
 
     @property
@@ -70,7 +70,7 @@ class VierGewinnt(Game):
     def gamePanelToString(self, gamePanel, firstLine = ""):
         s = ""
         for row in gamePanel[::-1]:
-            if countTokensIn(row) > 0:
+            if countTokensIn(row) >= 0:
                 s += ("\n" + " "*len(firstLine) if len(s) > 0 else "") + reduce(lambda s, e: s + tokenToString(e), row, "")
         return firstLine + s + "\n"
 
@@ -95,17 +95,17 @@ def countTokensIn(line):
     return sum([abs(token) for token in line])
 
 def tokenToString(token):
-    return "X " if token == 1 else "O " if token == -1 else "  " if token == 0 else "? "
+    return "X " if token == 1 else "O " if token == -1 else ". " if token == 0 else "? "
 
 # -------------------- Computer player callbacks --------------------   
-def computer1(game):
+def VierGewinnt_L1(game):
     """Ein Callback für einen dummen Computerspieler."""
     maxRow = 6
     maxCol = 7    
     nonFullColList = [i for i in range(1, maxCol+1) if countTokensIn(game.getColumn(i)) < maxRow]
     return nonFullColList[random.randint(0, len(nonFullColList)-1)]
 
-def computer2a(game):
+def VierGewinnt_L2(game):
     """Ein Callback für einen einfachen Computerspieler."""
     maxRow = 6
     maxCol = 7
@@ -120,9 +120,9 @@ def computer2a(game):
         # Dann prüfen wir ob der Gegner hier gewinnen könnte
         elif hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
             return col
-    return computer1(game)
+    return VierGewinnt_L1(game)
 
-def computer2b(game):
+def VierGewinnt_L3(game):
     """Ein Callback für einen einfachen Computerspieler."""
     maxRow = 6
     maxCol = 7
@@ -137,9 +137,9 @@ def computer2b(game):
         # Dann prüfen wir ob der Gegner hier gewinnen könnte
         elif hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
             return col
-    return (maxCol+1)//2 if countTokensIn(game.getColumn((maxCol+1)//2)) < maxRow else computer1(game)
+    return (maxCol+1)//2 if countTokensIn(game.getColumn((maxCol+1)//2)) < maxRow else VierGewinnt_L1(game)
 
-def computer3(game):
+def VierGewinnt_L4(game):
     """Ein Callback für einen smarten Computerspieler."""
     maxRow = 6
     maxCol = 7
@@ -204,8 +204,3 @@ def getPlaceValue(row, col, maxRow = 6, maxCol = 7):
     diagonal1 = min(downLeft, upRight, max(downLeft+upRight-4, 0))
     diagonal2 = min(downRight, upLeft, max(downRight+upLeft-4, 0))
     return min(row, maxRow+1-row) + min(col, maxCol+1-col) + diagonal1 + diagonal2
-
-#-------------MAIN
-mygame = VierGewinnt(computer2a, computer2b)
-mygame.play()
-#game.printAllStates()

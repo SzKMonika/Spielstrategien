@@ -35,7 +35,7 @@ class NimMultiGame(Game):
         return None if sum(self.__sticksList) > 0 else (self.nextPlayer%2+1) if self.__lastOneLoses else self.nextPlayer
 
 # -------------------- Computer player callbacks --------------------   
-def computer1(game):
+def NimMulti_L1(game):
     """Callback für einen dummen Computerspieler."""
     sticksList = game.gamePanel
     nonEmptySticksList = [(i, sticksList[i]) for i in range(len(sticksList)) if sticksList[i] > 0]
@@ -43,7 +43,7 @@ def computer1(game):
     move = random.randint(1, nonEmptySticksList[row][1])
     return (nonEmptySticksList[row][0] + 1, move)
 
-def computer2(game):
+def NimMulti_L2(game):
     """Callback für einen mittelmässigen Computerspieler."""
     sticksList = game.gamePanel
     maxSticks = 0
@@ -72,5 +72,5 @@ def computer2(game):
         return (maxIndex + 1, maxSticks-2 if maxSticks > 2 else 2)
 
 #-------------MAIN
-nimGame = NimMultiGame(human, computer2, [1,3,5,7])
+nimGame = NimMultiGame(human, NimMulti_L2, [1,3,5,7])
 nimGame.play()

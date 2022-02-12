@@ -39,11 +39,11 @@ class NimGame(Game):
         return None if self.__sticks > 0 else (self.nextPlayer%2+1) if self.__lastOneLoses else self.nextPlayer
 
 # -------------------- Computer player callbacks --------------------   
-def computer1(game):
+def Nim_L1(game):
     """Callback für einen dummen Computerspieler."""
     return random.randint(game.minTake, min(game.maxTake, game.gamePanel))
 
-def computer2(game):
+def Nim_L3(game):
     """Callback für den optimalen Computerspieler."""
     nextTake = (game.gamePanel - 1) % (game.minTake + game.maxTake)
     return (nextTake if nextTake > 0 else 1)

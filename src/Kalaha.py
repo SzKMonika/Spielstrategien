@@ -82,13 +82,13 @@ class Kalaha(Game):
         return firstLine + " |".join(pits1) + " |   " + "\n" + " "*len(firstLine) + "   |" + " |".join(pits2)
 
 # -------------------- Computer player callbacks --------------------   
-def computer1(game):
+def Kalaha_L1(game):
     """Ein Callback für einen dummen Computerspieler."""
     pitList = game.gamePanel[game.nextPlayer-1]
     nonEmptyPitList = [i for i in range(len(pitList)) if i > 0 and pitList[i] > 0]
     return nonEmptyPitList[random.randint(0, len(nonEmptyPitList)-1)]
 
-def computer2(game):
+def Kalaha_L2(game):
     """Ein Callback für einen halbwegs smarten Computerspieler."""
     pit = game.gamePanel
     move = 0
@@ -120,6 +120,6 @@ def computer2(game):
 
 # -------------------- MAIN --------------------   
 
-game = Kalaha(human, computer2)
+game = Kalaha(Kalaha_L2, Kalaha_L2)
 game.play()
 #game.printAllStates()
