@@ -5,8 +5,8 @@ import copy
 # -------------------- class Kalaha --------------------
 class Kalaha(Game):
     __PITS = 6
-    def __init__(self, player1, player2):
-        super(Kalaha, self).__init__(player1, player2)
+    def __init__(self, player1, player2, player1name = "Spieler 1", player2name = "Spieler 2"):
+        super(Kalaha, self).__init__(player1, player2, player1name, player2name)
         stones = 4
         self.__pit = ([0] + [stones] * self.__PITS, [0] + [stones] * self.__PITS)
 
@@ -117,9 +117,3 @@ def Kalaha_L2(game):
             moveValue = i-stones
     # Den move-Zug geben wir aber nur dann zurück, wenn wir sonst keinen anderen guten Zug haben
     return move
-
-# -------------------- MAIN --------------------   
-
-game = Kalaha(Kalaha_L2, Kalaha_L2)
-game.play()
-#game.printAllStates()

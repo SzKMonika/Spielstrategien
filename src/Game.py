@@ -1,11 +1,17 @@
+import os, sys, time
+
 # -------------------- class Game --------------------
 class Game(object):
-    def __init__(self, player1, player2, player1name = "Spieler 1", player2name = "Spieler 2"):
+    def __init__(self, player1, player2, player1name = "Spieler 1", player2name = "Spieler 2", printMoves = True):
         self.__playerCallback = (player1, player2)
         self.__playerName = (player1name, player2name)
+        self._printMoves = printMoves
         self.__nextPlayer = 1
         self.__nextMove = 0
         self.__moveRecords = []
+
+    def setPrintMoves(self, printMoves):
+        self._printMoves = printMoves
 
     @property
     def nextPlayer(self):
@@ -24,7 +30,7 @@ class Game(object):
 
     def play(self):
         """Startet das Spiel und ruft alternierend beide Spieler-Strategien auf, bis eine gewinnt."""
-        self.__recordState((self.nextMove, self.nextPlayer, "0", self.gamePanel))
+        self.__recordState((self.nextMove, self.nextPlayer, " ", self.gamePanel))
         try:
             while self.__nextPlayer > 0:
                 self.__nextMove += 1
@@ -57,7 +63,8 @@ class Game(object):
     def __recordState(self, state):
         """Speichert den Zug und den Spielstand ab um am Ende des Spiels den Spielablauf sehen zu können."""
         self.__moveRecords.append(state)
-        print(self.stateToString(state)) # TODO: Löschen
+        if self._printMoves:
+            print(self.stateToString(state))
 
     def stateToString(self, state):
         """Gibt den Spielstand nach einem Zug in kompakter/ausdruckbarer Form zurück."""
@@ -91,13 +98,56 @@ class Game(object):
 # -------------------- Human player callback --------------------   
 def human(game):
     """Ein Callback für einen menschlichen Spieler, der den Benutzer um ihren Zug fragt."""
-    n = None
+    move = None
     exc = ""
-    while n is None:
+    while move is None:
         try:
-            n = eval(str(input(exc + str(game.nextMove) + ". Zug kommt, welchen Zug wählst du? ")))
-            game.checkMove(n)
+            move = eval(str(input(exc + str(game.nextMove) + ". Zug kommt, welchen Zug wählst du? ")))
+            game.checkMove(move)
         except Exception as e:
-            n = None
+            move = None
             exc = str(e) + "! "
-    return n
+    return move
+
+# -------------------- Game execution --------------------   
+IS_PYTHON3 = sys.version_info[0] > 2
+
+IS_JYTHON = sys.executable.endswith("jython.exe") or sys.platform.startswith("java")
+
+if IS_JYTHON:
+    #from gpanel import *
+    import gconsole
+    println = gconsole.gprintln
+    waitForKey = gconsole.getKeyCodeWait
+    clr = gconsole.clear
+    close = gconsole.dispose
+else:
+    import builtins
+    import keyboard # https://stackoverflow.com/questions/24072790/how-to-detect-key-presses
+    println = builtins.print
+    waitForKey = keyboard.read_key
+    clr = (lambda: os.system('clear')) if os.name == 'posix' else (lambda: os.system('cls')) # https://www.scaler.com/topics/how-to-clear-screen-in-python/
+
+def playOnce(game, printMoves = True):
+    game.setPrintMoves(printMoves)
+    game.play()
+    if IS_JYTHON:
+        gconsole.makeConsole()
+    println("Benutze die Pfeiltasten um jeden Spielzug einzeln anzuschauen, und q um zu beenden!")
+    keyPressed = waitForKey()
+    index = 0
+    while keyPressed != 'q' and keyPressed != 81:
+        clr()
+        println(game.getPlayerNames())
+        println('')
+        println(game.getState(index))
+        time.sleep(0.2)
+        keyPressed = waitForKey()
+        if keyPressed == 37 or keyPressed == 'nach-links':
+            index -= 1
+        if keyPressed == 39 or keyPressed == 'nach-rechts':
+            index += 1
+        if keyPressed == 40 or keyPressed == 'nach-unten':
+            index = 0
+        if keyPressed == 81:
+            close()

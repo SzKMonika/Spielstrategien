@@ -3,8 +3,8 @@ import random
 
 # -------------------- class NimMultiGame --------------------
 class NimMultiGame(Game):
-    def __init__(self, player1, player2, sticksList, lastOneLoses = False):
-        super(NimMultiGame, self).__init__(player1, player2)
+    def __init__(self, player1, player2, sticksList, player1name = "Spieler 1", player2name = "Spieler 2", lastOneLoses = False):
+        super(NimMultiGame, self).__init__(player1, player2, player1name, player2name)
         self.__sticksList = sticksList
         self.__lastOneLoses = lastOneLoses
 
@@ -70,7 +70,3 @@ def NimMulti_L2(game):
     # Sonst lassen wir 2 stehen oder wenn es nur 2 gibt, dann nehmen wir beide weg
     else:
         return (maxIndex + 1, maxSticks-2 if maxSticks > 2 else 2)
-
-#-------------MAIN
-nimGame = NimMultiGame(human, NimMulti_L2, [1,3,5,7])
-nimGame.play()

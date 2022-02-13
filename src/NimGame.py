@@ -3,8 +3,8 @@ import random
 
 # -------------------- class NimGame --------------------
 class NimGame(Game):
-    def __init__(self, player1, player2, sticks, maxTake= 3, lastOneLoses = True):
-        super(NimGame, self).__init__(player1, player2)
+    def __init__(self, player1, player2, sticks, player1name = "Spieler 1", player2name = "Spieler 2", maxTake = 3, lastOneLoses = True):
+        super(NimGame, self).__init__(player1, player2, player1name, player2name)
         self.__sticks = sticks
         self.__minTake = 1
         self.__maxTake = maxTake
