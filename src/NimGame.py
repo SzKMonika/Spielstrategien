@@ -3,8 +3,8 @@ import random
 
 # -------------------- class NimGame --------------------
 class NimGame(Game):
-    def __init__(self, player1, player2, sticks, player1name = "Spieler 1", player2name = "Spieler 2", maxTake = 3, lastOneLoses = True):
-        super(NimGame, self).__init__(player1, player2, player1name, player2name)
+    def __init__(self, player1, player2, sticks, maxTake = 3, lastOneLoses = True):
+        super(NimGame, self).__init__(player1, player2)
         self.__sticks = sticks
         self.__minTake = 1
         self.__maxTake = maxTake
@@ -38,12 +38,12 @@ class NimGame(Game):
         """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)"""
         return None if self.__sticks > 0 else (self.nextPlayer%2+1) if self.__lastOneLoses else self.nextPlayer
 
-# -------------------- Computer player callbacks --------------------   
+# -------------------- Computer Strategien --------------------   
 def Nim_L1(game):
-    """Callback für einen dummen Computerspieler."""
+    """Strategie für einen dummen Computerspieler."""
     return random.randint(game.minTake, min(game.maxTake, game.gamePanel))
 
 def Nim_L3(game):
-    """Callback für den optimalen Computerspieler."""
+    """Strategie für den optimalen Computerspieler."""
     nextTake = (game.gamePanel - 1) % (game.minTake + game.maxTake)
     return (nextTake if nextTake > 0 else 1)

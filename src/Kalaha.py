@@ -5,8 +5,8 @@ import copy
 # -------------------- class Kalaha --------------------
 class Kalaha(Game):
     __PITS = 6
-    def __init__(self, player1, player2, player1name = "Spieler 1", player2name = "Spieler 2"):
-        super(Kalaha, self).__init__(player1, player2, player1name, player2name)
+    def __init__(self, player1, player2):
+        super(Kalaha, self).__init__(player1, player2)
         stones = 4
         self.__pit = ([0] + [stones] * self.__PITS, [0] + [stones] * self.__PITS)
 
@@ -81,39 +81,76 @@ class Kalaha(Game):
         pits2 = ["{:2d}".format(i) for i in gamePanel[1][::-1]]
         return firstLine + " |".join(pits1) + " |   " + "\n" + " "*len(firstLine) + "   |" + " |".join(pits2)
 
-# -------------------- Computer player callbacks --------------------   
+# -------------------- Computer Strategien --------------------   
 def Kalaha_L1(game):
-    """Ein Callback für einen dummen Computerspieler."""
+    """Strategie für einen dummen Computerspieler."""
     pitList = game.gamePanel[game.nextPlayer-1]
     nonEmptyPitList = [i for i in range(len(pitList)) if i > 0 and pitList[i] > 0]
     return nonEmptyPitList[random.randint(0, len(nonEmptyPitList)-1)]
 
 def Kalaha_L2(game):
-    """Ein Callback für einen halbwegs smarten Computerspieler."""
+    """Strategie für einen halbwegs smarten Computerspieler."""
     pit = game.gamePanel
-    move = 0
-    moveValue = -12
+    move = Kalaha_L1(game)
+    moveValue = 4
     for i in range(1, len(pit[game.nextPlayer-1])):
         stones = pit[game.nextPlayer-1][i]
-        if stones == 0:
-            continue
-        # Zuerst schauen wir, ob es ein Zug gibt, der den letzten Stein gerade in Kalah bringt
-        elif i == stones:
-            return i
-        # Sonst schauen wir, ob wir gegnerische Steine erbeuten können
-        elif stones < i and pit[game.nextPlayer-1][i-stones] == 0 and pit[game.nextPlayer%2][7-i+stones] > 0:
-            return i
-        elif stones > i+6 and stones < 13 and pit[game.nextPlayer-1][i+13-stones] == 0:
-            return i
-        elif stones == 13:
-            return i
-        # Wir schauen auf die andere Seite ob die Mulde dort leer ist
-        elif pit[game.nextPlayer%2][7-i] == 0 and stones > moveValue:
-            move = i
-            moveValue = stones
-        # Sonst suchen wir den Zug, der die wenigsten Steine auf die andere Seite bringt
-        elif i-stones > moveValue:
-            move = i
-            moveValue = i-stones
+        if stones > 0:
+            # Zuerst schauen wir, ob es ein Zug gibt, der den letzten Stein gerade in Kalah bringt
+            if i == stones:
+                return i
+            # Sonst schauen wir, ob wir gegnerische Steine erbeuten können
+            elif stones < i and pit[game.nextPlayer-1][i-stones] == 0 and pit[game.nextPlayer%2][7-i+stones] > 0:
+                return i
+            elif stones > i+6 and stones < 13 and pit[game.nextPlayer-1][i+13-stones] == 0:
+                return i
+            elif stones == 13:
+                return i
+            # Wir schauen auf die andere Seite ob die Mulde dort leer ist
+            elif pit[game.nextPlayer%2][7-i] == 0 and stones > moveValue:
+                move = i
+                moveValue = stones
+            # Sonst suchen wir den Zug, der die wenigsten Steine auf die andere Seite bringt
+            elif i-stones > moveValue:
+                move = i
+                moveValue = i-stones
+    # Den move-Zug geben wir aber nur dann zurück, wenn wir sonst keinen anderen guten Zug haben
+    return move
+
+def Kalaha_L3(game):
+    """Strategie für einen ziemlich smarten Computerspieler."""
+    pit = game.gamePanel
+    move = 0
+    moveValue = -15
+    for i in range(1, len(pit[game.nextPlayer-1])):
+        stones = pit[game.nextPlayer-1][i]
+        if stones > 0:
+            # Zuerst schauen wir, ob es ein Zug gibt, der den letzten Stein gerade in Kalah bringt
+            if i == stones:
+                return i
+            # Sonst schauen wir, ob wir gegnerische Steine erbeuten können
+            elif stones < i and pit[game.nextPlayer-1][i-stones] == 0 and pit[game.nextPlayer%2][7-i+stones] > 0:
+                return i
+            elif stones > i+6 and stones < 13 and pit[game.nextPlayer-1][i+13-stones] == 0:
+                return i
+            elif stones == 13:
+                return i
+            # Wir schauen auf die andere Seite ob die Mulde dort leer ist
+            elif pit[game.nextPlayer%2][7-i] == 0 and stones > moveValue:
+                # In diesem Fall "retten" wir unsere Steine aus der Mulde, es sei denn...
+                move = i
+                moveValue = stones
+                defenseValue = i - stones
+                # ...wir könnten evtl. in die gegenüberliegende leere Mulde ein Stein "legen"
+                for j in range(1, len(pit[game.nextPlayer-1])):
+                    stones2 = pit[game.nextPlayer-1][j]
+                    if i != j and stones2 >= j + i and j - stones2 > defenseValue:
+                        move = j
+                        defenseValue = j - stones2
+            # Sonst suchen wir den Zug, der die wenigsten Steine auf die andere Seite bringt
+            elif i-stones > moveValue:
+                move = i
+                moveValue = i-stones
+
     # Den move-Zug geben wir aber nur dann zurück, wenn wir sonst keinen anderen guten Zug haben
     return move

@@ -2,9 +2,9 @@ import os, sys, time
 
 # -------------------- class Game --------------------
 class Game(object):
-    def __init__(self, player1, player2, player1name = "Spieler 1", player2name = "Spieler 2", printMoves = True):
+    def __init__(self, player1, player2, printMoves = True):
         self.__playerCallback = (player1, player2)
-        self.__playerName = (player1name, player2name)
+        self.__playerName = (player1.__name__ + " (1)", player2.__name__ + " (2)")
         self._printMoves = printMoves
         self.__nextPlayer = 1
         self.__nextMove = 0
@@ -71,7 +71,7 @@ class Game(object):
         if (state[1] > 0):
             s = self.gamePanelToString(state[3], "({:2d}/{:d}): {} => ".format(state[0], state[1], state[2]))
         elif state[1] < 0:
-            s = " ENDE: {} ({:d}) gewinnt nach {:d} Zügen!".format(self.__playerName[-state[1]-1], -state[1], state[0])
+            s = " ENDE: {} gewinnt nach {:d} Zügen!".format(self.__playerName[-state[1]-1], state[0])
             if (state[2] != None):
                 s += " Grund: Falscher Zug ({:d}) des anderen Spielers.".format(state[2])
         else:
@@ -89,11 +89,15 @@ class Game(object):
 
     def getPlayerNames(self):
         """Gibt das Spiel und den Namen der gegeneinander antretenden Spieler/Strategien zurück."""
-        return "{} Spiel: {} (1) gegen {} (2)".format(type(self).__name__, self.__playerName[0], self.__playerName[1])
+        return "{} Spiel: {} gegen {}".format(type(self).__name__, self.__playerName[0], self.__playerName[1])
 
-    def getState(self, index):
+    def _getState(self, index):
+        """Gibt den rohen Spielstand nach dem gewählten Zug zurück."""
+        return self.__moveRecords[index % len(self.__moveRecords)]
+
+    def getStateString(self, index):
         """Gibt den Spielstand als String nach dem gewählten Zug zurück."""
-        return self.stateToString(self.__moveRecords[index % len(self.__moveRecords)])
+        return self.stateToString(self._getState(index))
 
 # -------------------- Human player callback --------------------   
 def human(game):
@@ -120,7 +124,6 @@ if IS_JYTHON:
     println = gconsole.gprintln
     waitForKey = gconsole.getKeyCodeWait
     clr = gconsole.clear
-    close = gconsole.dispose
 else:
     import builtins
     import keyboard # https://stackoverflow.com/questions/24072790/how-to-detect-key-presses
@@ -128,7 +131,9 @@ else:
     waitForKey = keyboard.read_key
     clr = (lambda: os.system('clear')) if os.name == 'posix' else (lambda: os.system('cls')) # https://www.scaler.com/topics/how-to-clear-screen-in-python/
 
-def playOnce(game, printMoves = True):
+def playOne(createGame, player1, player2, printMoves = True):
+    """Führt ein Spiel (Game) einmal aus und erlaubt es nachher die Schritte einzeln anzuschauen."""
+    game = createGame(player1, player2)
     game.setPrintMoves(printMoves)
     game.play()
     if IS_JYTHON:
@@ -140,7 +145,7 @@ def playOnce(game, printMoves = True):
         clr()
         println(game.getPlayerNames())
         println('')
-        println(game.getState(index))
+        println(game.getStateString(index))
         time.sleep(0.2)
         keyPressed = waitForKey()
         if keyPressed == 37 or keyPressed == 'nach-links':
@@ -149,5 +154,32 @@ def playOnce(game, printMoves = True):
             index += 1
         if keyPressed == 40 or keyPressed == 'nach-unten':
             index = 0
-        if keyPressed == 81:
-            close()
+    if IS_JYTHON:
+        gconsole.dispose()
+
+def playMany(createGame, player1, player2, count = 100):
+    """Führt ein Spiel (Game) mehrmals aus und gibt nachher eine Statistik aus."""
+    game1stats = [0, 0, 0]
+    game2stats = [0, 0, 0]
+    if IS_JYTHON:
+        gconsole.makeConsole()
+
+    for i in range(1, count+1):
+        game1 = createGame(player1, player2)
+        game1.setPrintMoves(False)
+        game1.play()
+        game1stats[-game1._getState(-1)[1]] += 1
+        game2 = createGame(player2, player1)
+        game2.setPrintMoves(False)
+        game2.play()
+        game2stats[game2._getState(-1)[1]] += 1
+        if IS_JYTHON:
+            time.sleep(0.1)
+        clr()
+        println(game1.getPlayerNames() + " \n")
+        println("(1) macht den ersten Zug: UNENTSCHIEDEN = {}    (1) GEWINNT = {}    (2) GEWINNT = {}".format(game1stats[0], game1stats[1], game1stats[2]))
+        println("(2) macht den ersten Zug: UNENTSCHIEDEN = {}    (1) GEWINNT = {}    (2) GEWINNT = {}".format(game2stats[0], game2stats[1], game2stats[2]))
+
+    keyPressed = waitForKey()
+    if IS_JYTHON:
+        gconsole.dispose()

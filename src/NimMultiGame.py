@@ -3,8 +3,8 @@ import random
 
 # -------------------- class NimMultiGame --------------------
 class NimMultiGame(Game):
-    def __init__(self, player1, player2, sticksList, player1name = "Spieler 1", player2name = "Spieler 2", lastOneLoses = False):
-        super(NimMultiGame, self).__init__(player1, player2, player1name, player2name)
+    def __init__(self, player1, player2, sticksList, lastOneLoses = False):
+        super(NimMultiGame, self).__init__(player1, player2)
         self.__sticksList = sticksList
         self.__lastOneLoses = lastOneLoses
 
@@ -34,9 +34,9 @@ class NimMultiGame(Game):
         """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)"""
         return None if sum(self.__sticksList) > 0 else (self.nextPlayer%2+1) if self.__lastOneLoses else self.nextPlayer
 
-# -------------------- Computer player callbacks --------------------   
+# -------------------- Computer Strategien --------------------   
 def NimMulti_L1(game):
-    """Callback für einen dummen Computerspieler."""
+    """Strategie für einen dummen Computerspieler."""
     sticksList = game.gamePanel
     nonEmptySticksList = [(i, sticksList[i]) for i in range(len(sticksList)) if sticksList[i] > 0]
     row = random.randint(0, len(nonEmptySticksList)-1)
@@ -44,7 +44,7 @@ def NimMulti_L1(game):
     return (nonEmptySticksList[row][0] + 1, move)
 
 def NimMulti_L2(game):
-    """Callback für einen mittelmässigen Computerspieler."""
+    """Strategie für einen mittelmässigen Computerspieler."""
     sticksList = game.gamePanel
     maxSticks = 0
     maxIndex = 0

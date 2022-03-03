@@ -31,9 +31,9 @@ Das Spiel wird auf einem senkrecht stehenden hohlen Spielbrett gespielt, in das 
 * L4: Ähnlich wie *L2*, aber statt dem letzten zufälligen Wahl wird für jede mögliche wählbare Stelle ein Wert kalkuliert, der die Anzahl möglicher 4-er Linien durch diese Stelle angibt, und gewählt wird die Stelle mit dem höchsten Wert. Zudem wird geschaut ob der andere Spieler gewinnen würde, wenn er nachher auch diese Spalte wählt, und falls ja, dann wird die Stelle mit dem zweitgrössten Wert gewählt.
 
 ## Kalaha
-Das Kalaha-Spielbrett besteht aus zwei Muldenreihen mit jeweils sechs Spielmulden plus eine Gewinnmulde jeweils auf der rechten Seite des gegenübersitzenden Spielers. Am Anfang legt man in jede Spielmulde gleich viele, z.B. 4 (oder auch 3, oder 6) Steinchen. Die Spieler bewegen die Steinchen abwechselnd und am Ende gewinnt derjenige Spieler, der mehr Steinchen in seiner Gewinnmulde gesammelt hat.
+Das Kalaha-Spielbrett besteht aus zwei Muldenreihen mit jeweils sechs Spielmulden plus eine Gewinnmulde jeweils auf der rechten Seite des gegenübersitzenden Spielers. Am Anfang legt man in jede Spielmulde gleich viele, z.B. 4 (oder auch 3, oder 6) Steinchen. Die Spieler bewegen die Steinchen abwechselnd, solange bis nach einem Zug die Spielmulden auf einer Seite ganz leer werden. In diesem Fall endet das Spiel, die restlichen Steine werden in die eigene Gewinnmude verschoben und es gewinnt derjenige Spieler, der mehr Steinchen in seiner Gewinnmulde gesammelt hat.
 
 ### Kalaha - Strategien
 * L1: Die Steine aus einer zufällig gewählten Mulde werden weggenommen.
 * L2: Zuerst schauen wir, ob es einen Zug gibt, der den letzten Stein gerade in den Kalah bringt. Dann schauen wir ob wir mit einem Zug gegnerische Steine erbeuten können. Sonst schauen wir ob auf der anderen Seite leere Mulden gibt und versuchen auf unserer Seite die Mulde mit den meisten Steinen dadurch zu schützen, dass wir unsere Steine von dieser wegbringen. Zuletzt, wenn kein Regel davor gegriffen hat, suchen wir den Zug, der die wenigsten Steine auf die andere Seite bringt.
-* L3: ...
+* L3: Ähnlich, wie *L2*, aber im Falle von leerem Mulden auf der anderen Seite prüft die Strategie zusätzlich, ob es nicht möglich ist, in die Mulde ein eigenes Stein zu "legen".

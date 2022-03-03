@@ -7,8 +7,8 @@ import random
 class VierGewinnt(Game):
     __ROWS = 6
     __COLUMNS = 7
-    def __init__(self, player1, player2, player1name = "Spieler 1", player2name = "Spieler 2"):
-        super(VierGewinnt, self).__init__(player1, player2, player1name, player2name)
+    def __init__(self, player1, player2):
+        super(VierGewinnt, self).__init__(player1, player2)
         self.__gamePanel = [[0]*self.__COLUMNS for _ in range(self.__ROWS)]
 
     @property
@@ -97,16 +97,16 @@ def countTokensIn(line):
 def tokenToString(token):
     return "X " if token == 1 else "O " if token == -1 else ". " if token == 0 else "? "
 
-# -------------------- Computer player callbacks --------------------   
+# -------------------- Computer Strategien --------------------   
 def VierGewinnt_L1(game):
-    """Ein Callback für einen dummen Computerspieler."""
+    """Strategie für einen dummen Computerspieler."""
     maxRow = 6
     maxCol = 7    
     nonFullColList = [i for i in range(1, maxCol+1) if countTokensIn(game.getColumn(i)) < maxRow]
     return nonFullColList[random.randint(0, len(nonFullColList)-1)]
 
 def VierGewinnt_L2(game):
-    """Ein Callback für einen einfachen Computerspieler."""
+    """Strategie für einen einfachen Computerspieler."""
     maxRow = 6
     maxCol = 7
 
@@ -123,7 +123,7 @@ def VierGewinnt_L2(game):
     return VierGewinnt_L1(game)
 
 def VierGewinnt_L3(game):
-    """Ein Callback für einen einfachen Computerspieler."""
+    """Strategie für einen einfachen Computerspieler."""
     maxRow = 6
     maxCol = 7
 
@@ -140,7 +140,7 @@ def VierGewinnt_L3(game):
     return (maxCol+1)//2 if countTokensIn(game.getColumn((maxCol+1)//2)) < maxRow else VierGewinnt_L1(game)
 
 def VierGewinnt_L4(game):
-    """Ein Callback für einen smarten Computerspieler."""
+    """Strategie für einen smarten Computerspieler."""
     maxRow = 6
     maxCol = 7
     selectedCol = 0

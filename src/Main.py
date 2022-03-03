@@ -1,9 +1,16 @@
 import random
 from Game import *
 from NimGame import *
-#from NimMultiGame import *
-#from Kalaha import *
-#from VierGewinnt import *
+from NimMultiGame import *
+from Kalaha import *
+from VierGewinnt import *
+
+nim = lambda p1, p2: NimGame(p1, p2, 15, 3)
+nimMulti = lambda p1, p2: NimMultiGame(p1, p2, [1, 3, 5, 7])
+kalaha = lambda p1, p2: Kalaha(p1, p2)
+vierGewinnt = lambda p1, p2: VierGewinnt(p1, p2)
+
+# -------------------- STRATEGIE --------------------   
 
 def Nim_meineStrategie(game):
     if game.gamePanel <= game.maxTake + 1:
@@ -13,9 +20,13 @@ def Nim_meineStrategie(game):
     return (nextTake if nextTake > 0 else 1)
 
 # -------------------- MAIN --------------------   
-myGame = NimGame(Nim_meineStrategie, Nim_L1, 15, "Meine Strategie")
-#myGame = NimMultiGame(Game.human, NimMulti_L2, [1,3,5,7])
-#myGame = Kalaha(Kalaha_L2, Kalaha_L2, "L2", "L2")
-#myGame = VierGewinnt(VierGewinnt_L4, VierGewinnt_L4, "L4", "L4")
 
-playOnce(myGame)
+#playOne(nim, Nim_L1, Nim_L3)
+#playOne(nimMulti, NimMulti_L1, NimMulti_L2)
+#playOne(kalaha, Kalaha_L1, Kalaha_L2)
+#playOne(vierGewinnt, VierGewinnt_L3, VierGewinnt_L4)
+
+#playMany(nim, Nim_L1, Nim_L3, 500)
+#playMany(nimMulti, NimMulti_L1, NimMulti_L2, 100)
+playMany(kalaha, Kalaha_L2, Kalaha_L3, 100)
+#playMany(vierGewinnt, VierGewinnt_L4, VierGewinnt_L4, 100)
