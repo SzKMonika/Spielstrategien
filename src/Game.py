@@ -126,7 +126,7 @@ if IS_JYTHON:
     clr = gconsole.clear
 else:
     import builtins
-    import keyboard # https://stackoverflow.com/questions/24072790/how-to-detect-key-presses
+    import keyboard # pip3 install keyboard / https://stackoverflow.com/questions/24072790/how-to-detect-key-presses
     println = builtins.print
     waitForKey = keyboard.read_key
     clr = (lambda: os.system('clear')) if os.name == 'posix' else (lambda: os.system('cls')) # https://www.scaler.com/topics/how-to-clear-screen-in-python/

@@ -8,9 +8,9 @@ Aktuell werden nachfolgende Spiele unterstützt.
 Zwei Spieler nehmen abwechselnd eine limitierte Anzahl (z.B. 1, 2 oder 3) von Gegenständen, etwa Streichhölzer, weg. Gewonnen hat beim Standardspiel derjenige, der das letzte Hölzchen nimmt, bei der Misère-Variante verliert dieser.
 
 ### Nim - Strategien
-* L1: Man nimmt immer eine Zufallszahl zwischen min (1) und max (3) an Streichhölzer weg, aber höchstens so viele die noch verfügbar sind.
-* L2: Die Dumme Strategie kann so erweitert werden, dass wenn es möglich ist genau 0 (Standard) bzw. 1 (Misère) oder um min+max (4) mehr Streichholz stehen zu lassen, dann wird so gezogen.
-* L3: Man nimmt immer so viele Streichhölzer, dass nachher eine Mehrfache von min+max (4) plus 0 (Standard) bzw. 1 (Misère) bleiben, oder wenn das nicht geht, dann wird min (1) weggenommen.
+* L1: Man nimmt immer eine Zufallszahl zwischen 1 und max (3) an Streichhölzer weg, aber höchstens so viele die noch verfügbar sind.
+* L2: Die Dumme Strategie kann so erweitert werden, dass wenn es möglich ist genau 0 (Standard) bzw. 1 (Misère) oder um max+1 (4) mehr Streichhölzer stehen zu lassen, dann wird so gezogen.
+* L3: Man nimmt immer so viele Streichhölzer, dass nachher eine Mehrfache von max+1 (4) plus 0 (Standard) bzw. 1 (Misère) bleiben, oder wenn das nicht geht, dann wird 1 weggenommen.
 
 ## Nim-Multi
 In dieser Variante des Nim-Spiels gibt es mehrere Reihen von Hölzchen, und die zwei Spieler nehmen abwechselnd eins oder mehrere Hölzchen aus einer der Reihen weg. Wie viele sie nehmen, spielt keine Rolle; es dürfen bei einem Zug jedoch nur Hölzchen aus einer einzigen Reihe genommen werden. Gewonnen hat beim Standardspiel derjenige, der das letzte Hölzchen nimmt, bei der Misère-Variante verliert dieser.

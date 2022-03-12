@@ -5,7 +5,7 @@ from NimMultiGame import *
 from Kalaha import *
 from VierGewinnt import *
 
-nim = lambda p1, p2: NimGame(p1, p2, 15, 3)
+nim = lambda p1, p2: NimGame(p1, p2, 15, 3, False)
 nimMulti = lambda p1, p2: NimMultiGame(p1, p2, [1, 3, 5, 7])
 kalaha = lambda p1, p2: Kalaha(p1, p2)
 vierGewinnt = lambda p1, p2: VierGewinnt(p1, p2)
@@ -21,12 +21,12 @@ def Nim_meineStrategie(game):
 
 # -------------------- MAIN --------------------   
 
-#playOne(nim, Nim_L1, Nim_L3)
+#playOne(nim, Nim_L2, Nim_L3)
 #playOne(nimMulti, NimMulti_L1, NimMulti_L2)
 #playOne(kalaha, Kalaha_L1, Kalaha_L2)
 #playOne(vierGewinnt, VierGewinnt_L3, VierGewinnt_L4)
 
-#playMany(nim, Nim_L1, Nim_L3, 500)
+playMany(nim, Nim_L2, Nim_L3, 500)
 #playMany(nimMulti, NimMulti_L1, NimMulti_L2, 100)
-playMany(kalaha, Kalaha_L2, Kalaha_L3, 100)
+#playMany(kalaha, Kalaha_L2, Kalaha_L3, 100)
 #playMany(vierGewinnt, VierGewinnt_L4, VierGewinnt_L4, 100)

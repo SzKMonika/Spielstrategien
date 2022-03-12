@@ -27,14 +27,14 @@ class VierGewinnt(Game):
     def _doMove(self, move):
         """Macht den aktuellen Zug und gibt zurück welcher Spieler als nächster kommt."""
         row = countTokensIn(self.getColumn(move)) + 1
-        self.__gamePanel[row-1][move-1] = self.getTokenForNextPlayer()
-        return (self.nextPlayer % 2 + 1)
+        self.__gamePanel[row - 1][move - 1] = self.getTokenForNextPlayer()
+        return (self.nextPlayer%2 + 1)
 
     def _checkEnd(self, move):
         """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)"""
         row = countTokensIn(self.getColumn(move))
         winner = getWinnerIn(self.getColumn(move), self.getRow(row), self.getDiagonalUpRight(row, move), self.getDiagonalUpLeft(row, move))
-        return winner if winner > 0 else 0 if self.countTokens() >= self.__ROWS * self.__COLUMNS else None
+        return winner if winner > 0 else 0 if self.countTokens() >= self.__ROWS*self.__COLUMNS else None
 
     def getTokenForNextPlayer(self):
         return 1 if self.nextPlayer == 1 else -1
@@ -46,10 +46,10 @@ class VierGewinnt(Game):
         return count
 
     def getColumn(self, column):
-        return [row[column-1] for row in self.__gamePanel]
+        return [row[column - 1] for row in self.__gamePanel]
 
     def getRow(self, row):
-        return list(self.__gamePanel[row-1])
+        return list(self.__gamePanel[row - 1])
 
     def getDiagonalUpRight(self, row, column):
         placesDownLeft = min(row - 1, column - 1)
@@ -86,7 +86,7 @@ def countSameTokensIn(line):
     """Gibt an wie viele gleiche Tokens benachbart in einer Reihe von Zahlen vorkommen."""
     sum = maxSum = minSum = 0
     for token in line:
-        sum = sum + token if token * sum > 0 else token
+        sum = sum + token if token*sum > 0 else token
         maxSum = sum if sum > maxSum else maxSum
         minSum = sum if sum < minSum else minSum
     return minSum if -minSum > maxSum else maxSum
@@ -102,15 +102,15 @@ def VierGewinnt_L1(game):
     """Strategie für einen dummen Computerspieler."""
     maxRow = 6
     maxCol = 7    
-    nonFullColList = [i for i in range(1, maxCol+1) if countTokensIn(game.getColumn(i)) < maxRow]
-    return nonFullColList[random.randint(0, len(nonFullColList)-1)]
+    nonFullColList = [i for i in range(1, maxCol + 1) if countTokensIn(game.getColumn(i)) < maxRow]
+    return nonFullColList[random.randint(0, len(nonFullColList) - 1)]
 
 def VierGewinnt_L2(game):
     """Strategie für einen einfachen Computerspieler."""
     maxRow = 6
     maxCol = 7
 
-    for col in range(1, maxCol+1):
+    for col in range(1, maxCol + 1):
         row = countTokensIn(game.getColumn(col)) + 1
         if row > maxRow:
             pass
@@ -127,7 +127,7 @@ def VierGewinnt_L3(game):
     maxRow = 6
     maxCol = 7
 
-    for col in range(1, maxCol+1):
+    for col in range(1, maxCol + 1):
         row = countTokensIn(game.getColumn(col)) + 1
         if row > maxRow:
             pass
@@ -137,7 +137,7 @@ def VierGewinnt_L3(game):
         # Dann prüfen wir ob der Gegner hier gewinnen könnte
         elif hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
             return col
-    return (maxCol+1)//2 if countTokensIn(game.getColumn((maxCol+1)//2)) < maxRow else VierGewinnt_L1(game)
+    return (maxCol + 1)//2 if countTokensIn(game.getColumn((maxCol + 1)//2)) < maxRow else VierGewinnt_L1(game)
 
 def VierGewinnt_L4(game):
     """Strategie für einen smarten Computerspieler."""
@@ -145,7 +145,7 @@ def VierGewinnt_L4(game):
     maxCol = 7
     selectedCol = 0
     selectedValue = 0
-    for col in range(1, maxCol+1):
+    for col in range(1, maxCol + 1):
         row = countTokensIn(game.getColumn(col)) + 1
         if row > maxRow:
             pass
@@ -159,7 +159,7 @@ def VierGewinnt_L4(game):
         # Ansonsten merken wir die Stelle mit dem grössten Wert...
         elif selectedValue < getPlaceValue(row, col, maxRow, maxCol):
             # ...und prüfen, dass der Gegner im nächsten Zug in der gleichen Spalte nicht gewinnnen kann
-            if not(row < maxRow and hasWinnerWithTokenIn(game, row+1, col, -game.getTokenForNextPlayer())):
+            if not(row < maxRow and hasWinnerWithTokenIn(game, row + 1, col, -game.getTokenForNextPlayer())):
                 selectedCol = col
                 selectedValue = getPlaceValue(row, col, maxRow, maxCol)
     return selectedCol
@@ -169,10 +169,10 @@ def hasWinnerWithTokenIn(game, row, col, token, maxCol = 7):
     lineRow = game.getRow(row)
     lineDiag1 = game.getDiagonalUpRight(row, col)
     lineDiag2 = game.getDiagonalUpLeft(row, col)
-    lineCol[row-1] = token
-    lineRow[col-1] = token
-    lineDiag1[min(row, col)-1] = token
-    lineDiag2[min(row, maxCol+1-col)-1] = token
+    lineCol[row - 1] = token
+    lineRow[col - 1] = token
+    lineDiag1[min(row, col) - 1] = token
+    lineDiag2[min(row, maxCol + 1 - col) - 1] = token
     win = getWinnerIn(lineCol, lineRow, lineDiag1, lineDiag2) > 0
     # In der ersten Zeile würde eine beidseitig offener "3-er Reihe" auch (im nächsten Zug) schon gewinnen
     if row == 1 and countSameTokensIn(lineRow) == 3:
@@ -184,23 +184,23 @@ def hasWinnerWithTokenIn(game, row, col, token, maxCol = 7):
 def getSameCountList(line, extraForEmptyNeigbour = 0.4):
     sameCountList = [line[0]]
     for i in range(1, len(line)):
-        if sameCountList[-1] * line[i] > 0:
+        if sameCountList[-1]*line[i] > 0:
             sameCountList[-1] += line[i]
-        elif sameCountList[-1] * line[i] < 0:
+        elif sameCountList[-1]*line[i] < 0:
             sameCountList.append(line[i])
         elif sameCountList[-1] != 0 and line[i] == 0:
             sameCountList[-1] += extraForEmptyNeigbour if sameCountList[-1] > 0 else -extraForEmptyNeigbour
             sameCountList.append(line[i])
         elif sameCountList[-1] == 0 and line[i] != 0:
-            sameCountList.append(line[i] * (1 + extraForEmptyNeigbour))
+            sameCountList.append(line[i]*(1 + extraForEmptyNeigbour))
     return sameCountList
 
 def getPlaceValue(row, col, maxRow = 6, maxCol = 7):
     """Kalkuliert den Wert einer Stelle, also die Anzahl 4-er Ketten die über dieser Stelle laufen."""
     downLeft = min(row, col)
-    upRight = min(maxRow+1-row, maxCol+1-col)
-    downRight = min(row, maxCol+1-col)
-    upLeft = min(maxRow+1-row, col)
-    diagonal1 = min(downLeft, upRight, max(downLeft+upRight-4, 0))
-    diagonal2 = min(downRight, upLeft, max(downRight+upLeft-4, 0))
-    return min(row, maxRow+1-row) + min(col, maxCol+1-col) + diagonal1 + diagonal2
+    upRight = min(maxRow + 1 - row, maxCol + 1 - col)
+    downRight = min(row, maxCol + 1 - col)
+    upLeft = min(maxRow + 1 - row, col)
+    diagonal1 = min(downLeft, upRight, max(downLeft + upRight - 4, 0))
+    diagonal2 = min(downRight, upLeft, max(downRight + upLeft - 4, 0))
+    return min(row, maxRow + 1 - row) + min(col, maxCol + 1 - col) + diagonal1 + diagonal2
