@@ -145,6 +145,7 @@ def VierGewinnt_L4(game):
     maxCol = 7
     selectedCol = 0
     selectedValue = 0
+    maxValue = 1000
     for col in range(1, maxCol + 1):
         row = countTokensIn(game.getColumn(col)) + 1
         if row > maxRow:
@@ -155,7 +156,7 @@ def VierGewinnt_L4(game):
         # Dann prüfen wir ob der Gegner hier gewinnen könnte
         elif hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
             selectedCol = col
-            selectedValue = 1000
+            selectedValue = maxValue
         # Ansonsten merken wir die Stelle mit dem grössten Wert...
         elif selectedValue < getPlaceValue(row, col, maxRow, maxCol):
             # ...und prüfen, dass der Gegner im nächsten Zug in der gleichen Spalte nicht gewinnnen kann

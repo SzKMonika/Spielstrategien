@@ -73,7 +73,7 @@ class Game(object):
         elif state[1] < 0:
             s = " ENDE: {} gewinnt nach {:d} Zügen!".format(self.__playerName[-state[1]-1], state[0])
             if (state[2] != None):
-                s += " Grund: Falscher Zug ({:d}) des anderen Spielers.".format(state[2])
+                s += " Grund: Falscher Zug ({}) des anderen Spielers.".format(state[2])
         else:
             s = " ENDE: Das Spiel endet unentschieden nach {:d} Zügen!".format(state[0])
         return s
@@ -180,6 +180,6 @@ def playMany(createGame, player1, player2, count = 100):
         println("(1) macht den ersten Zug: UNENTSCHIEDEN = {}    (1) GEWINNT = {}    (2) GEWINNT = {}".format(game1stats[0], game1stats[1], game1stats[2]))
         println("(2) macht den ersten Zug: UNENTSCHIEDEN = {}    (1) GEWINNT = {}    (2) GEWINNT = {}".format(game2stats[0], game2stats[1], game2stats[2]))
 
-    keyPressed = waitForKey()
     if IS_JYTHON:
+        waitForKey()
         gconsole.dispose()

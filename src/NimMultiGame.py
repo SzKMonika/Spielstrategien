@@ -1,5 +1,6 @@
 from Game import Game, human
 import random
+from functools import reduce
 
 # -------------------- class NimMultiGame --------------------
 class NimMultiGame(Game):
@@ -70,3 +71,27 @@ def NimMulti_L2(game):
     # Sonst lassen wir 2 stehen oder wenn es nur 2 gibt, dann nehmen wir beide weg
     else:
         return (maxIndex + 1, maxSticks - 2 if maxSticks > 2 else 2)
+
+def NimMulti_L3(game):
+    """Strategie für einen optimalen Computerspieler."""
+    sticksList = game.gamePanel
+    xorValue = reduce(lambda s, e: s ^ e, sticksList, 0)
+    countRowMore = reduce(lambda s, e: s + 1 if e > 1 else s, sticksList, 0)
+    countRowOne = reduce(lambda s, e: s + 1 if e == 1 else s, sticksList, 0)
+
+    # In der Misère-Variante müssen wir schauen ob es nur noch eine Reihe mit mehr als 1 Stick gibt
+    if game.lastOneLoses and countRowMore == 1:
+        # ...dann nehmen wir hier alle oder alle bis auf 1 Sticks weg, abhängig davon
+        # wie viele andere Reihen es noch gibt mit je einem Stick.
+        longRow = [(i + 1, sticksList[i] - (countRowOne + 1) % 2) for i in range(len(sticksList)) if sticksList[i] > 1]
+        return longRow[0]
+    # Wenn es nur noch 1-er Reihen gibt oder der XOR-Wert 0 ist (Verluststellung), dann
+    # können wir einfach einen zufälligen Zug machen.
+    elif countRowMore == 0 or xorValue == 0:
+        return NimMulti_L1(game)
+    # Ansonsten nehmen wir die erste Reihe, wo wir dem anderen Spieler eine Verlusstellung übergeben können
+    else:
+        for i in range(len(sticksList)):
+            newNumberOfSticks = sticksList[i] ^ xorValue
+            if newNumberOfSticks < sticksList[i]:
+                return (i + 1, sticksList[i] - newNumberOfSticks)
