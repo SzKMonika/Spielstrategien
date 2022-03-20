@@ -75,7 +75,7 @@ class VierGewinnt(Game):
                 s += ("\n" + " "*len(firstLine) if len(s) > 0 else "") + reduce(lambda s, e: s + tokenToString(e), row, "")
         return firstLine + s + "\n"
 
-# -------------------- Utility methods --------------------   
+# -------------------- Hilfsmethoden --------------------   
 def getWinnerIn(*lines):
     for line in lines:
         countSame = countSameTokensIn(line)
