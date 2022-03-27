@@ -160,7 +160,9 @@ def playOne(createGame, player1, player2, printMoves = True):
 def playMany(createGame, player1, player2, count = 100):
     """Führt ein Spiel (Game) mehrmals aus und gibt nachher eine Statistik aus."""
     game1stats = [0, 0, 0]
+    game1wrongmove = [0, 0, 0]
     game2stats = [0, 0, 0]
+    game2wrongmove = [0, 0, 0]
     if IS_JYTHON:
         gconsole.makeConsole()
 
@@ -168,17 +170,30 @@ def playMany(createGame, player1, player2, count = 100):
         game1 = createGame(player1, player2)
         game1.setPrintMoves(False)
         game1.play()
-        game1stats[-game1._getState(-1)[1]] += 1
+        winner = -game1._getState(-1)[1]
+        game1stats[winner] += 1
+        if game1._getState(-1)[2] != None:
+            game1wrongmove[winner] += 1
         game2 = createGame(player2, player1)
         game2.setPrintMoves(False)
         game2.play()
-        game2stats[game2._getState(-1)[1]] += 1
+        # Im game2 sind die Spieler umgekehrt, darum arbeiten wir einfach mit negativem Gewinner bzw. Index
+        winner = game2._getState(-1)[1]
+        game2stats[winner] += 1
+        if game2._getState(-1)[2] != None:
+            game2wrongmove[winner] += 1
         if IS_JYTHON:
-            time.sleep(0.1)
+            time.sleep(0.2)
         clr()
         println(game1.getPlayerNames() + " \n")
-        println("(1) macht den ersten Zug: UNENTSCHIEDEN = {}    (1) GEWINNT = {}    (2) GEWINNT = {}".format(game1stats[0], game1stats[1], game1stats[2]))
-        println("(2) macht den ersten Zug: UNENTSCHIEDEN = {}    (1) GEWINNT = {}    (2) GEWINNT = {}".format(game2stats[0], game2stats[1], game2stats[2]))
+        println("  Erster Zug    |  Unentschieden  |    Spieler (1) gewinnt     |    Spieler (2) gewinnt")
+        println("    durch       |                 | (davon wegen falschem Zug) | (davon wegen falschem Zug)")
+        println("----------------+-----------------+----------------------------+----------------------------")
+        println("  Spieler (1)   |      {:^5}      |           {:^5}            |           {:^5}".format(game1stats[0], game1stats[1], game1stats[2]))
+        println("                |                 |          ({:^5})           |          ({:^5})".format(game1wrongmove[1], game1wrongmove[2]))
+        println("----------------+-----------------+----------------------------+----------------------------")
+        println("  Spieler (2)   |      {:^5}      |           {:^5}            |           {:^5}".format(game2stats[0], game2stats[1], game2stats[2]))
+        println("                |                 |          ({:^5})           |          ({:^5})".format(game2wrongmove[1], game2wrongmove[2]))
 
     if IS_JYTHON:
         waitForKey()
