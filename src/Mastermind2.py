@@ -1,38 +1,17 @@
-from pickle import FALSE
+from Game import *
 import random
 
-from numpy import False_
-
 # -------------------- class Mastermind --------------------
-class Mastermind():
+class Mastermind(Game):
     def __init__(self, player1, player2):
+        super(Mastermind, self).__init__(player1, player2)
         self.__numDigits = 4
         self.__secretNumber = random.randint(0, 10**self.__numDigits - 1)
-        self.__guesser = player1
         self.__guessList = []
-        self.__nextMove = 0
-        self.__moveRecords = []        
     
     @property
     def gamePanel(self):
         return list(self.__guessList)
-
-    @property
-    def nextMove(self):
-        """Gibt zurück, wievielter Zug gerade kommt."""
-        return self.__nextMove
-
-    def play(self):
-        """Startet das Spiel und ruft alternierend beide Spieler-Strategien auf, bis eine gewinnt."""
-        try:
-            match = False
-            while not match:
-                self.__nextMove += 1
-                move = self.__guesser(self)
-                self.checkMove(move)
-                match = self._doMove(move)
-        except ValueError as e:
-            pass #TODO Was tun wir beim Fehler?
 
     def checkMove(self, move):
         """Prüft, ob der gewählte Zug des aktuellen Spielers den Regeln und dem aktuellen Stand entspricht."""
@@ -44,10 +23,13 @@ class Mastermind():
     def _doMove(self, move):
         """Macht den aktuellen Zug und gibt zurück welcher Spieler als nächster kommt."""
         good, halfgood = compareNumbers(move, self.__secretNumber, self.__numDigits)
-        #TODO Der andere Spieler soll good und halfgood angeben.
         # Der Spielpanel soll alle bisherige Tipps und dazu gehörige Resultate enthalten
         self.__guessList.append((move, good, halfgood))
-        return good == self.__numDigits
+        return (self.nextPlayer%2 + 1)
+
+    def _checkEnd(self, move):
+        """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)"""
+        return None if move != self.__secretNumber else self.nextPlayer
 
 # -------------------- Hilfsmethoden --------------------   
 def compareNumbers(guess, secret, numDigits = 4):
@@ -109,17 +91,14 @@ class MastermindStrategy:
             self.possibleSecretNumbers[:] = [number for number in self.possibleSecretNumbers if compareNumbers(guess[0], number) == (guess[1], guess[2])]
 
         self.nextGuessIndex = len(guessList)
+        print("({:2d}/{:d}): Strategie {} / {}".format(game.nextMove, game.nextPlayer, len(self.possibleSecretNumbers), self.nextGuessIndex))
 
         # Von den verbleibenden Zahlen wählen wir vollständig random
         next = random.randint(0, len(self.possibleSecretNumbers) - 1)
-        print("({:2d}): Anzahl Möglichkeiten {}; Tipp: {}".format(game.nextMove, len(self.possibleSecretNumbers), self.possibleSecretNumbers[next]))
         return self.possibleSecretNumbers[next]
 
 mastermind = lambda p1, p2: Mastermind(p1, p2)
 strategy1 = MastermindStrategy()
 strategy2 = MastermindStrategy()
-mastermind(strategy1.Mastermind_L2, strategy2.Mastermind_L2).play()
-
-
-#playOne(mastermind, strategy1.Mastermind_L2, human)
+playOne(mastermind, strategy1.Mastermind_L2, human)
 #playMany(mastermind, strategy1.Mastermind_L2, strategy2.Mastermind_L2, 100)

@@ -69,7 +69,8 @@ class Game(object):
     def stateToString(self, state):
         """Gibt den Spielstand nach einem Zug in kompakter/ausdruckbarer Form zurück."""
         if (state[1] > 0):
-            s = self.gamePanelToString(state[3], "({:2d}/{:d}): {} => ".format(state[0], state[1], state[2]))
+            header = "{:2d}. Zug, Spieler {:d}: {} => ".format(state[0], state[1], state[2]) if state[0] > 0 else " START                => "
+            s = self.gamePanelToString(state[3], header)
         elif state[1] < 0:
             s = " ENDE: {} gewinnt nach {:d} Zügen!".format(self.__playerName[-state[1]-1], state[0])
             if (state[2] != None):
@@ -106,6 +107,7 @@ def human(game):
     exc = ""
     while move is None:
         try:
+            #print(game.getStateString(-1) + "\n") TODO Hier ausschreiben statt in recordState, ab dem letzten eigenen Zug (Kalaha)
             move = eval(str(input(exc + str(game.nextMove) + ". Zug kommt, welchen Zug wählst du? ")))
             game.checkMove(move)
         except Exception as e:
