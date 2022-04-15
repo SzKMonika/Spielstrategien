@@ -108,7 +108,7 @@ def human(game):
     while move is None:
         try:
             #print(game.getStateString(-1) + "\n") TODO Hier ausschreiben statt in recordState, ab dem letzten eigenen Zug (Kalaha)
-            move = eval(str(input(exc + str(game.nextMove) + ". Zug kommt, welchen Zug wählst du? ")))
+            move = eval(str(input(exc + str(game.nextMove) + ". Zug kommt, was ziehst du? ")))
             game.checkMove(move)
         except Exception as e:
             move = None

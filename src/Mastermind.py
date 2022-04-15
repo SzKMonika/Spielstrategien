@@ -1,7 +1,5 @@
-from pickle import FALSE
 import random
-
-from numpy import False_
+from Game import human
 
 # -------------------- class Mastermind --------------------
 class Mastermind():
@@ -11,7 +9,6 @@ class Mastermind():
         self.__guesser = player1
         self.__guessList = []
         self.__nextMove = 0
-        self.__moveRecords = []        
     
     @property
     def gamePanel(self):
@@ -31,6 +28,7 @@ class Mastermind():
                 move = self.__guesser(self)
                 self.checkMove(move)
                 match = self._doMove(move)
+                print(self.stateToString((self.nextMove, move, self.gamePanel)))
         except ValueError as e:
             pass #TODO Was tun wir beim Fehler?
 
@@ -48,6 +46,16 @@ class Mastermind():
         # Der Spielpanel soll alle bisherige Tipps und dazu gehörige Resultate enthalten
         self.__guessList.append((move, good, halfgood))
         return good == self.__numDigits
+
+    def stateToString(self, state):
+        """Gibt den Spielstand nach einem Zug in kompakter/ausdruckbarer Form zurück."""
+        return self.gamePanelToString(state[2], "{:2d}. Zug: {:4d} => ".format(state[0], state[1]))
+
+    def gamePanelToString(self, gamePanel, firstLine = ""):
+        s = ""
+        for guess in gamePanel[::-1]:
+            s += ("\n" + " "*len(firstLine) if len(s) > 0 else "") + "{:04d} : {:d} GUT + {:d} halbgut".format(guess[0], guess[1], guess[2])
+        return firstLine + s + "\n"
 
 # -------------------- Hilfsmethoden --------------------   
 def compareNumbers(guess, secret, numDigits = 4):
@@ -112,14 +120,12 @@ class MastermindStrategy:
 
         # Von den verbleibenden Zahlen wählen wir vollständig random
         next = random.randint(0, len(self.possibleSecretNumbers) - 1)
-        print("({:2d}): Anzahl Möglichkeiten {}; Tipp: {}".format(game.nextMove, len(self.possibleSecretNumbers), self.possibleSecretNumbers[next]))
+        print("Anzahl Möglichkeiten {}".format(len(self.possibleSecretNumbers)))
         return self.possibleSecretNumbers[next]
 
 mastermind = lambda p1, p2: Mastermind(p1, p2)
-strategy1 = MastermindStrategy()
-strategy2 = MastermindStrategy()
-mastermind(strategy1.Mastermind_L2, strategy2.Mastermind_L2).play()
+strategy = MastermindStrategy()
+#mastermind(strategy.Mastermind_L2, None).play()
+mastermind(human, None).play()
 
-
-#playOne(mastermind, strategy1.Mastermind_L2, human)
-#playMany(mastermind, strategy1.Mastermind_L2, strategy2.Mastermind_L2, 100)
+#TODO playMany!
