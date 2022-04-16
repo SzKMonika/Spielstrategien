@@ -21,10 +21,10 @@ def Nim_meineStrategie(game):
 
 # -------------------- MAIN --------------------   
 
-#playOne(nim, Nim_L1, human, False)
-#playOne(nimMulti, NimMulti_L2, NimMulti_L3, False)
-playOne(kalaha, Kalaha_L2p(3), human, True)
-#playOne(vierGewinnt, human, VierGewinnt_L4, False)
+playOne(nim, Nim_L1, human)
+#playOne(nimMulti, NimMulti_L2, NimMulti_L3)
+#playOne(kalaha, Kalaha_L2p(3), human)
+#playOne(vierGewinnt, human, VierGewinnt_L4)
 
 #playMany(nim, Nim_L2, Nim_meineStrategie, 200)
 #playMany(nimMulti, NimMulti_L2, NimMulti_L3, 100)

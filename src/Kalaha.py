@@ -79,7 +79,7 @@ class Kalaha(Game):
     def gamePanelToString(self, gamePanel, firstLine = ""):
         pits1 = ["{:2d}".format(i) for i in gamePanel[0]]
         pits2 = ["{:2d}".format(i) for i in gamePanel[1][::-1]]
-        return firstLine + " |".join(pits1) + " |   " + "\n" + " "*len(firstLine) + "   |" + " |".join(pits2)
+        return firstLine + " | ".join(pits1) + " |" + "\n" + " "*len(firstLine) + "   | " + " | ".join(pits2)
 
 # -------------------- Computer Strategien --------------------   
 def Kalaha_L1(game):

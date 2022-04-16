@@ -1,6 +1,6 @@
 # Einführung
 
-Dieses Projekt bietet ein Framework um Spielalgorithmen bei verschiedenen endlichen 2-Spieler Spielen mit perfekter Information auszuprobieren.
+Dieses Projekt bietet ein Framework um Spielalgorithmen bei verschiedenen endlichen 2-Personen Spielen mit perfekter Information auszuprobieren.
 Eine generelle Vereinbarung ist, dass bei einem ungültigen Zug, der gegen die Regeln verstösst, der andere Spieler gewinnt.
 Aktuell werden nachfolgende Spiele unterstützt.
 

@@ -3,7 +3,20 @@ import random
 
 # -------------------- class NimGame --------------------
 class NimGame(Game):
-    def __init__(self, player1, player2, sticks, maxTake = 3, lastOneLoses = True):
+    """Das ist ein konkretes Spiel (Game), wo die zwei Spieler abwechselnd 1 bis 3 (maxTake) Objekte wegnehmen von beim Spielbeginn 'sticks' Anzahl an Objekten.
+    Gewonnen hat beim Standardspiel (lastOneLoses=False) derjenige, der das letzte Stück nimmt, bei der Misère-Variante (lastOneLoses=True) verliert dieser.
+
+    Args:
+        sticks (int): Anzahl der Objekte beim Spielbeginn.
+        maxTake (int): Maximale Anzahl der Objekte die in einem Zug weggenommen werden können.
+        lastOneLoses (bool): Gibt an, welche Variante gespielt wird. False bedeutet die Standard-Variante, True bedeutet die Misère-Variante.
+
+    Attributes:
+        __sticks (int): Die aktuelle Anzahl der Objekte, am Anfang 'sticks'.
+        __maxTake (int): Der als 'maxTake' angegebene Wert.
+        __lastOneLoses (bool): Die Spielvariante, die als 'lastOneLoses' angegeben wurde.
+    """
+    def __init__(self, player1, player2, sticks = 15, maxTake = 3, lastOneLoses = True):
         super(NimGame, self).__init__(player1, player2)
         self.__sticks = sticks
         self.__maxTake = maxTake
@@ -15,26 +28,25 @@ class NimGame(Game):
     
     @property
     def maxTake(self):
+        """Maximale Anzahl der Objekte, die in einem Zug weggenommen werden können."""
         return self.__maxTake
     
     @property
     def lastOneLoses(self):
+        """Gibt an, welche Variante gespielt wird. False bedeutet die Standard-Variante, True bedeutet die Misère-Variante."""
         return self.__lastOneLoses
 
     def checkMove(self, move):
-        """Prüft, ob der gewählte Zug des aktuellen Spielers den Regeln und dem aktuellen Stand entspricht."""
         if not isinstance(move, int):
             raise ValueError("Es muss eine ganze Zahl angegeben werden!")
         if 1 > move or min(self.__maxTake, self.__sticks) < move:
             raise ValueError("Ungültiger Zug " + str(move) + " statt zwischen 1 und " + str(min(self.__maxTake, self.__sticks)) + "!")
 
     def _doMove(self, move):
-        """Macht den aktuellen Zug und gibt zurück welcher Spieler als nächster kommt."""
         self.__sticks = self.__sticks - move
         return (self.nextPlayer%2 + 1)
 
     def _checkEnd(self, move):
-        """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)"""
         return None if self.__sticks > 0 else (self.nextPlayer%2 + 1) if self.__lastOneLoses else self.nextPlayer
 
 # -------------------- Computer Strategien --------------------   

@@ -2,7 +2,24 @@ import os, sys, time
 
 # -------------------- class Game --------------------
 class Game(object):
-    def __init__(self, player1, player2, printMoves = True):
+    """Die Game Klasse ist die gemeinsame Hauptklasse für alle Zweipersonen-Spiele und ist somit der Kern des Frameworks.
+    Hier wird der Ablauf der Spiele generell definiert (siehe play()). Manche Methoden (wie checkMove(), _doMove() und _checkEnd())
+    müssen in den konkreten Spielklassen überschrieben bzw. implementiert werden.
+
+    Args:
+        player1: Eine Callback-Funktion die in play() aufgerufen wird, um die Züge des Spieler 1 zu ermitteln.
+        player2: Eine Callback-Funktion die in play() aufgerufen wird, um die Züge des Spieler 2 zu ermitteln.
+        printMoves (bool): Gibt an, ob die einzelne Züge während des Spiels via print() ausgeschrieben werden sollen, oder nicht
+
+    Attributes:
+        __playerCallback: Ein Tuple aus den eingegeben player1 und player2 Callback-Funktionen.
+        __playerName: Ein Tuple, das die Namen der player1 und player2 Callback-Funktionen und somit den zugewiesenen Spielernamen enthält.
+        _printMoves (bool): Der Wert vom printMoves Argument.
+        __nextPlayer (int): Gibt an, welcher Spieler gerade am Zug ist (1 oder 2). Bei Spielende wird es 0 bei unentschieden bzw. -1 oder -2 abhängig davon wer gewonnen hat.
+        __nextMove (int): Gibt an, welcher Zug kommt. Der erste Zug hat den Index 1.
+        __moveRecords: Eine Liste, die für den Startzustand, für jeden Zug und zum Ende einen Eintrag enthält. Jeder Eintrag ist ein Tuple aus 4 Werten.
+    """
+    def __init__(self, player1, player2, printMoves = False):
         self.__playerCallback = (player1, player2)
         self.__playerName = (player1.__name__ + " (1)", player2.__name__ + " (2)")
         self._printMoves = printMoves
@@ -11,25 +28,34 @@ class Game(object):
         self.__moveRecords = []
 
     def setPrintMoves(self, printMoves):
+        """Setzt den Wert von _printMoves, der angibt ob die jeweiligen Züge direkt mit print() ausgeschrieben werden sollen oder nicht."""
         self._printMoves = printMoves
 
     @property
     def nextPlayer(self):
-        """Gibt den Spieler (1 oder 2) zurück, dessen Zug gerade kommt."""
+        """Gibt den Spieler (1 oder 2) zurück, dessen Zug gerade kommt. Wenn das Spiel schon beendet wurde, ist der Wert 0 (unentschieden), -1 oder -2."""
         return self.__nextPlayer
 
     @property
     def nextMove(self):
-        """Gibt zurück, wievielter Zug gerade kommt."""
+        """Gibt zurück, wievielter Zug gerade kommt, oder bei Spielende die Anzahl insgesamt gemachter Züge."""
         return self.__nextMove
 
     @property
     def gamePanel(self):
-        """Das konkrete Spiel gibt das Spielfeld in seinem Rohform zurück."""
+        """Das konkrete Spiel gibt das Spielfeld in seinem Rohmodell zurück, damit die Spieler-Callbacks daraus den Spielstand vollständig erkunden können.
+        Warnung: Bei Listen oder noch komplexeren Strukturen muss eine Kopie zurückgegeben, damit der Spielstand von aussen unveränderbar bleibt!
+        """
         return None
 
     def play(self):
-        """Startet das Spiel und ruft alternierend beide Spieler-Strategien auf, bis eine gewinnt."""
+        """Startet das Spiel und ruft alternierend beide Spieler-Strategien auf, bis eine gewinnt oder das Spiel mit unentschieden endet.
+        Die Züge werden in einer Schleife abgearbeitet, solange es kein Gewinner (oder unentschiedenes Spielende) gibt:
+        1. __nextMove wird um 1 erhöht und der __playerCallback vom __nextPlayer wird aufgerufen. Dieser Antwortet mit einem 'move'.
+        2. Der 'move' wird geprüft, ob er den Regeln und dem aktuellen Stand entspricht. Falls nicht, dann endet das Spiel mit dem Sieg des anderen Spielers.
+        3. Der 'move' wird ausgeführt in _doMove(), dessen return-Wert der nächste Spieler angibt. In manchen Spielen kann ein Spieler noch ein- oder mehrmals ziehen.
+        4. Es wird geprüft ob das Spiel beendet ist (_checkEnd()). Falls ja, speichern wir den Resultat ab und die Methode wird beendet, sonst kommt der nächste Zug.
+        """
         self.__recordState((self.nextMove, self.nextPlayer, " ", self.gamePanel))
         try:
             while self.__nextPlayer > 0:
@@ -49,19 +75,25 @@ class Game(object):
             self.__recordState((self.__nextMove, self.__nextPlayer, move, None))
 
     def checkMove(self, move):
-        """Prüft, ob der gewählte Zug des aktuellen Spielers den Regeln und dem aktuellen Stand entspricht."""
+        """Das konkrete Spiel prüft, ob der gewählte Zug des aktuellen Spielers den Regeln und dem aktuellen Stand entspricht."""
         pass
 
     def _doMove(self, move):
-        """Macht den aktuellen Zug und gibt zurück welcher Spieler als nächster kommt."""
+        """Im konkreten Spiel wird der aktuelle Zug ausgeführt. Zurückgegeben wird der Spieler (1 oder 2) der als nächster kommt."""
         return 0
 
     def _checkEnd(self, move):
-        """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)"""
+        """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)."""
         return None
 
     def __recordState(self, state):
-        """Speichert den Zug und den Spielstand ab um am Ende des Spiels den Spielablauf sehen zu können."""
+        """Speichert den Zug und den Spielstand ab um nach Spielende den Spielablauf Schritt für Schritt ansehen zu können.
+        Der 'state' Argument sollte ein Tuple mit folgenden Werten beinhalten: (Zugindex, Spieler, Zug, Spielbrett nach dem Zug).
+
+        Warnung! Beim Spielbrett, der meistens einfach das gamePanel ist, muss man aufpassen, eine später nicht mehr veränderbare Struktur einzugeben.
+                 Vor allem bei List-Werten kann es vorkommen, dass - wenn der Wert direkt übergeben wurde - bei weiteren Zügen alle vorher gespeicherten
+                 Spielstände die neuen Werte in der Liste übernehmen. Aus diesem Grund sollten bei List-Werten immer eine Kopie eingegeben werden!
+        """
         self.__moveRecords.append(state)
         if self._printMoves:
             print(self.stateToString(state))
@@ -80,20 +112,24 @@ class Game(object):
         return s
 
     def gamePanelToString(self, gamePanel, firstLine = ""):
-        """Gibt das gamePanel als String zurück. Diese Methode sollte von den Subklassen überschrieben werden."""
+        """Das konkrete Spiel gibt das gamePanel als String zurück, damit es auch für Menschen einfach interpretierbar wird."""
         return firstLine + str(gamePanel)
-
-    def printAllStates(self):
-        """Gibt alle Züge in kompakter Form aus."""
-        for state in self.__moveRecords:
-            print(self.stateToString(state))
 
     def getPlayerNames(self):
         """Gibt das Spiel und den Namen der gegeneinander antretenden Spieler/Strategien zurück."""
         return "{} Spiel: {} gegen {}".format(type(self).__name__, self.__playerName[0], self.__playerName[1])
 
+    def _getLastStatesForNextPlayer(self):
+        """Gibt die letzten Spielstände zurück seit dem letzten Zug des aktuellen __nextPlayer Spielers."""
+        lastStates = []
+        for state in self.__moveRecords[::-1]:
+            lastStates.insert(0, state) # Wir fügen immer am Anfang der Liste ein, damit die Reihenfolge gut wird
+            if state[1] == self.__nextPlayer:
+                return lastStates
+        return lastStates
+
     def _getState(self, index):
-        """Gibt den rohen Spielstand nach dem gewählten Zug zurück."""
+        """Gibt den Spielstand als 4-er Tuple (Zugindex, Spieler, Zug, Spielbrett nach dem Zug) nach dem gewählten Zug zurück."""
         return self.__moveRecords[index % len(self.__moveRecords)]
 
     def getStateString(self, index):
@@ -102,12 +138,15 @@ class Game(object):
 
 # -------------------- Human player callback --------------------   
 def human(game):
-    """Ein Callback für einen menschlichen Spieler, der den Benutzer um ihren Zug fragt."""
+    """Ein Callback für einen menschlichen Spieler, der den Benutzer um ihren Zug fragt.
+    Dieser Callback darf in jedem Spiel generell verwendet werden, weil er den gewählten Zug zuerst mit game.checkMove() überprüft.
+    """
     move = None
     exc = ""
+    for state in game._getLastStatesForNextPlayer():
+        print(game.stateToString(state) + "\n")
     while move is None:
         try:
-            #print(game.getStateString(-1) + "\n") TODO Hier ausschreiben statt in recordState, ab dem letzten eigenen Zug (Kalaha)
             move = eval(str(input(exc + str(game.nextMove) + ". Zug kommt, was ziehst du? ")))
             game.checkMove(move)
         except Exception as e:
@@ -133,7 +172,7 @@ else:
     waitForKey = keyboard.read_key
     clr = (lambda: os.system('clear')) if os.name == 'posix' else (lambda: os.system('cls')) # https://www.scaler.com/topics/how-to-clear-screen-in-python/
 
-def playOne(createGame, player1, player2, printMoves = True):
+def playOne(createGame, player1, player2, printMoves = False):
     """Führt ein Spiel (Game) einmal aus und erlaubt es nachher die Schritte einzeln anzuschauen."""
     game = createGame(player1, player2)
     game.setPrintMoves(printMoves)
