@@ -52,7 +52,7 @@ class Game(object):
         """Startet das Spiel und ruft alternierend beide Spieler-Strategien auf, bis eine gewinnt oder das Spiel mit unentschieden endet.
         Die Züge werden in einer Schleife abgearbeitet, solange es kein Gewinner (oder unentschiedenes Spielende) gibt:
         1. __nextMove wird um 1 erhöht und der __playerCallback vom __nextPlayer wird aufgerufen. Dieser Antwortet mit einem 'move'.
-        2. Der 'move' wird geprüft, ob er den Regeln und dem aktuellen Stand entspricht. Falls nicht, dann endet das Spiel mit dem Sieg des anderen Spielers.
+        2. Der 'move' wird geprüft, ob er den Regeln und dem aktuellen Stand entspricht. Falls nicht (ValueError), dann endet das Spiel mit dem Sieg des anderen Spielers.
         3. Der 'move' wird ausgeführt in _doMove(), dessen return-Wert der nächste Spieler angibt. In manchen Spielen kann ein Spieler noch ein- oder mehrmals ziehen.
         4. Es wird geprüft ob das Spiel beendet ist (_checkEnd()). Falls ja, speichern wir den Resultat ab und die Methode wird beendet, sonst kommt der nächste Zug.
         """
@@ -75,7 +75,11 @@ class Game(object):
             self.__recordState((self.__nextMove, self.__nextPlayer, move, None))
 
     def checkMove(self, move):
-        """Das konkrete Spiel prüft, ob der gewählte Zug des aktuellen Spielers den Regeln und dem aktuellen Stand entspricht."""
+        """Das konkrete Spiel prüft, ob der gewählte Zug des aktuellen Spielers den Regeln und dem aktuellen Stand entspricht.
+
+        Raises:
+            ValueError: Im Falle eines Problems wird ein ValueError mit entsprechendem Text geworfen.
+        """
         pass
 
     def _doMove(self, move):
