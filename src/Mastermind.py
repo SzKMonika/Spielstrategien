@@ -172,10 +172,10 @@ def humanGuessResult(guess, length):
     exc = ""
     while good is None or halfgood is None:
         try:
-            good = int(input("{} Beim Tipp {:04d}, wie viele Ziffern sind gut und an GUTER Stelle? ".format(exc, guess)))
+            good = int(input("{} Beim Tipp {:04d}, wie viele Ziffern sind richtig und an GUTER Stelle? ".format(exc, guess)))
             if good < 0 or good > length:
                 raise ValueError("Es muss eine ganze Zahl zwischen 0 und {:d} angegeben werden!".format(length))
-            halfgood = int(input("{} Beim Tipp {:04d}, wie viele Ziffern sind gut und an falscher Stelle? ".format(exc, guess)))
+            halfgood = int(input("{} Beim Tipp {:04d}, wie viele Ziffern sind richtig aber an falscher Stelle? ".format(exc, guess)))
             if halfgood < 0 or halfgood > length:
                 raise ValueError("Es muss eine ganze Zahl zwischen 0 und {:d} angegeben werden!".format(length))
             if good + halfgood > length:

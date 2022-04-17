@@ -4,7 +4,20 @@ from functools import reduce
 
 # -------------------- class NimMultiGame --------------------
 class NimMultiGame(Game):
-    def __init__(self, player1, player2, sticksList, lastOneLoses = False):
+    """Das ist ein konkretes Spiel (Game), wo die zwei Spieler abwechselnd beliebige Anzahl an Objekten aus einer beliebigen Reihe wegnehmen, aus einer
+    am Anfang des Spiels vordefinierten Anzahl an Objekten die in Reihen eingeteilt sind (sticksList).
+    Gewonnen hat beim Standardspiel (lastOneLoses=False) derjenige, der das letzte Stück nimmt, bei der Misère-Variante (lastOneLoses=True) verliert dieser.
+    Unten werden nur die Nim-spezifische Argumente und Attribute aufgeführt, für die sonstigen bitte im Game schauen.
+
+    Args:
+        sticksList: Eine Liste mit positiven ganzen Zahlen, die die Anzahl der Objekte in der jeweiligen Reihe beim Spielbeginn angeben.
+        lastOneLoses (bool): Gibt an, welche Variante gespielt wird. False bedeutet die Standard-Variante, True bedeutet die Misère-Variante.
+
+    Attributes:
+        __sticksList: Eine Liste mit den aktuellen Anzahl der Objekten in den jeweiligen Reihen, am Anfang 'sticksList'.
+        __lastOneLoses (bool): Die Spielvariante, die als 'lastOneLoses' angegeben wurde.
+    """
+    def __init__(self, player1, player2, sticksList = [1, 3, 5, 7], lastOneLoses = False):
         super(NimMultiGame, self).__init__(player1, player2)
         self.__sticksList = sticksList
         self.__lastOneLoses = lastOneLoses
@@ -15,10 +28,10 @@ class NimMultiGame(Game):
 
     @property
     def lastOneLoses(self):
+        """Gibt an, welche Variante gespielt wird. False bedeutet die Standard-Variante, True bedeutet die Misère-Variante."""
         return self.__lastOneLoses
 
     def checkMove(self, move):
-        """Prüft, ob der gewählte Zug des aktuellen Spielers den Regeln und dem aktuellen Stand entspricht."""
         if not isinstance(move, tuple):
             raise ValueError("Es müssen zwei mit Komma getrennten ganze Zahlen angegeben werden!")
         if move[0] < 1 or move[0] > len(self.__sticksList):
@@ -27,12 +40,10 @@ class NimMultiGame(Game):
             raise ValueError("In der gewählten Reihe " + str(move[0]) + " wollte man eine ungültige Anzahl " + str(move[1]) + " wegnehmen!")
 
     def _doMove(self, move):
-        """Macht den aktuellen Zug und gibt zurück welcher Spieler als nächster kommt."""
         self.__sticksList[move[0] - 1] = self.__sticksList[move[0] - 1] - move[1]
         return (self.nextPlayer%2 + 1)
 
     def _checkEnd(self, move):
-        """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)"""
         return None if sum(self.__sticksList) > 0 else (self.nextPlayer%2 + 1) if self.__lastOneLoses else self.nextPlayer
 
 # -------------------- Computer Strategien --------------------   

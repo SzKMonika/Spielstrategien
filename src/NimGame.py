@@ -5,7 +5,7 @@ import random
 class NimGame(Game):
     """Das ist ein konkretes Spiel (Game), wo die zwei Spieler abwechselnd 1 bis 3 (maxTake) Objekte wegnehmen von beim Spielbeginn 'sticks' Anzahl an Objekten.
     Gewonnen hat beim Standardspiel (lastOneLoses=False) derjenige, der das letzte Stück nimmt, bei der Misère-Variante (lastOneLoses=True) verliert dieser.
-    Unten werden nur die Nim-spezifische Argumente und Attribute aufgeführt, für die sonstigen allgemeinen bitte im Game schauen.
+    Unten werden nur die Nim-spezifische Argumente und Attribute aufgeführt, für die sonstigen bitte im Game schauen.
 
     Args:
         sticks (int): Anzahl der Objekte beim Spielbeginn.
