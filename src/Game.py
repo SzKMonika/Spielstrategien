@@ -119,9 +119,13 @@ class Game(object):
         """Das konkrete Spiel gibt das gamePanel als String zurück, damit es auch für Menschen einfach interpretierbar wird."""
         return firstLine + str(gamePanel)
 
+    def getName(self):
+        """Gibt den Namen des Spiels zurück. Falls Varianten oder Parameter angezeigt werden sollen, dann muss diese Methode im konkreten Spiel überschrieben werden."""
+        return type(self).__name__
+
     def getPlayerNames(self):
         """Gibt das Spiel und den Namen der gegeneinander antretenden Spieler/Strategien zurück."""
-        return "{} Spiel: {} gegen {}".format(type(self).__name__, self.__playerName[0], self.__playerName[1])
+        return "{} gegen {}".format(self.__playerName[0], self.__playerName[1])
 
     def _getLastStatesForNextPlayer(self):
         """Gibt die letzten Spielstände zurück seit dem letzten Zug des aktuellen __nextPlayer Spielers."""
@@ -140,31 +144,108 @@ class Game(object):
         """Gibt den Spielstand als String nach dem gewählten Zug zurück."""
         return self.stateToString(self._getState(index))
 
-# -------------------- Human player callback --------------------   
-def human(game):
-    """Ein Callback für einen menschlichen Spieler, der den Benutzer um ihren Zug fragt.
-    Dieser Callback darf in jedem Spiel generell verwendet werden, weil er den gewählten Zug zuerst mit game.checkMove() überprüft.
-    """
-    move = None
-    exc = ""
-    for state in game._getLastStatesForNextPlayer():
-        print(game.stateToString(state) + "\n")
-    while move is None:
-        try:
-            move = eval(str(input(exc + str(game.nextMove) + ". Zug kommt, was ziehst du? ")))
-            game.checkMove(move)
-        except Exception as e:
-            move = None
-            exc = str(e) + "! "
-    return move
+    def isLastMoveWrong(self):
+        """Gibt zurück, ob der letzte Zug vor dem Spielende ungültig war oder nicht."""
+        return self._getState(-1)[2] != None and self._getState(-1)[3] == None
 
-# -------------------- Game execution --------------------   
+    # -------------------- Human callback --------------------   
+    @staticmethod
+    def human(game):
+        """Ein Callback für einen menschlichen Spieler, der den Benutzer um ihren Zug fragt.
+        Dieser Callback darf in jedem Spiel generell verwendet werden, weil er den gewählten Zug zuerst mit game.checkMove() überprüft.
+        """
+        move = None
+        exc = ""
+        for state in game._getLastStatesForNextPlayer():
+            print(game.stateToString(state) + "\n")
+        while move is None:
+            try:
+                move = eval(str(input(exc + str(game.nextMove) + ". Zug kommt, was ziehst du? ")))
+                game.checkMove(move)
+            except Exception as e:
+                move = None
+                exc = str(e) + "! "
+        return move
+
+    # -------------------- Spielausführung --------------------   
+    @staticmethod
+    def playOne(createGame, player1, player2, printMoves = False):
+        """Führt ein Spiel (Game) einmal aus und erlaubt es nachher die Schritte einzeln anzuschauen."""
+        game = createGame(player1, player2)
+        game.setPrintMoves(printMoves)
+        game.play()
+        if IS_JYTHON:
+            gconsole.makeConsole()
+        println("Benutze die Pfeiltasten um jeden Spielzug einzeln anzuschauen, und q um zu beenden!")
+        keyPressed = waitForKey()
+        index = 0
+        while keyPressed != 'q' and keyPressed != 81:
+            clr()
+            println(game.getName() + ": " + game.getPlayerNames())
+            println('')
+            println(game.getStateString(index))
+            time.sleep(0.2)
+            keyPressed = waitForKey()
+            if keyPressed == 37 or keyPressed == 'nach-links':
+                index -= 1
+            if keyPressed == 39 or keyPressed == 'nach-rechts':
+                index += 1
+            if keyPressed == 40 or keyPressed == 'nach-unten':
+                index = 0
+        if IS_JYTHON:
+            gconsole.dispose()
+
+    @staticmethod
+    def playMany(createGame, player1, player2, count = 100):
+        """Führt ein Spiel (Game) mehrmals aus und gibt nachher eine Statistik aus."""
+        start = time.time()
+        game1stats = [0, 0, 0]
+        game1wrongmove = [0, 0, 0]
+        game2stats = [0, 0, 0]
+        game2wrongmove = [0, 0, 0]
+        if IS_JYTHON:
+            gconsole.makeConsole()
+
+        for _ in range(1, count+1):
+            game1 = createGame(player1, player2)
+            game1.setPrintMoves(False)
+            game1.play()
+            winner = -game1.nextPlayer
+            game1stats[winner] += 1
+            if game1.isLastMoveWrong():
+                game1wrongmove[winner] += 1
+            game2 = createGame(player2, player1)
+            game2.setPrintMoves(False)
+            game2.play()
+            # Im game2 sind die Spieler umgekehrt, darum arbeiten wir einfach mit negativem Gewinner bzw. Index
+            winner = game2.nextPlayer
+            game2stats[winner] += 1
+            if game2.isLastMoveWrong():
+                game2wrongmove[winner] += 1
+            if IS_JYTHON:
+                time.sleep(0.1)
+            clr()
+            out = game1.getName() + ": " + game1.getPlayerNames() + " \n"
+            out += ("\n  Erster Zug    |  Unentschieden  |    Spieler (1) gewinnt     |    Spieler (2) gewinnt")
+            out += ("\n    durch       |                 | (davon wegen falschem Zug) | (davon wegen falschem Zug)")
+            out += ("\n----------------+-----------------+----------------------------+----------------------------")
+            out += ("\n  Spieler (1)   |      {:^5}      |           {:^5}            |           {:^5}".format(game1stats[0], game1stats[1], game1stats[2]))
+            out += ("\n                |                 |          ({:^5})           |          ({:^5})".format(game1wrongmove[1], game1wrongmove[2]))
+            out += ("\n----------------+-----------------+----------------------------+----------------------------")
+            out += ("\n  Spieler (2)   |      {:^5}      |           {:^5}            |           {:^5}".format(game2stats[0], game2stats[1], game2stats[2]))
+            out += ("\n                |                 |          ({:^5})           |          ({:^5})".format(game2wrongmove[1], game2wrongmove[2]))
+            out += ("\n\n(Zeit: {:5.3f} s)".format(time.time() - start))
+            println(out)
+        if IS_JYTHON:
+            waitForKey()
+            gconsole.dispose()
+
+# -------------------- Umgebung-abhängige Initialisierung --------------------   
 IS_PYTHON3 = sys.version_info[0] > 2
 
 IS_JYTHON = sys.executable.endswith("jython.exe") or sys.platform.startswith("java")
 
 if IS_JYTHON:
-    #from gpanel import *
     import gconsole
     println = gconsole.gprintln
     waitForKey = gconsole.getKeyCodeWait
@@ -175,71 +256,3 @@ else:
     println = builtins.print
     waitForKey = keyboard.read_key
     clr = (lambda: os.system('clear')) if os.name == 'posix' else (lambda: os.system('cls')) # https://www.scaler.com/topics/how-to-clear-screen-in-python/
-
-def playOne(createGame, player1, player2, printMoves = False):
-    """Führt ein Spiel (Game) einmal aus und erlaubt es nachher die Schritte einzeln anzuschauen."""
-    game = createGame(player1, player2)
-    game.setPrintMoves(printMoves)
-    game.play()
-    if IS_JYTHON:
-        gconsole.makeConsole()
-    println("Benutze die Pfeiltasten um jeden Spielzug einzeln anzuschauen, und q um zu beenden!")
-    keyPressed = waitForKey()
-    index = 0
-    while keyPressed != 'q' and keyPressed != 81:
-        clr()
-        println(game.getPlayerNames())
-        println('')
-        println(game.getStateString(index))
-        time.sleep(0.2)
-        keyPressed = waitForKey()
-        if keyPressed == 37 or keyPressed == 'nach-links':
-            index -= 1
-        if keyPressed == 39 or keyPressed == 'nach-rechts':
-            index += 1
-        if keyPressed == 40 or keyPressed == 'nach-unten':
-            index = 0
-    if IS_JYTHON:
-        gconsole.dispose()
-
-def playMany(createGame, player1, player2, count = 100):
-    """Führt ein Spiel (Game) mehrmals aus und gibt nachher eine Statistik aus."""
-    game1stats = [0, 0, 0]
-    game1wrongmove = [0, 0, 0]
-    game2stats = [0, 0, 0]
-    game2wrongmove = [0, 0, 0]
-    if IS_JYTHON:
-        gconsole.makeConsole()
-
-    for i in range(1, count+1):
-        game1 = createGame(player1, player2)
-        game1.setPrintMoves(False)
-        game1.play()
-        winner = -game1._getState(-1)[1]
-        game1stats[winner] += 1
-        if game1._getState(-1)[2] != None:
-            game1wrongmove[winner] += 1
-        game2 = createGame(player2, player1)
-        game2.setPrintMoves(False)
-        game2.play()
-        # Im game2 sind die Spieler umgekehrt, darum arbeiten wir einfach mit negativem Gewinner bzw. Index
-        winner = game2._getState(-1)[1]
-        game2stats[winner] += 1
-        if game2._getState(-1)[2] != None:
-            game2wrongmove[winner] += 1
-        if IS_JYTHON:
-            time.sleep(0.2)
-        clr()
-        println(game1.getPlayerNames() + " \n")
-        println("  Erster Zug    |  Unentschieden  |    Spieler (1) gewinnt     |    Spieler (2) gewinnt")
-        println("    durch       |                 | (davon wegen falschem Zug) | (davon wegen falschem Zug)")
-        println("----------------+-----------------+----------------------------+----------------------------")
-        println("  Spieler (1)   |      {:^5}      |           {:^5}            |           {:^5}".format(game1stats[0], game1stats[1], game1stats[2]))
-        println("                |                 |          ({:^5})           |          ({:^5})".format(game1wrongmove[1], game1wrongmove[2]))
-        println("----------------+-----------------+----------------------------+----------------------------")
-        println("  Spieler (2)   |      {:^5}      |           {:^5}            |           {:^5}".format(game2stats[0], game2stats[1], game2stats[2]))
-        println("                |                 |          ({:^5})           |          ({:^5})".format(game2wrongmove[1], game2wrongmove[2]))
-
-    if IS_JYTHON:
-        waitForKey()
-        gconsole.dispose()
