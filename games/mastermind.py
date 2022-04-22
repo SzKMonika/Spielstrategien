@@ -1,4 +1,4 @@
-from Game import Game # Wir brauchen nur den 'human' Spieler, sonst nichts
+from games.game import Game # Wir brauchen nur den 'human' Spieler, sonst nichts
 import os, random, time
 
 # -------------------- class Mastermind --------------------

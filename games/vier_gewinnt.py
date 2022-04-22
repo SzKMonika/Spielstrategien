@@ -1,8 +1,6 @@
-from Game import Game
-import copy
+from games.game import Game
 from functools import reduce
-import random
-import sys
+import copy, random, sys
 
 # -------------------- class VierGewinnt --------------------
 class VierGewinnt(Game):

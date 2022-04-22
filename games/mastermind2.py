@@ -1,4 +1,4 @@
-from Game import Game
+from games.game import Game
 import random
 
 # -------------------- class Mastermind --------------------

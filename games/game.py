@@ -108,11 +108,11 @@ class Game(object):
             header = "{:2d}. Zug, Spieler {:d}: {} => ".format(state[0], state[1], state[2]) if state[0] > 0 else " START                => "
             s = self.gamePanelToString(state[3], header)
         elif state[1] < 0:
-            s = " ENDE: {} gewinnt nach {:d} Zügen!".format(self.__playerName[-state[1]-1], state[0])
+            s = " ENDE: {} gewinnt nach {:d} Zuegen!".format(self.__playerName[-state[1]-1], state[0])
             if (state[2] != None):
                 s += " Grund: Falscher Zug ({}) des anderen Spielers.".format(state[2])
         else:
-            s = " ENDE: Das Spiel endet unentschieden nach {:d} Zügen!".format(state[0])
+            s = " ENDE: Das Spiel endet unentschieden nach {:d} Zuegen!".format(state[0])
         return s
 
     def gamePanelToString(self, gamePanel, firstLine = ""):

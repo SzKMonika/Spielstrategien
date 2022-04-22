@@ -1,6 +1,6 @@
-from Game import Game
-import random
+from games.game import Game
 from functools import reduce
+import random
 
 # -------------------- class NimMulti --------------------
 class NimMulti(Game):

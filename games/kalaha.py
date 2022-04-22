@@ -1,6 +1,5 @@
-from Game import Game
-import random
-import copy
+from games.game import Game
+import copy, random
 
 # -------------------- class Kalaha --------------------
 class Kalaha(Game):
