@@ -100,7 +100,7 @@ class NimMulti(Game):
         if game.lastOneLoses and countRowMore == 1:
             # ...dann nehmen wir hier alle oder alle bis auf 1 Sticks weg, abhängig davon
             # wie viele andere Reihen es noch gibt mit je einem Stick.
-            longRow = [(i + 1, sticksList[i] - (countRowOne + 1) % 2) for i in range(len(sticksList)) if sticksList[i] > 1]
+            longRow = [(i + 1, sticksList[i] - (countRowOne + 1)%2) for i in range(len(sticksList)) if sticksList[i] > 1]
             return longRow[0]
         # Wenn es nur noch 1-er Reihen gibt oder der XOR-Wert 0 ist (Verluststellung), dann
         # können wir einfach einen zufälligen Zug machen.

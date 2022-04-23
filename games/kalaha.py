@@ -7,7 +7,7 @@ class Kalaha(Game):
     def __init__(self, player1, player2):
         super(Kalaha, self).__init__(player1, player2)
         stones = 4
-        self.__pit = ([0] + [stones] * self.__PITS, [0] + [stones] * self.__PITS)
+        self.__pit = ([0] + [stones]*self.__PITS, [0] + [stones]*self.__PITS)
 
     @property
     def gamePanel(self):
@@ -19,16 +19,16 @@ class Kalaha(Game):
             raise ValueError("Es muss eine ganze Zahl angegeben werden!")
         if move < 1 or move > self.__PITS:
             raise ValueError("Gewählte Mulde " + str(move) + " ist ungültig!")
-        if self.__pit[self.nextPlayer-1][move] < 1:
+        if self.__pit[self.nextPlayer - 1][move] < 1:
             raise ValueError("In der gewählten Mulde " + str(move) + " gibt es keinen Stein!")
 
     def _doMove(self, move):
         """Macht den aktuellen Zug und gibt zurück welcher Spieler als nächster kommt."""
         # Zuerst entfernen wir alle Steine von der gewählten Mulde
-        stones = self.__pit[self.nextPlayer-1][move]
-        self.__pit[self.nextPlayer-1][move] = 0
+        stones = self.__pit[self.nextPlayer - 1][move]
+        self.__pit[self.nextPlayer - 1][move] = 0
         # Dann verteilen wir die Steine rekursiv auf die nächsten Mulden
-        nextPlayer = self.__addStone(self.nextPlayer-1, move-1, stones)
+        nextPlayer = self.__addStone(self.nextPlayer - 1, move - 1, stones)
         return nextPlayer
 
     def _checkEnd(self, move):
@@ -46,7 +46,7 @@ class Kalaha(Game):
             return self.nextPlayer%2 + 1
         elif pit < 1:
             # In der eigener Reihe legen wir einen zusätzlichen Stein auch in den Kalah
-            if row == self.nextPlayer-1:
+            if row == self.nextPlayer - 1:
                 self.__pit[row][0] += 1
                 remaining -= 1
                 # Wenn das der letzte Stein war, dann kommt nochmals dieser Spieler
@@ -59,21 +59,21 @@ class Kalaha(Game):
             self.__pit[row][pit] += 1
             remaining -= 1
             if remaining < 1:
-                stonesInOppositePit = self.__pit[(row+1)%2][self.__PITS+1-pit]
+                stonesInOppositePit = self.__pit[(row + 1)%2][self.__PITS + 1 - pit]
                 # Wenn das der letzte Stein war und in eine eigene leere Mulde gestellt wurde,
                 # deren gegenüberliegende Mulde nicht leer war, dann ...
-                if row == self.nextPlayer-1 and self.__pit[row][pit] == 1 and stonesInOppositePit > 0:
+                if row == self.nextPlayer - 1 and self.__pit[row][pit] == 1 and stonesInOppositePit > 0:
                     # ... speichern wir den Zwischenstand für bessere Nachvollziehbarkeit
                     # TODO? self.__recordState((self.__nextMove, self.__nextPlayer, "*", copy.deepcopy(self.__pit)))
                     # ... und verschieben alle Steine der beiden Mulden in den eigenen Kalah
                     self.__pit[row][0] += stonesInOppositePit + 1
                     self.__pit[row][pit] = 0
-                    self.__pit[(row+1)%2][self.__PITS+1-pit] = 0
+                    self.__pit[(row + 1)%2][self.__PITS + 1 - pit] = 0
                 # Nachdem alle Steine verteilt wurden, kommt der andere Spieler an der Reihe
                 return self.nextPlayer%2 + 1
             # Wenn das nicht der letzte Stein war, gehen wir weiter zur nächsten Mulde
             else:
-                return self.__addStone(row, pit-1, remaining)
+                return self.__addStone(row, pit - 1, remaining)
 
     def gamePanelToString(self, gamePanel, firstLine = ""):
         pits1 = ["{:2d}".format(i) for i in gamePanel[0]]
@@ -84,41 +84,51 @@ class Kalaha(Game):
     @staticmethod
     def level1(game):
         """Strategie für einen dummen Computerspieler."""
-        pitList = game.gamePanel[game.nextPlayer-1]
+        pitList = game.gamePanel[game.nextPlayer - 1]
         nonEmptyPitList = [i for i in range(len(pitList)) if i > 0 and pitList[i] > 0]
-        return nonEmptyPitList[random.randint(0, len(nonEmptyPitList)-1)]
+        return nonEmptyPitList[random.randint(0, len(nonEmptyPitList) - 1)]
 
     @staticmethod
-    def level2p(startMoveValue = 4):
-        def level2(game):
-            """Strategie für einen halbwegs smarten Computerspieler."""
-            pit = game.gamePanel
-            move = Kalaha.level1(game)
-            moveValue = startMoveValue
-            for i in range(1, len(pit[game.nextPlayer-1])):
-                stones = pit[game.nextPlayer-1][i]
-                if stones > 0:
-                    # Zuerst schauen wir, ob es ein Zug gibt, der den letzten Stein gerade in Kalah bringt
-                    if i == stones:
-                        return i
-                    # Sonst schauen wir, ob wir gegnerische Steine erbeuten können
-                    elif stones < i and pit[game.nextPlayer-1][i-stones] == 0 and pit[game.nextPlayer%2][7-i+stones] > 0:
-                        return i
-                    elif stones > i+6 and stones < 13 and pit[game.nextPlayer-1][i+13-stones] == 0:
-                        return i
-                    elif stones == 13:
-                        return i
-                    # Wir schauen auf die andere Seite ob die Mulde dort leer ist
-                    elif pit[game.nextPlayer%2][7-i] == 0 and stones > moveValue:
-                        move = i
-                        moveValue = stones
-                    # Sonst suchen wir den Zug, der die wenigsten Steine auf die andere Seite bringt
-                    elif i-stones > moveValue:
-                        move = i
-                        moveValue = i-stones
-            # Den move-Zug geben wir aber nur dann zurück, wenn wir sonst keinen anderen guten Zug haben
-            return move
-        return level2
+    def level2a(game):
+        return Kalaha._level2(game, 2)
+
+    @staticmethod
+    def level2b(game):
+        return Kalaha._level2(game, 3)
+
+    @staticmethod
+    def level2c(game):
+        return Kalaha._level2(game, 4)
+
+    @staticmethod
+    def _level2(game, startMoveValue = 4):
+        """Strategie für einen halbwegs smarten Computerspieler."""
+        pit = game.gamePanel
+        move = Kalaha.level1(game)
+        moveValue = startMoveValue
+        for i in range(1, len(pit[game.nextPlayer - 1])):
+            stones = pit[game.nextPlayer - 1][i]
+            if stones > 0:
+                # Zuerst schauen wir, ob es ein Zug gibt, der den letzten Stein gerade in Kalah bringt
+                if i == stones:
+                    return i
+                # Sonst schauen wir, ob wir gegnerische Steine erbeuten können
+                elif stones < i and pit[game.nextPlayer - 1][i - stones] == 0 and pit[game.nextPlayer%2][7 - i + stones] > 0:
+                    return i
+                elif stones > i + 6 and stones < 13 and pit[game.nextPlayer - 1][i + 13 - stones] == 0:
+                    return i
+                elif stones == 13:
+                    return i
+                # Wir schauen auf die andere Seite ob die Mulde dort leer ist
+                elif pit[game.nextPlayer%2][7 - i] == 0 and stones > moveValue:
+                    move = i
+                    moveValue = stones
+                # Sonst suchen wir den Zug, der die wenigsten Steine auf die andere Seite bringt
+                elif i - stones > moveValue:
+                    move = i
+                    moveValue = i - stones
+        # Den move-Zug geben wir aber nur dann zurück, wenn wir sonst keinen anderen guten Zug haben
+        return move
 
     @staticmethod
     def level3(game):
@@ -126,35 +136,35 @@ class Kalaha(Game):
         pit = game.gamePanel
         move = 0
         moveValue = -15
-        for i in range(1, len(pit[game.nextPlayer-1])):
-            stones = pit[game.nextPlayer-1][i]
+        for i in range(1, len(pit[game.nextPlayer - 1])):
+            stones = pit[game.nextPlayer - 1][i]
             if stones > 0:
                 # Zuerst schauen wir, ob es ein Zug gibt, der den letzten Stein gerade in Kalah bringt
                 if i == stones:
                     return i
                 # Sonst schauen wir, ob wir gegnerische Steine erbeuten können
-                elif stones < i and pit[game.nextPlayer-1][i-stones] == 0 and pit[game.nextPlayer%2][7-i+stones] > 0:
+                elif stones < i and pit[game.nextPlayer - 1][i - stones] == 0 and pit[game.nextPlayer%2][7 - i + stones] > 0:
                     return i
-                elif stones > i+6 and stones < 13 and pit[game.nextPlayer-1][i+13-stones] == 0:
+                elif stones > i + 6 and stones < 13 and pit[game.nextPlayer - 1][i + 13 - stones] == 0:
                     return i
                 elif stones == 13:
                     return i
-                # Wir schauen auf die andere Seite ob die Mulde dort leer ist
-                elif pit[game.nextPlayer%2][7-i] == 0 and stones > moveValue:
+                # Wir schauen auf die andere Seite, ob die Mulde dort leer ist oder so entleert werden kann, dass der Gegner wiederkommt
+                elif pit[game.nextPlayer%2][7 - i] in (0, 7 - i) and stones > moveValue:
                     # In diesem Fall "retten" wir unsere Steine aus der Mulde, es sei denn...
                     move = i
                     moveValue = stones
                     defenseValue = i - stones
                     # ...wir könnten evtl. in die gegenüberliegende leere Mulde ein Stein "legen"
-                    for j in range(1, len(pit[game.nextPlayer-1])):
-                        stones2 = pit[game.nextPlayer-1][j]
+                    for j in range(1, len(pit[game.nextPlayer - 1])):
+                        stones2 = pit[game.nextPlayer - 1][j]
                         if i != j and stones2 >= j + i and j - stones2 > defenseValue:
                             move = j
-                            defenseValue = j - stones2
+                            defenseValue = j - stones2              
                 # Sonst suchen wir den Zug, der die wenigsten Steine auf die andere Seite bringt
-                elif i-stones > moveValue:
+                elif i - stones > moveValue:
                     move = i
-                    moveValue = i-stones
+                    moveValue = i - stones
 
         # Den move-Zug geben wir aber nur dann zurück, wenn wir sonst keinen anderen guten Zug haben
         return move

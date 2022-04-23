@@ -172,7 +172,7 @@ class Mastermind():
         """Führt das Mastermind Spiel mehrmals aus und gibt nachher eine Statistik aus."""
         start = time.time()
         moves = []
-        for i in range(1, count+1):
+        for i in range(1, count + 1):
             game = Mastermind(player1, player2, None, False)
             game.play()
             moves += [game.nextMove]
