@@ -1,4 +1,5 @@
-from games.game import Game # Wir brauchen nur den 'human' Spieler, sonst nichts
+"""Dieses Modul beinhaltet die Klassen Mastermind und MastermindStrategy."""
+
 import os, random, time
 
 # -------------------- class Mastermind --------------------
@@ -6,7 +7,7 @@ class Mastermind():
     """Das ist ein eigenständiges Zweipersonen-Spiel, das jedoch asymmetrisch mit imperferkter Information ist.
     Wie im echten Mastermind, muss der erste Spieler eine geheime Reihenfolge ausdenken und der zweite Spieler muss diese erraten. Die Reihenfolge besteht
     in diesem Spiel aus Ziffern (0 bis 9) statt Farben (wie im echten Mastermind).
-    Nach jedem Tipp gibt der erste Spieler dem zweiten an, wie viele Ziffern gut sind und an guter Stelle sich befinden, und wie viele an falscher Stelle sind.
+    Nach jedem Tipp gibt der erste Spieler dem zweiten an, wie viele Ziffern richtig sind und an guter Stelle sich befinden, und wie viele an falscher Stelle sind.
     Wenn diese Resultat immer vom menschlichen Spieler eingegeben werden soll, dann sollte player1 = player1_human sein.
 
     Args:
@@ -20,7 +21,7 @@ class Mastermind():
         _printMoves (bool): Der Wert vom printMoves Argument.
         __secretCreator: Die als player1 eingegebene Callback-Funktion.
         __guesser: Die als player2 eingegebene Callback-Funktion.
-        __guessList: Die Liste der Züge, die aus 3-er Tuplen besteht.
+        __guessList: Die Liste der Züge, die jeweils aus 3-er Tuplen bestehen: (Tipp, Gut, Halbgut)
         __nextMove (int): Gibt an, welcher Zug kommt. Der erste Zug hat den Index 1.
     """
     def __init__(self, player1, player2, printMoves = True):
@@ -75,7 +76,7 @@ class Mastermind():
                 print("Ungültiger Tipp ({}): {}".format(move, str(e)))
 
     def checkMove(self, move):
-        """Hier wird geprüft, ob die gewählte Zahl zwischen 0 und 9999 (10^4-1) ist.
+        """Hier wird geprüft, ob die gewählte Zahl zwischen 0 und 9999 (10**4-1) ist.
 
         Raises:
             ValueError: Wenn die Eingabe keine ganze Zahl ist, oder negativ bzw. grösser als 9999 ist, wird ein ValueError mit entsprechendem Text geworfen.
@@ -160,13 +161,14 @@ class Mastermind():
         return (good, halfgood)
 
     @staticmethod
-    def zufallsZahl(length):
-        """Generiert eine Zufallszahl mit der angegebenen maximalen Länge."""
-        return random.randint(0, 10**length - 1)
-
-    @staticmethod
     def playMany(player1, player2, count = 100):
-        """Führt das Mastermind Spiel mehrmals aus und gibt nachher eine Statistik aus."""
+        """Führt das Mastermind Spiel mehrmals aus und gibt nachher eine Statistik aus.
+
+        Args:
+            player1: Eine Funktion, die die Strategie des ersten Spielers ausführt.
+            player2: Eine Funktion, die die Strategie des zweiten Spielers ausführt.
+            count (int): Anzahl der Spiele die durchgespielt werden sollen. 
+        """
         start = time.time()
         moves = []
         for i in range(1, count + 1):
@@ -182,10 +184,10 @@ class Mastermind():
             print("Durchschnitt:   {:5.2f}".format(sum(moves)/len(moves)))
             print("\n(Zeit: {:5.3f} s)".format(time.time() - start))
 
-    # -------------------- Human player callbacks --------------------   
+    # -------------------- Menschlicher Spieler --------------------   
     @staticmethod
     def player1_human(_):
-        """Ein Callback für einen menschlichen Spieler, der seine Geheimzahl nicht mitteilt, sondern nach jedem Zug die Resultat angibt."""
+        """Ein Callback für einen menschlichen Spieler, der seine Geheimzahl nicht mitteilt, sondern nach jedem Zug das Resultat (gut, halbgut) angibt."""
         return None
 
     @staticmethod
@@ -228,7 +230,7 @@ class Mastermind():
     # -------------------- Computer Strategien --------------------   
     @staticmethod
     def player1_random(length):
-        """Ein Callback, der eine zufällige Geheimzahl zurückgibt."""
+        """Generiert eine zufällige Geheimzahl mit der angegebenen maximalen Länge."""
         return random.randint(0, 10**length - 1)
 
     @staticmethod

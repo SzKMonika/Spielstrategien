@@ -1,3 +1,5 @@
+"""Dieses Modul beinhaltet die Klasse NimMulti, eine konkrete Subklasse von Game."""
+
 from games.game import Game
 from functools import reduce
 import random

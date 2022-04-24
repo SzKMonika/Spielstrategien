@@ -1,3 +1,5 @@
+"""Dieses Modul ermöglicht das Starten eines beliebigen Spiels von der games-Package."""
+
 import inspect, random, sys
 from games.game import Game
 from games.nim import Nim
@@ -5,9 +7,11 @@ from games.nim_multi import NimMulti
 from games.kalaha import Kalaha
 from games.vier_gewinnt import VierGewinnt
 from games.mastermind import Mastermind
+from games.mastermind2 import Mastermind2
 import strategy
 
 def listFunctions(module, prefix = ""):
+    """Diese Funktion kann für ein Modul oder Klasse (Argument module) die Namen derjenigen Methoden ausgeben, die mit dem angegebenen Prefix anfangen."""
     functions = []
     for name in dir(module):
         obj = getattr(module, name)
@@ -33,11 +37,14 @@ def kalaha(p1, p2):
 def vierGewinnt(p1, p2):
     return VierGewinnt(p1, p2)
 
+def mastermind2(p1, p2):
+    return Mastermind2(p1, p2)
+
 # -------------------- MAIN --------------------
 if __name__ == "__main__":
     gamesDict = { 1: "nim", 2: "nimMisere", 3: "nimMulti", 4: "nimMultiMisere", 5: "kalaha", 6: "vierGewinnt", 7: "mastermind" }
-    classesDict = { 1: Nim, 2: Nim, 3: NimMulti, 4: NimMulti, 5: Kalaha, 6: VierGewinnt, 7: Mastermind }
-    prefixDict = { 1: "nim_", 2: "nim_", 3: "nimMulti", 4: "nimMulti", 5: "kalaha", 6: "vierGewinnt", 7: "mastermind" }
+    classesDict = { 1: Nim, 2: Nim, 3: NimMulti, 4: NimMulti, 5: Kalaha, 6: VierGewinnt, 7: Mastermind, 8: Mastermind2 }
+    prefixDict = { 1: "nim_", 2: "nim_", 3: "nimMulti", 4: "nimMulti", 5: "kalaha", 6: "vierGewinnt", 7: "mastermind", 8: "mastermind" }
 
     game = int(input("Bitte wähle den Spiel aus " + str(gamesDict) + ": "))
 
@@ -49,11 +56,13 @@ if __name__ == "__main__":
         player2 = int(input("Bitte gib die Strategie des 2. Spielers an " + str(strategiesDict) + ": "))
         count = int(input("Bitte gib die Anzahl Durchführungen an: "))
 
+        # Falls der Name einer Strategie-Funktion mit '_' endet, dann rufen wir sie effektiv auf, damit wir die richtige Strategie-Funktion erhalten
+        strategy1 = eval(strategiesDict[player1] + ("()" if strategiesDict[player1].endswith("_") else ""))
+        strategy2 = eval(strategiesDict[player2] + ("()" if strategiesDict[player2].endswith("_") else ""))
         if count <= 1:
-            Game.playOne(eval(gamesDict[game]), eval(strategiesDict[player1]), eval(strategiesDict[player2]))
+            Game.playOne(eval(gamesDict[game]), strategy1, strategy2)
         else:
-            Game.playMany(eval(gamesDict[game]), eval(strategiesDict[player1]), eval(strategiesDict[player2]), count)
-
+            Game.playMany(eval(gamesDict[game]), strategy1, strategy2, count)
     else: # Wir spielen Mastermind
         strategies1 = listFunctions(Mastermind, "player1") + listFunctions(strategy, prefixDict[game])
         strategies1Dict = { i + 1 : strategies1[i] for i in range(len(strategies1)) }
@@ -64,21 +73,11 @@ if __name__ == "__main__":
         player2 = int(input("Bitte gib die Strategie des 2. Spielers an " + str(strategies2Dict) + ": "))
         count = int(input("Bitte gib die Anzahl Durchführungen an: "))
 
-        s2 = eval(strategies2Dict[player2] + ("()" if strategies2Dict[player2].endswith("_") else ""))
+        # Falls der Name einer Strategie-Funktion mit '_' endet, dann rufen wir sie effektiv auf, damit wir die richtige Strategie-Funktion erhalten
+        strategy1 = eval(strategies1Dict[player1] + ("()" if strategies1Dict[player1].endswith("_") else ""))
+        strategy2 = eval(strategies2Dict[player2] + ("()" if strategies2Dict[player2].endswith("_") else ""))
         if count <= 1:
-            game = Mastermind(eval(strategies1Dict[player1]), s2)
+            game = Mastermind(strategy1, strategy2)
             game.play()
         else:
-            Mastermind.playMany(eval(strategies1Dict[player1]), s2, count)
-
-#Game.playOne(nim, Nim.level2, Game.human)
-#Game.playOne(nimMulti, NimMulti.level2, NimMulti.level3)
-#Game.playOne(kalaha, Kalaha.level2p(3), Game.human)
-#Game.playOne(vierGewinnt, Game.human, VierGewinnt.level4)
-#Game.playOne(mastermind, mmstrategy.level3, Game.human)
-
-#Game.playMany(nim, Nim.level2, Nim_meineStrategie, 100)
-#Game.playMany(nimMulti, NimMulti.level2, NimMulti.level3, 100)
-#Game.playMany(kalaha, Kalaha.level2p(3), Kalaha.level1, 100)
-#Game.playMany(vierGewinnt, VierGewinnt.level2, VierGewinnt.level3, 100)
-#Game.playMany(mastermind, Mastermind.level3p(), Mastermind.level2, 100)
+            Mastermind.playMany(strategy1, strategy2, count)

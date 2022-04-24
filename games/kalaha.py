@@ -1,8 +1,27 @@
+"""Dieses Modul beinhaltet die Klasse Kalaha, eine konkrete Subklasse von Game."""
+
 from games.game import Game
 import copy, random
 
 # -------------------- class Kalaha --------------------
 class Kalaha(Game):
+    """Das ist ein konkretes Spiel (Game), in dem das Ziel ist, mehr Steine auf der eigenen Seite zu sammeln als der Gegner.
+    Das Spielbrett besteht aus zwei Muldenreihen mit jeweils sechs Spielmulden plus eine Gewinnmulde jeweils auf der rechten Seite des Spielers.
+    Am Anfang legt man in jede Spielmulde 4 Steine. Die Spieler bewegen die Steine so, dass aus einer eigenen Spielmulde alle Steine genommen werden,
+    und diese gegen Uhrzeigersinn auf die folgenden Mulden verteilt werden (ausser gegnerische Gewinnmulde). Wenn der letzte Stein in der eigenen
+    Gewinnmulde landet gibt es einen Bonus-Zug, sonst kommt der andere Spieler.
+    Es gibt noch einen Spezialfall: Wenn der letzte Stein in einer eigenen leeren Spielmulde landet, und direkt gegenüber 1 oder mehrere Steine
+    liegen, dann werden alle Steine aus beiden Mulden in die eigene Gewinnmulde verschoben
+    Das Spiel endet wenn nach einem Zug die Spielmulden auf einer Seite ganz leer werden.
+    Es gewinnt derjenige Spieler, der mehr Steine auf seiner Seite (inkl. Gewinnmulde) gesammelt hat, bei Gleichstand ist es unentschieden.
+    Unten werden nur die Kalaha-spezifische Argumente und Attribute aufgeführt, für die sonstigen bitte im Game schauen.
+
+    Attributes:
+        __PITS (int): Anzahl Spielmulden pro Spieler (Konstante mit dem Wert 6).
+        __pit: Das Spielbrett-Modell. Es besteht aus einer Tuple mit 2 Listen (für die zwei Muldenreihen) mit jeweils 7 ganzen Zahlen.
+                Beide Listen haben auf Index 0 die Anzahl Steine in der Gewinnmulde, und unter Index 1 bis 6 befinden sich die Anzahl Steine
+                in den Spielmulden, und zwar immer von der Gewinnmulde gezählt. 
+    """
     __PITS = 6
     def __init__(self, player1, player2):
         super(Kalaha, self).__init__(player1, player2)
@@ -14,7 +33,6 @@ class Kalaha(Game):
         return copy.deepcopy(self.__pit)
 
     def checkMove(self, move):
-        """Prüft, ob der gewählte Zug des aktuellen Spielers den Regeln und dem aktuellen Stand entspricht."""
         if not isinstance(move, int):
             raise ValueError("Es muss eine ganze Zahl angegeben werden!")
         if move < 1 or move > self.__PITS:
@@ -23,7 +41,6 @@ class Kalaha(Game):
             raise ValueError("In der gewählten Mulde " + str(move) + " gibt es keinen Stein!")
 
     def _doMove(self, move):
-        """Macht den aktuellen Zug und gibt zurück welcher Spieler als nächster kommt."""
         # Zuerst entfernen wir alle Steine von der gewählten Mulde
         stones = self.__pit[self.nextPlayer - 1][move]
         self.__pit[self.nextPlayer - 1][move] = 0
@@ -32,7 +49,6 @@ class Kalaha(Game):
         return nextPlayer
 
     def _checkEnd(self, move):
-        """Gibt an ob das Spiel mit unentschieden beendet ist (0) oder ein Spieler gewonnen hat (1 oder 2), oder noch nicht beendet ist (None)"""
         if sum(self.__pit[0][1:]) < 1 or sum(self.__pit[1][1:]) < 1:
             stones1 = sum(self.__pit[0])
             stones2 = sum(self.__pit[1])
@@ -40,7 +56,7 @@ class Kalaha(Game):
         return None
 
     def __addStone(self, row, pit, remaining):
-        """Addiert 'remaining' Anzahl Steine angefangen von der gegebenen Mulde in der gegebenen Zeile, rekursiv."""
+        """Addiert 'remaining' Anzahl Steine angefangen von der gegebenen Mulde 'pit' in der gegebenen Zeile 'row', rekursiv."""
         if remaining < 1:
             # Nachdem alle Steine verteilt wurden, kommt der andere Spieler an der Reihe
             return self.nextPlayer%2 + 1
@@ -102,7 +118,8 @@ class Kalaha(Game):
 
     @staticmethod
     def _level2(game, startMoveValue = 4):
-        """Strategie für einen halbwegs smarten Computerspieler."""
+        """Parametrisierbare Strategie für einen halbwegs smarten Computerspieler.
+        Je höher der 'startMoveValue' Parameter, desto mehr wird zufällig gezogen, wenn es keine Möglichkeit zum Bonus-Zug oder Fangen gibt."""
         pit = game.gamePanel
         move = Kalaha.level1(game)
         moveValue = startMoveValue
@@ -112,14 +129,14 @@ class Kalaha(Game):
                 # Zuerst schauen wir, ob es ein Zug gibt, der den letzten Stein gerade in Kalah bringt
                 if i == stones:
                     return i
-                # Sonst schauen wir, ob wir gegnerische Steine erbeuten können
+                # Sonst schauen wir, ob wir gegnerische Steine fangen können
                 elif stones < i and pit[game.nextPlayer - 1][i - stones] == 0 and pit[game.nextPlayer%2][7 - i + stones] > 0:
                     return i
                 elif stones > i + 6 and stones < 13 and pit[game.nextPlayer - 1][i + 13 - stones] == 0:
                     return i
                 elif stones == 13:
                     return i
-                # Wir schauen auf die andere Seite ob die Mulde dort leer ist
+                # Wir schauen auf die andere Seite ob die Mulde dort leer ist und wir mehr als 'moveValue' Steine hier haben
                 elif pit[game.nextPlayer%2][7 - i] == 0 and stones > moveValue:
                     move = i
                     moveValue = stones

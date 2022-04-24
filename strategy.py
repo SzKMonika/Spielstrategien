@@ -1,8 +1,8 @@
 import random
 
-# -------------------- Eigene Strategien --------------------   
-
-def Nim_meineStrategie(game):
+# -------------------- Eigene Strategien --------------------
+def nim_beispielStrategie(game):
+    """Eine einfache Beispiel-Strategie für Nim (Standard)."""
     if game.gamePanel <= game.maxTake + 1:
         nextTake = game.gamePanel - 1
     else:

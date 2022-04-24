@@ -148,7 +148,7 @@ class Game(object):
         """Gibt zurück, ob der letzte Zug vor dem Spielende ungültig war oder nicht."""
         return self._getState(-1)[2] != None and self._getState(-1)[3] == None
 
-    # -------------------- Human callback --------------------   
+    # -------------------- Menschlicher Spieler --------------------   
     @staticmethod
     def human(game):
         """Ein Callback für einen menschlichen Spieler, der den Benutzer um ihren Zug fragt.
@@ -160,6 +160,8 @@ class Game(object):
             print(game.stateToString(state) + "\n")
         while move is None:
             try:
+                # In TigerJython wird input automatisch ausgewertet (wie eval), hingegen in standard Python gibt das ein String zurück.
+                # Darum konvertieren wir explizit auf String und machen dann einen eval darauf, damit es einheitlich funktioniert.
                 move = eval(str(input(exc + str(game.nextMove) + ". Zug kommt, was ziehst du? ")))
                 game.checkMove(move)
             except Exception as e:
@@ -170,10 +172,18 @@ class Game(object):
     # -------------------- Spielausführung --------------------   
     @staticmethod
     def playOne(createGame, player1, player2, printMoves = False):
-        """Führt ein Spiel (Game) einmal aus und erlaubt es nachher die Schritte einzeln anzuschauen."""
+        """Führt ein Spiel (Game) einmal aus und erlaubt es nachher die Züge einzeln anzuschauen.
+        
+        Args:
+            createGame: eine Funktion oder Lambda, die ein Instanz des gewählten Spiels mit den angegeben beiden Spielern erstellen kann
+            player1: Eine Funktion, die die Strategie des ersten Spielers ausführt.
+            player2: Eine Funktion, die die Strategie des zweiten Spielers ausführt.
+            printMoves (bool): Gibt an, ob die Züge bzw. Spielstände auf die Konsole ausgegeben werden sollen oder nicht.
+        """
         game = createGame(player1, player2)
         game.setPrintMoves(printMoves)
         game.play()
+        # Das Spiel ist nun zu Ende, jetzt soll der Benutzer die Züge einzeln anschauen können.
         if IS_JYTHON:
             gconsole.makeConsole()
         println("Benutze die Pfeiltasten um jeden Spielzug einzeln anzuschauen, und q um zu beenden!")
@@ -197,7 +207,15 @@ class Game(object):
 
     @staticmethod
     def playMany(createGame, player1, player2, count = 100):
-        """Führt ein Spiel (Game) mehrmals aus und gibt nachher eine Statistik aus."""
+        """Führt ein Spiel (Game) mehrmals aus und gibt nachher eine Statistik aus.
+        Für jedes ausgeführte Spiel gibt es fairerweise auch eine Revanche, wo die Reihenfolge der beiden Spieler getauscht wird.
+
+        Args:
+            createGame: eine Funktion oder Lambda, die ein Instanz des gewählten Spiels mit den angegeben beiden Spielern erstellen kann
+            player1: Eine Funktion, die die Strategie des ersten Spielers ausführt.
+            player2: Eine Funktion, die die Strategie des zweiten Spielers ausführt.
+            count (int): Anzahl der Spiele die durchgespielt werden sollen. Eigentlich werden doppelt so viele Spiele ausgeführt, wegen den Revanchen. 
+        """
         start = time.time()
         game1stats = [0, 0, 0]
         game1wrongmove = [0, 0, 0]

@@ -1,3 +1,5 @@
+"""Dieses Modul beinhaltet die Klasse Nim, eine konkrete Subklasse von Game."""
+
 from games.game import Game
 import random
 
