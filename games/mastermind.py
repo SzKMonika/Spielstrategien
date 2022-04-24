@@ -7,32 +7,29 @@ class Mastermind():
     Wie im echten Mastermind, muss der erste Spieler eine geheime Reihenfolge ausdenken und der zweite Spieler muss diese erraten. Die Reihenfolge besteht
     in diesem Spiel aus Ziffern (0 bis 9) statt Farben (wie im echten Mastermind).
     Nach jedem Tipp gibt der erste Spieler dem zweiten an, wie viele Ziffern gut sind und an guter Stelle sich befinden, und wie viele an falscher Stelle sind.
-    Wenn diese Resultat immer vom menschlichen Spieler zurückgegeben werden soll, dann sollte player1 = (lambda _: None) und guessResult = humanGuessResult sein.
+    Wenn diese Resultat immer vom menschlichen Spieler eingegeben werden soll, dann sollte player1 = player1_human sein.
 
     Args:
         player1: Eine Callback-Funktion die in play() einmalig aufgerufen wird, um die Geheimzahl zu ermitteln.
         player2: Eine Callback-Funktion die in play() aufgerufen wird, um die Züge (Tipps) des Spieler 2 zu ermitteln.
-        guessResult: Eine Callback-Funktion vom Spieler 1, die zum eingegebenen Tipp die gute und halbgute Zifferzahl angibt. Bei Computer-Spielern kann es None sein.
 
     Attributes:
         __length (int): Die Anzahl Ziffern bzw. Dezimalstellen der Geheimzahl.
         __maxGuessLimit (int): Der maximale Anzahl Tipps, um Endlos-Schleifen zu vermeiden.
         __playerName: Ein Tuple, das die Namen der player1 und player2 Callback-Funktionen und somit den zugewiesenen Spielernamen enthält.
         _printMoves (bool): Der Wert vom printMoves Argument.
-        __secretCreator: Die als player1 eingegebene Callback-Funktion oder wenn die None ist, dann eine Lambda-Funktion die eine random Zahl generiert.
+        __secretCreator: Die als player1 eingegebene Callback-Funktion.
         __guesser: Die als player2 eingegebene Callback-Funktion.
-        __guessResult: Die als guessResult eingegebene Callback-Funktion.
         __guessList: Die Liste der Züge, die aus 3-er Tuplen besteht.
         __nextMove (int): Gibt an, welcher Zug kommt. Der erste Zug hat den Index 1.
     """
-    def __init__(self, player1, player2, guessResult = None, printMoves = True):
+    def __init__(self, player1, player2, printMoves = True):
         self.__length = 4
         self.__maxGuessLimit = 100
-        self.__playerName = (player1.__name__ + " (1)", player2.__name__ + " (2)" if guessResult is None else guessResult.__name__ + " (2)")
+        self.__playerName = (player1.__name__ + " (1)", player2.__name__ + " (2)")
         self._printMoves = printMoves
-        self.__secretCreator = player1 if player1 is not None else (lambda length: random.randint(0, 10**length - 1))
+        self.__secretCreator = player1
         self.__guesser = player2
-        self.__guessResult = guessResult
         self.__guessList = []
         self.__nextMove = 0
 
@@ -90,7 +87,7 @@ class Mastermind():
 
     def _doMove(self, move, secretNumber):
         """In dieser Methode wird der eingegebene Tipp mit dem Geheimzahl verglichen, und der Tipp samt Vergleichsresultat dem __guessList hinzugefügt.
-        Der Vergleich geschieht entweder durch die Funktion compareNumbers() oder durch menschlichen Input (via __guessResult).
+        Der Vergleich geschieht entweder durch die Funktion compareNumbers() oder durch menschlichen Input (via compareNumbers_human()).
 
         Returns:
             match (bool): True wenn die Geheimzahl erraten wurde, False wenn nicht.
@@ -98,7 +95,7 @@ class Mastermind():
         if secretNumber is not None:
             good, halfgood = Mastermind.compareNumbers(move, secretNumber, self.__length)
         else:
-            good, halfgood = self.__guessResult(move, self.__length)
+            good, halfgood = Mastermind.compareNumbers_human(move, self.__length)
         # Der Spielpanel soll alle bisherige Tipps und dazu gehörige Resultate enthalten
         self.__guessList.append((move, good, halfgood))
         return good == self.__length
@@ -173,7 +170,7 @@ class Mastermind():
         start = time.time()
         moves = []
         for i in range(1, count + 1):
-            game = Mastermind(player1, player2, None, False)
+            game = Mastermind(player1, player2, False)
             game.play()
             moves += [game.nextMove]
             os.system('clear' if os.name == 'posix' else 'cls') # https://www.scaler.com/topics/how-to-clear-screen-in-python/
@@ -187,7 +184,12 @@ class Mastermind():
 
     # -------------------- Human player callbacks --------------------   
     @staticmethod
-    def humanSecretCreator(length):
+    def player1_human(_):
+        """Ein Callback für einen menschlichen Spieler, der seine Geheimzahl nicht mitteilt, sondern nach jedem Zug die Resultat angibt."""
+        return None
+
+    @staticmethod
+    def player1_human_auto(length):
         """Ein Callback für einen menschlichen Spieler, der den Benutzer um eine Geheimzahl fragt."""
         secret = None
         exc = ""
@@ -204,7 +206,7 @@ class Mastermind():
         return secret
 
     @staticmethod
-    def humanGuessResult(guess, length):
+    def compareNumbers_human(guess, length):
         """Ein Callback für einen menschlichen Spieler, der den Benutzer um die gute und halbgute Ziffern fragt."""
         good = halfgood = None
         exc = ""
@@ -225,7 +227,12 @@ class Mastermind():
 
     # -------------------- Computer Strategien --------------------   
     @staticmethod
-    def level2(game):
+    def player1_random(length):
+        """Ein Callback, der eine zufällige Geheimzahl zurückgibt."""
+        return random.randint(0, 10**length - 1)
+
+    @staticmethod
+    def player2_level2(game):
         """Strategie für einen mittelmässigen Computerspieler, der mit den Ziffern einzeln arbeitet."""
         length = 4
         guessList = game.gamePanel
@@ -254,10 +261,10 @@ class Mastermind():
         return newGuess
 
     @staticmethod
-    def level3p():
+    def player2_level3_():
         """Gibt die gute Strategie von MastermindStrategy zurück."""
         strategy = MastermindStrategy()
-        return strategy.level3
+        return strategy.player2_level3
 
 # -------------------- Class MastermindStrategy --------------------   
 class MastermindStrategy:
@@ -280,7 +287,7 @@ class MastermindStrategy:
             self.possibleSecretNumbers = [i for i in range(10**4)]
             self.lastGuessIndex = 0
 
-    def level3(self, game):
+    def player2_level3(self, game):
         """Diese Methode ist die eigentliche Callback-Funktion, die dem Mastermind Spiel als Argument eingegeben werden soll."""
         guessList = game.gamePanel
         # Prüfen wir ob vielleicht ein neues Spiel gestartet wurde
@@ -301,9 +308,3 @@ class MastermindStrategy:
             raise ValueError("Der andere Spieler hat geschummelt! Ich bin raus!")
         #print("Anzahl Möglichkeiten {}".format(len(self.possibleSecretNumbers)))
         return self.possibleSecretNumbers[next]
-
-#game = Mastermind(None, Mastermind.level2, Mastermind.humanGuessResult)
-game = Mastermind(Mastermind.humanSecretCreator, Game.human, Mastermind.humanGuessResult)
-#game.play()
-
-Mastermind.playMany(Mastermind.zufallsZahl, Mastermind.level3p())

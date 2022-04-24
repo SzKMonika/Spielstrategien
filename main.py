@@ -4,7 +4,7 @@ from games.nim import Nim
 from games.nim_multi import NimMulti
 from games.kalaha import Kalaha
 from games.vier_gewinnt import VierGewinnt
-from games.mastermind2 import Mastermind, MastermindStrategy
+from games.mastermind import Mastermind
 import strategy
 
 def listFunctions(module, prefix = ""):
@@ -33,27 +33,43 @@ def kalaha(p1, p2):
 def vierGewinnt(p1, p2):
     return VierGewinnt(p1, p2)
 
-def mastermind(p1, p2):
-    return Mastermind(p1, p2)
-
 # -------------------- MAIN --------------------
 if __name__ == "__main__":
     gamesDict = { 1: "nim", 2: "nimMisere", 3: "nimMulti", 4: "nimMultiMisere", 5: "kalaha", 6: "vierGewinnt", 7: "mastermind" }
     classesDict = { 1: Nim, 2: Nim, 3: NimMulti, 4: NimMulti, 5: Kalaha, 6: VierGewinnt, 7: Mastermind }
+    prefixDict = { 1: "nim_", 2: "nim_", 3: "nimMulti", 4: "nimMulti", 5: "kalaha", 6: "vierGewinnt", 7: "mastermind" }
 
     game = int(input("Bitte wähle den Spiel aus " + str(gamesDict) + ": "))
 
-    strategies = listFunctions(classesDict[game] , "level") + listFunctions(strategy) + ["Game.human"]
-    strategiesDict = { i + 1 : strategies[i] for i in range(len(strategies)) }
+    if classesDict[game] != Mastermind:
+        strategies = listFunctions(classesDict[game], "level") + listFunctions(strategy, prefixDict[game]) + ["Game.human"]
+        strategiesDict = { i + 1 : strategies[i] for i in range(len(strategies)) }
 
-    player1 = int(input("Bitte gib die Strategie des 1. Spielers an " + str(strategiesDict) + ": "))
-    player2 = int(input("Bitte gib die Strategie des 2. Spielers an " + str(strategiesDict) + ": "))
-    count = int(input("Bitte gib die Anzahl Durchführungen an: "))
+        player1 = int(input("Bitte gib die Strategie des 1. Spielers an " + str(strategiesDict) + ": "))
+        player2 = int(input("Bitte gib die Strategie des 2. Spielers an " + str(strategiesDict) + ": "))
+        count = int(input("Bitte gib die Anzahl Durchführungen an: "))
 
-    if count <= 1:
-        Game.playOne(eval(gamesDict[game]), eval(strategiesDict[player1]), eval(strategiesDict[player2]))
-    else:
-        Game.playMany(eval(gamesDict[game]), eval(strategiesDict[player1]), eval(strategiesDict[player2]), count)
+        if count <= 1:
+            Game.playOne(eval(gamesDict[game]), eval(strategiesDict[player1]), eval(strategiesDict[player2]))
+        else:
+            Game.playMany(eval(gamesDict[game]), eval(strategiesDict[player1]), eval(strategiesDict[player2]), count)
+
+    else: # Wir spielen Mastermind
+        strategies1 = listFunctions(Mastermind, "player1") + listFunctions(strategy, prefixDict[game])
+        strategies1Dict = { i + 1 : strategies1[i] for i in range(len(strategies1)) }
+        strategies2 = listFunctions(Mastermind, "player2") + listFunctions(strategy, prefixDict[game]) + ["Game.human"]
+        strategies2Dict = { i + 1 : strategies2[i] for i in range(len(strategies1)) }
+
+        player1 = int(input("Bitte gib die Strategie des 1. Spielers an " + str(strategies1Dict) + ": "))
+        player2 = int(input("Bitte gib die Strategie des 2. Spielers an " + str(strategies2Dict) + ": "))
+        count = int(input("Bitte gib die Anzahl Durchführungen an: "))
+
+        s2 = eval(strategies2Dict[player2] + ("()" if strategies2Dict[player2].endswith("_") else ""))
+        if count <= 1:
+            game = Mastermind(eval(strategies1Dict[player1]), s2)
+            game.play()
+        else:
+            Mastermind.playMany(eval(strategies1Dict[player1]), s2, count)
 
 #Game.playOne(nim, Nim.level2, Game.human)
 #Game.playOne(nimMulti, NimMulti.level2, NimMulti.level3)
