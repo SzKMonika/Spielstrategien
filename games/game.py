@@ -1,3 +1,4 @@
+"""Dieses Modul beinhaltet die Klasse Game."""
 import os, sys, time
 
 # -------------------- class Game --------------------

@@ -1,7 +1,7 @@
 """Dieses Modul ermöglicht das Starten eines beliebigen Spiels von der games-Package."""
 
 import inspect, random, sys
-from games.game import Game
+import games.game
 from games.nim import Nim
 from games.nim_multi import NimMulti
 from games.kalaha import Kalaha
@@ -20,22 +20,28 @@ def listFunctions(module, prefix = ""):
     return functions
 
 def nim(p1, p2):
-    return Nim(p1, p2, 15, 3, False)
+    """Diese Funktion erstellt ein Nim-Spiel (Standard)."""
+    return games.nim.Nim(p1, p2, 15, 3, False)
 
 def nimMisere(p1, p2):
-    return Nim(p1, p2, 15, 3, True)
+    """Diese Funktion erstellt ein Nim-Spiel (Misere)."""
+    return games.nim.Nim(p1, p2, 15, 3, True)
 
 def nimMulti(p1, p2):
-    return NimMulti(p1, p2, [1, 3, 5, 7], False)
+    """Diese Funktion erstellt ein NimMulti-Spiel (Standard)."""
+    return games.nim_multi.NimMulti(p1, p2, [1, 3, 5, 7], False)
 
 def nimMultiMisere(p1, p2):
-    return NimMulti(p1, p2, [1, 3, 5, 7], True)
+    """Diese Funktion erstellt ein NimMulti-Spiel (Misere)."""
+    return games.nim_multi.NimMulti(p1, p2, [1, 3, 5, 7], True)
 
 def kalaha(p1, p2):
-    return Kalaha(p1, p2)
+    """Diese Funktion erstellt ein Kalaha-Spiel."""
+    return games.kalaha.Kalaha(p1, p2)
 
 def vierGewinnt(p1, p2):
-    return VierGewinnt(p1, p2)
+    """Diese Funktion erstellt ein VierGewinnt-Spiel."""
+    return games.vier_gewinnt.VierGewinnt(p1, p2)
 
 def mastermind2(p1, p2):
     return Mastermind2(p1, p2)
@@ -60,9 +66,9 @@ if __name__ == "__main__":
         strategy1 = eval(strategiesDict[player1] + ("()" if strategiesDict[player1].endswith("_") else ""))
         strategy2 = eval(strategiesDict[player2] + ("()" if strategiesDict[player2].endswith("_") else ""))
         if count <= 1:
-            Game.playOne(eval(gamesDict[game]), strategy1, strategy2)
+            games.game.Game.playOne(eval(gamesDict[game]), strategy1, strategy2)
         else:
-            Game.playMany(eval(gamesDict[game]), strategy1, strategy2, count)
+            games.game.Game.playMany(eval(gamesDict[game]), strategy1, strategy2, count)
     else: # Wir spielen Mastermind
         strategies1 = listFunctions(Mastermind, "player1") + listFunctions(strategy, prefixDict[game])
         strategies1Dict = { i + 1 : strategies1[i] for i in range(len(strategies1)) }
