@@ -46,6 +46,10 @@ def vierGewinnt(p1, p2):
 def mastermind2(p1, p2):
     return Mastermind2(p1, p2)
 
+def human(game):
+    """Ein menschlicher Spieler, der in jedem Spiel verwendet werden kann."""
+    return games.game.Game.human(game)
+
 # -------------------- MAIN --------------------
 if __name__ == "__main__":
     gamesDict = { 1: "nim", 2: "nimMisere", 3: "nimMulti", 4: "nimMultiMisere", 5: "kalaha", 6: "vierGewinnt", 7: "mastermind" }
@@ -55,7 +59,7 @@ if __name__ == "__main__":
     game = int(input("Bitte wähle den Spiel aus " + str(gamesDict) + ": "))
 
     if classesDict[game] != Mastermind:
-        strategies = listFunctions(classesDict[game], "level") + listFunctions(strategy, prefixDict[game]) + ["Game.human"]
+        strategies = listFunctions(classesDict[game], "level") + listFunctions(strategy, prefixDict[game]) + ["human"]
         strategiesDict = { i + 1 : strategies[i] for i in range(len(strategies)) }
 
         player1 = int(input("Bitte gib die Strategie des 1. Spielers an " + str(strategiesDict) + ": "))
@@ -72,7 +76,7 @@ if __name__ == "__main__":
     else: # Wir spielen Mastermind
         strategies1 = listFunctions(Mastermind, "player1") + listFunctions(strategy, prefixDict[game])
         strategies1Dict = { i + 1 : strategies1[i] for i in range(len(strategies1)) }
-        strategies2 = listFunctions(Mastermind, "player2") + listFunctions(strategy, prefixDict[game]) + ["Game.human"]
+        strategies2 = listFunctions(Mastermind, "player2") + listFunctions(strategy, prefixDict[game]) + ["human"]
         strategies2Dict = { i + 1 : strategies2[i] for i in range(len(strategies1)) }
 
         player1 = int(input("Bitte gib die Strategie des 1. Spielers an " + str(strategies1Dict) + ": "))
