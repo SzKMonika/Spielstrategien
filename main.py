@@ -56,7 +56,7 @@ if __name__ == "__main__":
     classesDict = { 1: Nim, 2: Nim, 3: NimMulti, 4: NimMulti, 5: Kalaha, 6: VierGewinnt, 7: Mastermind, 8: Mastermind2 }
     prefixDict = { 1: "nim_", 2: "nim_", 3: "nimMulti", 4: "nimMulti", 5: "kalaha", 6: "vierGewinnt", 7: "mastermind", 8: "mastermind" }
 
-    game = int(input("Bitte wähle den Spiel aus " + str(gamesDict) + ": "))
+    game = int(input("Bitte wähle das Spiel aus " + str(gamesDict) + ": "))
 
     if classesDict[game] != Mastermind:
         strategies = listFunctions(classesDict[game], "level") + listFunctions(strategy, prefixDict[game]) + ["human"]

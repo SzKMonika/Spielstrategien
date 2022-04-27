@@ -1,5 +1,6 @@
-"""Dieses Modul beinhaltet alle Funktionen, die die eigenen Strategien für die Spiele implementieren. Diese haben immer ein Argument (game)
-und deren Name muss abhängig vom Spiel mit 'nim_', 'nimMulti_', 'kalaha_', 'vierGewinnt_' oder 'mastermind_' anfangen.
+"""Dieses Modul beinhaltet alle eigenen Strategien, die für die Spiele von main.py genutzt werden können.
+Diese sind jeweils eine Funktion mit einem Argument (game) und deren Name muss abhängig vom Spiel mit
+'nim_', 'nimMulti_', 'kalaha_', 'vierGewinnt_' oder 'mastermind_' anfangen.
 """
 import random
 
