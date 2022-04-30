@@ -156,16 +156,20 @@ class Game(object):
         Dieser Callback darf in jedem Spiel generell verwendet werden, weil er den gewählten Zug zuerst mit game.checkMove() überprüft.
         """
         move = None
-        exc = ""
+        exc = "" # Beschreibung der Fehler bei falscher Eingabe
+        # Zuerst schreiben wir die letzten Spielstände aus
         for state in game._getLastStatesForNextPlayer():
             print(game.stateToString(state) + "\n")
+        # Bis der Spieler keinen gültigen Zug eingibt, fragen wir ihn danach
         while move is None:
             try:
                 # In TigerJython wird input automatisch ausgewertet (wie eval), hingegen in standard Python gibt das ein String zurück.
                 # Darum konvertieren wir explizit auf String und machen dann einen eval darauf, damit es einheitlich funktioniert.
                 move = eval(str(input(exc + str(game.nextMove) + ". Zug kommt, was ziehst du? ")))
+                # Wir prüfen, ob die Eingabe gültig ist
                 game.checkMove(move)
             except Exception as e:
+                # Falls die Eingabe ungültig war, setzen wir den Zug auf None
                 move = None
                 exc = str(e) + "! "
         return move

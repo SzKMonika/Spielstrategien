@@ -66,16 +66,23 @@ class Nim(Game):
         """Strategie für einen mittelmässigen Computerspieler."""
         last = (1 if game.lastOneLoses else 0)
 
+        # Falls wir nicht mehr als 3 (4 bei Misère) Objekte haben...
         if game.gamePanel <= game.maxTake + last:
+            # nehmen wir alle (bis auf 1 bei Misère) Objekte weg.
             return max(1, game.gamePanel - last)
+        # Falls wir nicht mehr als 7 (8 bei Misère) Objekte haben...
         elif game.gamePanel <= 2*game.maxTake + 1 + last:
+            # lassen wir genau 4 (5 bei Misère) Objekte stehen.
             return max(1, game.gamePanel - (game.maxTake + 1 + last))
+        # Ansonsten nehmen wir eine zufällige Anzahl weg.
         else:
-            return random.randint(1, min(game.maxTake, game.gamePanel))
+            return random.randint(1, game.maxTake)
 
     @staticmethod
     def level3(game):
         """Strategie für den optimalen Computerspieler."""
         last = (1 if game.lastOneLoses else 0)
+        # Wir nehmen so viele Objekte weg, dass die verbleibende Anzahl
+        # module 4 gleich 0 (1 bei Misère) wird.
         nextTake = (game.gamePanel - last) % (game.maxTake + 1)
         return (nextTake if nextTake > 0 else 1)

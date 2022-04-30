@@ -56,8 +56,11 @@ class NimMulti(Game):
     def level1(game):
         """Strategie für einen dummen Computerspieler."""
         sticksList = game.gamePanel
+        # Wir stecken zuerst eine Liste der nicht-leeren Reihen zusammen, damit wir deren Index kennen
         nonEmptySticksList = [(i, sticksList[i]) for i in range(len(sticksList)) if sticksList[i] > 0]
+        # Dann wählen wir zufällig eine der nicht-leeren Reihen aus
         row = random.randint(0, len(nonEmptySticksList) - 1)
+        # Nachher wählen wir eine zufällige Anzahl Objekte, die wir nehmen
         move = random.randint(1, nonEmptySticksList[row][1])
         return (nonEmptySticksList[row][0] + 1, move)
 
@@ -94,23 +97,28 @@ class NimMulti(Game):
     def level3(game):
         """Strategie für einen optimalen Computerspieler."""
         sticksList = game.gamePanel
+        # Wir machen zuerst eine bitweise XOR auf alle Reihen
         xorValue = reduce(lambda s, e: s ^ e, sticksList, 0)
+        # Wir zählen alle Reihen zusammen mit mehr als einem Objekt
         countRowMore = reduce(lambda s, e: s + 1 if e > 1 else s, sticksList, 0)
+        # Wir zählen alle Reihen zusammen mit genau einem Objekt
         countRowOne = reduce(lambda s, e: s + 1 if e == 1 else s, sticksList, 0)
 
         # In der Misère-Variante müssen wir schauen ob es nur noch eine Reihe mit mehr als 1 Stick gibt
         if game.lastOneLoses and countRowMore == 1:
-            # ...dann nehmen wir hier alle oder alle bis auf 1 Sticks weg, abhängig davon
-            # wie viele andere Reihen es noch gibt mit je einem Stick.
+            # ...dann nehmen wir hier alle oder alle bis auf 1 Sticks weg, abhängig davon wie viele andere Reihen es noch gibt mit je einem Stick.
             longRow = [(i + 1, sticksList[i] - (countRowOne + 1)%2) for i in range(len(sticksList)) if sticksList[i] > 1]
             return longRow[0]
-        # Wenn es nur noch 1-er Reihen gibt oder der XOR-Wert 0 ist (Verluststellung), dann
-        # können wir einfach einen zufälligen Zug machen.
+        # Wenn es nur noch 1-er Reihen gibt oder der XOR-Wert 0 ist (Verluststellung), dann können wir einfach einen zufälligen Zug machen.
         elif countRowMore == 0 or xorValue == 0:
             return NimMulti.level1(game)
         # Ansonsten nehmen wir die erste Reihe, wo wir dem anderen Spieler eine Verlusstellung übergeben können
         else:
             for i in range(len(sticksList)):
+                # Wenn wir eine konkrete Reihe wieder XOR-en mit xorValue, dann wird diese Reihe im xorValue "neutralisiert" (rausgenommen)
+                # und wenn wir die übrig gebliebene Anzahl in dieser Reihe hätten, dann wäre damit xorValue = 0.
                 newNumberOfSticks = sticksList[i] ^ xorValue
+                # Die Frage ist nur, ob diese neue nötige Anzahl kleiner ist als die bisherige...
                 if newNumberOfSticks < sticksList[i]:
+                    # falls ja, können wir aus dieser Reihe die entsprechende Anzahl wegnehmen.
                     return (i + 1, sticksList[i] - newNumberOfSticks)
