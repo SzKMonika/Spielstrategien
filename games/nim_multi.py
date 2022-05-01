@@ -85,7 +85,7 @@ class NimMulti(Game):
         # Wenn es nur Reihen mit einem Stick gibt, dann müssen/können wir eine beliebige nehmen
         if countRowMore == 0:
             return (maxIndex + 1, 1)
-        # Wenn es nur noch eine Reihe mit mehr als einem Stick gibt oder mehr als 3 UND auch mind. 1-er Reihe...
+        # Wenn es nur noch eine Reihe mit mehr als einem Stick gibt oder mind. 3 längere Reihen UND auch mind. eine 1-er Reihe...
         elif countRowMore == 1 or (countRowMore > 2 and countRowOne > 0):
             #...dann nehmen wir alle oder alle bis auf einem Stick weg, so dass gerade passende Anzahl an 1-er Reihen bleiben.
             return (maxIndex + 1, maxSticks if bool(countRowOne%2 == 0) ^ bool(game.lastOneLoses) else maxSticks - 1)
