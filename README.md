@@ -5,7 +5,7 @@ Eine generelle Vereinbarung ist, dass bei einem ungültigen Zug, der gegen die R
 Aktuell werden nachfolgende Spiele unterstützt.
 
 ## Wie spielt man?
-Das Code wurde in Python geschrieben und kann sowohl in [TigerJython](https://www.tigerjython.ch/) als auch in [Visual Studio Code](https://code.visualstudio.com/) ausgeführt werden.
+Das Code wurde in Python geschrieben und kann sowohl in [TigerJython](https://www.tigerjython.ch/) als auch in [Visual Studio Code](https://code.visualstudio.com/) ausgeführt werden. Das Code ist in einem [GitHub Repository](https://github.com/SzKMonika/Spielstrategien) verfügbar und kann auch direkt [als ZIP-Datei heruntergeladen](https://github.com/SzKMonika/Spielstrategien/archive/refs/heads/main.zip) werden.
 
 Für Visual Studio Code gibt es noch einige Voraussetzungen, damit alles gut funktioniert:
 * Installiere das [Python Extension for VS Code und auch Python selber](https://code.visualstudio.com/docs/python/python-tutorial#_prerequisites).
