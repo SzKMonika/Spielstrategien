@@ -43,7 +43,7 @@ def vierGewinnt(p1, p2):
     """Diese Funktion erstellt ein VierGewinnt-Spiel."""
     return games.vier_gewinnt.VierGewinnt(p1, p2)
 
-def mastermind2(p1, p2):
+def _mastermind2(p1, p2):
     return Mastermind2(p1, p2)
 
 def human(game):
@@ -51,43 +51,58 @@ def human(game):
     return games.game.Game.human(game)
 
 # -------------------- MAIN --------------------
+# Wir prüfen ob tatsächlich dieses Module aufgerufen wurde. Falls nicht (=es handelt sich um ein import), machen wir nichts.
 if __name__ == "__main__":
+    # Wir bauen Dictionaries auf, damit der Benutzer mit einzelnen Zahlen bzw. Ziffern seinen Auswahl treffen kann.
     gamesDict = { 1: "nim", 2: "nimMisere", 3: "nimMulti", 4: "nimMultiMisere", 5: "kalaha", 6: "vierGewinnt", 7: "mastermind" }
     classesDict = { 1: Nim, 2: Nim, 3: NimMulti, 4: NimMulti, 5: Kalaha, 6: VierGewinnt, 7: Mastermind, 8: Mastermind2 }
     prefixDict = { 1: "nim_", 2: "nim_", 3: "nimMulti", 4: "nimMulti", 5: "kalaha", 6: "vierGewinnt", 7: "mastermind", 8: "mastermind" }
 
-    game = int(input("Bitte wähle das Spiel aus " + str(gamesDict) + ": "))
+    try:
+        # Zuerst muss das Spiel ausgewählt werden.
+        game = int(input("Bitte wähle das Spiel aus " + str(gamesDict) + ": "))
 
-    if classesDict[game] != Mastermind:
-        strategies = listFunctions(classesDict[game], "level") + listFunctions(strategy, prefixDict[game]) + ["human"]
-        strategiesDict = { i + 1 : strategies[i] for i in range(len(strategies)) }
+        # Wenn wir nicht Mastermind spielen...
+        if classesDict[game] != Mastermind:
+            # dann stellen wir zuerst eine Liste der vordefinierten Computer-Strategien und evtl. eigene Strategien zusammen...
+            strategies = listFunctions(classesDict[game], "level") + listFunctions(strategy, prefixDict[game]) + ["human"]
+            strategiesDict = { i + 1 : strategies[i] for i in range(len(strategies)) }
 
-        player1 = int(input("Bitte gib die Strategie des 1. Spielers an " + str(strategiesDict) + ": "))
-        player2 = int(input("Bitte gib die Strategie des 2. Spielers an " + str(strategiesDict) + ": "))
-        count = int(input("Bitte gib die Anzahl Durchführungen an: "))
+            # und wir lassen den Benutzer aus der Liste wählen.
+            player1 = int(input("Bitte gib die Strategie des 1. Spielers an " + str(strategiesDict) + ": "))
+            player2 = int(input("Bitte gib die Strategie des 2. Spielers an " + str(strategiesDict) + ": "))
+            count = int(input("Bitte gib die Anzahl Durchführungen an: "))
 
-        # Falls der Name einer Strategie-Funktion mit '_' endet, dann rufen wir sie effektiv auf, damit wir die richtige Strategie-Funktion erhalten
-        strategy1 = eval(strategiesDict[player1] + ("()" if strategiesDict[player1].endswith("_") else ""))
-        strategy2 = eval(strategiesDict[player2] + ("()" if strategiesDict[player2].endswith("_") else ""))
-        if count <= 1:
-            games.game.Game.playOne(eval(gamesDict[game]), strategy1, strategy2)
+            # Falls der Name einer Strategie-Funktion mit '_' endet, dann rufen wir sie effektiv auf, damit wir die richtige Strategie-Funktion erhalten
+            strategy1 = eval(strategiesDict[player1] + ("()" if strategiesDict[player1].endswith("_") else ""))
+            strategy2 = eval(strategiesDict[player2] + ("()" if strategiesDict[player2].endswith("_") else ""))
+            # Wir starten 1 oder mehrere Durchläufe des gewählten Spiels mit den gewählten Strategien
+            if count <= 1:
+                games.game.Game.playOne(eval(gamesDict[game]), strategy1, strategy2)
+            else:
+                games.game.Game.playMany(eval(gamesDict[game]), strategy1, strategy2, count)
+        # Wenn wir Mastermind spielen...
         else:
-            games.game.Game.playMany(eval(gamesDict[game]), strategy1, strategy2, count)
-    else: # Wir spielen Mastermind
-        strategies1 = listFunctions(Mastermind, "player1") + listFunctions(strategy, prefixDict[game])
-        strategies1Dict = { i + 1 : strategies1[i] for i in range(len(strategies1)) }
-        strategies2 = listFunctions(Mastermind, "player2") + listFunctions(strategy, prefixDict[game]) + ["human"]
-        strategies2Dict = { i + 1 : strategies2[i] for i in range(len(strategies1)) }
+            # dann stellen wir zuerst separat die Strategien für Spieler 1 und Spieler 2 zusammen...
+            strategies1 = listFunctions(Mastermind, "player1") + listFunctions(strategy, prefixDict[game])
+            strategies1Dict = { i + 1 : strategies1[i] for i in range(len(strategies1)) }
+            strategies2 = listFunctions(Mastermind, "player2") + listFunctions(strategy, prefixDict[game]) + ["human"]
+            strategies2Dict = { i + 1 : strategies2[i] for i in range(len(strategies1)) }
 
-        player1 = int(input("Bitte gib die Strategie des 1. Spielers an " + str(strategies1Dict) + ": "))
-        player2 = int(input("Bitte gib die Strategie des 2. Spielers an " + str(strategies2Dict) + ": "))
-        count = int(input("Bitte gib die Anzahl Durchführungen an: "))
+            # und wir lassen den Benutzer aus den beiden Listen wählen.
+            player1 = int(input("Bitte gib die Strategie des 1. Spielers an " + str(strategies1Dict) + ": "))
+            player2 = int(input("Bitte gib die Strategie des 2. Spielers an " + str(strategies2Dict) + ": "))
+            count = int(input("Bitte gib die Anzahl Durchführungen an: "))
 
-        # Falls der Name einer Strategie-Funktion mit '_' endet, dann rufen wir sie effektiv auf, damit wir die richtige Strategie-Funktion erhalten
-        strategy1 = eval(strategies1Dict[player1] + ("()" if strategies1Dict[player1].endswith("_") else ""))
-        strategy2 = eval(strategies2Dict[player2] + ("()" if strategies2Dict[player2].endswith("_") else ""))
-        if count <= 1:
-            game = Mastermind(strategy1, strategy2)
-            game.play()
-        else:
-            Mastermind.playMany(strategy1, strategy2, count)
+            # Falls der Name einer Strategie-Funktion mit '_' endet, dann rufen wir sie effektiv auf, damit wir die richtige Strategie-Funktion erhalten
+            strategy1 = eval(strategies1Dict[player1] + ("()" if strategies1Dict[player1].endswith("_") else ""))
+            strategy2 = eval(strategies2Dict[player2] + ("()" if strategies2Dict[player2].endswith("_") else ""))
+            # Wir starten 1 oder mehrere Durchläufe des gewählten Spiels mit den gewählten Strategien
+            if count <= 1:
+                game = Mastermind(strategy1, strategy2)
+                game.play()
+            else:
+                Mastermind.playMany(strategy1, strategy2, count)
+    except (KeyError, ValueError) as e:
+        print("  Du hast eine falsche Eingabe gemacht: " + str(e) + "!")
+        print("  Bitte starte das Programm neu und gib bei jeder Frage eine der aufgeführten ganzen Zahl ab 1 ein. Danke.")

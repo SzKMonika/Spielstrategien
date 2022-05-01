@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module strategy</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>strategy</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cdev%5Cspielstrategien%5Cstrategy.py">c:\dev\spielstrategien\strategy.py</a></font></td></tr></table>
+    <p><tt>Dieses&nbsp;Modul&nbsp;beinhaltet&nbsp;alle&nbsp;eigenen&nbsp;Strategien,&nbsp;die&nbsp;für&nbsp;die&nbsp;Spiele&nbsp;von&nbsp;main.py&nbsp;genutzt&nbsp;werden&nbsp;können.<br>
+Diese&nbsp;sind&nbsp;jeweils&nbsp;eine&nbsp;Funktion&nbsp;mit&nbsp;einem&nbsp;Argument&nbsp;(game)&nbsp;und&nbsp;deren&nbsp;Name&nbsp;muss&nbsp;abhängig&nbsp;vom&nbsp;Spiel&nbsp;mit<br>
+'nim_',&nbsp;'nimMulti_',&nbsp;'kalaha_',&nbsp;'vierGewinnt_'&nbsp;oder&nbsp;'mastermind_'&nbsp;anfangen.<br>
+&nbsp;<br>
+In&nbsp;allen&nbsp;Strategien&nbsp;können&nbsp;die&nbsp;Properties&nbsp;von&nbsp;game,&nbsp;und&nbsp;bei&nbsp;VierGewinnt&nbsp;die&nbsp;Hilfsmethoden&nbsp;verwendet&nbsp;werden:<br>
+game.gamePanel:&nbsp;Gibt&nbsp;in&nbsp;allen&nbsp;Spielen&nbsp;das&nbsp;Modell&nbsp;des&nbsp;Spielfeldes&nbsp;zurück.<br>
+game.nextPlayer:&nbsp;Gibt&nbsp;in&nbsp;allen&nbsp;Spielen&nbsp;den&nbsp;Spieler&nbsp;(1&nbsp;oder&nbsp;2)&nbsp;zurück,&nbsp;dessen&nbsp;Zug&nbsp;gerade&nbsp;kommt.<br>
+game.nextMove:&nbsp;Gibt&nbsp;in&nbsp;allen&nbsp;Spielen&nbsp;zurück,&nbsp;wievielter&nbsp;Zug&nbsp;gerade&nbsp;kommt.<br>
+&nbsp;<br>
+Weitere&nbsp;Details&nbsp;(Modell,&nbsp;Properties,&nbsp;Hilfsmethoden)&nbsp;pro&nbsp;Spiel<br>
+-------------------------------------------------------------<br>
+Nim:<br>
+-&nbsp;game.gamePanel&nbsp;ist&nbsp;einfach&nbsp;eine&nbsp;int-Zahl&nbsp;mit&nbsp;der&nbsp;Anzahl&nbsp;verbleibenden&nbsp;Objekten.<br>
+-&nbsp;game.maxTake:&nbsp;Maximale&nbsp;Anzahl&nbsp;der&nbsp;Objekte,&nbsp;die&nbsp;in&nbsp;einem&nbsp;Zug&nbsp;weggenommen&nbsp;werden&nbsp;können,&nbsp;also&nbsp;3.<br>
+-&nbsp;game.lastOneLoses:&nbsp;Gibt&nbsp;an,&nbsp;welche&nbsp;Variante&nbsp;gespielt&nbsp;wird:&nbsp;False&nbsp;=&nbsp;Standard-Variante,&nbsp;True&nbsp;=&nbsp;Misère-Variante.<br>
+&nbsp;<br>
+NimMulti:<br>
+-&nbsp;game.gamePanel&nbsp;ist&nbsp;eine&nbsp;Liste&nbsp;von&nbsp;int-Zahlen,&nbsp;die&nbsp;jeweils&nbsp;die&nbsp;Anzahl&nbsp;verbleibender&nbsp;Objekte&nbsp;einer&nbsp;Reihe&nbsp;angeben.<br>
+-&nbsp;game.lastOneLoses:&nbsp;Gibt&nbsp;an,&nbsp;welche&nbsp;Variante&nbsp;gespielt&nbsp;wird:&nbsp;False&nbsp;=&nbsp;Standard-Variante,&nbsp;True&nbsp;=&nbsp;Misère-Variante.<br>
+&nbsp;<br>
+Kalaha:<br>
+-&nbsp;game.gamePanel&nbsp;ist&nbsp;eine&nbsp;Tuple&nbsp;mit&nbsp;2&nbsp;Listen&nbsp;(für&nbsp;die&nbsp;zwei&nbsp;Muldenreihen)&nbsp;mit&nbsp;jeweils&nbsp;7&nbsp;ganzen&nbsp;Zahlen.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beide&nbsp;Listen&nbsp;haben&nbsp;auf&nbsp;Index&nbsp;0&nbsp;die&nbsp;Anzahl&nbsp;Steine&nbsp;in&nbsp;der&nbsp;Gewinnmulde,&nbsp;und&nbsp;unter&nbsp;Index&nbsp;1&nbsp;bis&nbsp;6<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;befinden&nbsp;sich&nbsp;die&nbsp;Anzahl&nbsp;Steine&nbsp;in&nbsp;den&nbsp;Spielmulden,&nbsp;und&nbsp;zwar&nbsp;immer&nbsp;von&nbsp;der&nbsp;Gewinnmulde&nbsp;gezählt.<br>
+&nbsp;<br>
+VierGewinnt:<br>
+-&nbsp;game.gamePanel&nbsp;ist&nbsp;eine&nbsp;zweidimensionale&nbsp;Liste&nbsp;von&nbsp;ganzen&nbsp;Zahlen,&nbsp;die&nbsp;jeweils&nbsp;den&nbsp;Wert<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;(leeres&nbsp;Feld),&nbsp;1&nbsp;(Feld&nbsp;belegt&nbsp;von&nbsp;Spieler&nbsp;1)&nbsp;oder&nbsp;-1&nbsp;(Feld&nbsp;belegt&nbsp;von&nbsp;Spieler&nbsp;2)&nbsp;haben.<br>
+-&nbsp;game.getColumn(int):&nbsp;Gibt&nbsp;den&nbsp;Inhalt&nbsp;der&nbsp;gewählten&nbsp;Spalte&nbsp;(1&nbsp;bis&nbsp;7)&nbsp;als&nbsp;eine&nbsp;Liste&nbsp;zurück.<br>
+-&nbsp;game.getRow(int):&nbsp;Gibt&nbsp;den&nbsp;Inhalt&nbsp;der&nbsp;gewählten&nbsp;Reihe&nbsp;(1&nbsp;bis&nbsp;6)&nbsp;als&nbsp;eine&nbsp;Liste&nbsp;zurück.<br>
+-&nbsp;game.getTokenForNextPlayer():&nbsp;Gibt&nbsp;den&nbsp;Wert&nbsp;des&nbsp;Tokens&nbsp;als&nbsp;ganze&nbsp;Zahl&nbsp;(1&nbsp;oder&nbsp;-1)&nbsp;für&nbsp;nextPlayer&nbsp;zurück.<br>
+-&nbsp;game.getDiagonalUpRight(row,&nbsp;column):&nbsp;Gibt&nbsp;den&nbsp;Inhalt&nbsp;der&nbsp;diagonalen&nbsp;Linie&nbsp;(von&nbsp;unten&nbsp;links&nbsp;nach&nbsp;oben&nbsp;rechts)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zurück,&nbsp;die&nbsp;durch&nbsp;das&nbsp;angegebene&nbsp;Feld&nbsp;durchläuft.<br>
+-&nbsp;game.getDiagonalUpLeft(row,&nbsp;column):&nbsp;Gibt&nbsp;den&nbsp;Inhalt&nbsp;der&nbsp;diagonalen&nbsp;Linie&nbsp;(von&nbsp;unten&nbsp;rechts&nbsp;nach&nbsp;oben&nbsp;links)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zurück,&nbsp;die&nbsp;durch&nbsp;das&nbsp;angegebene&nbsp;Feld&nbsp;durchläuft.<br>
+-&nbsp;VierGewinnt.countTokensIn(line):&nbsp;Gibt&nbsp;an,&nbsp;wie&nbsp;viele&nbsp;Spielsteine&nbsp;insgesamt&nbsp;in&nbsp;der&nbsp;angegebenen&nbsp;Linie&nbsp;vorkommen.<br>
+&nbsp;<br>
+Mastermind:<br>
+-&nbsp;game.gamePanel&nbsp;ist&nbsp;die&nbsp;Liste&nbsp;der&nbsp;Züge,&nbsp;die&nbsp;jeweils&nbsp;aus&nbsp;3-er&nbsp;Tuplen&nbsp;bestehen:&nbsp;(Tipp,&nbsp;Gut,&nbsp;Halbgut)</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-nim_beispielStrategie"><strong>nim_beispielStrategie</strong></a>(game)</dt><dd><tt>Eine&nbsp;einfache&nbsp;Beispiel-Strategie&nbsp;für&nbsp;Nim.&nbsp;Welche&nbsp;Variante?</tt></dd></dl>
+</td></tr></table>
+</body></html>

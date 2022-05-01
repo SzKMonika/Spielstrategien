@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module games.mastermind2</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="games.html"><font color="#ffffff">games</font></a>.mastermind2</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cdev%5Cspielstrategien%5Cgames%5Cmastermind2.py">c:\dev\spielstrategien\games\mastermind2.py</a></font></td></tr></table>
+    <p><tt>Dieses&nbsp;Modul&nbsp;beinhaltet&nbsp;die&nbsp;Klasse&nbsp;<a href="#Mastermind2">Mastermind2</a>,&nbsp;eine&nbsp;konkrete&nbsp;Subklasse&nbsp;von&nbsp;<a href="games.game.html#Game">Game</a>.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="games.game.html#Game">games.game.Game</a>(<a href="builtins.html#object">builtins.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="games.mastermind2.html#Mastermind2">Mastermind2</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Mastermind2">class <strong>Mastermind2</strong></a>(<a href="games.game.html#Game">games.game.Game</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Mastermind2">Mastermind2</a>(player1,&nbsp;player2)<br>
+&nbsp;<br>
+Das&nbsp;ist&nbsp;ein&nbsp;modifiziertes&nbsp;Mastermind-Spiel,&nbsp;das&nbsp;durch&nbsp;<a href="games.game.html#Game">Game</a>&nbsp;symmetrisch&nbsp;gemacht&nbsp;wurde.&nbsp;Am&nbsp;Anfang&nbsp;wird&nbsp;eine&nbsp;zufällige&nbsp;Geheimzahl&nbsp;generiert,<br>
+und&nbsp;diese&nbsp;muss&nbsp;abwechselnd&nbsp;von&nbsp;den&nbsp;beiden&nbsp;Spielern&nbsp;erraten&nbsp;werden.&nbsp;Derjenige&nbsp;Spieler,&nbsp;der&nbsp;die&nbsp;Geheimzahl&nbsp;zuerst&nbsp;errät,&nbsp;gewinnt.<br>
+Nach&nbsp;jedem&nbsp;Tipp&nbsp;wird&nbsp;angegeben,&nbsp;wie&nbsp;viele&nbsp;Ziffern&nbsp;richtig&nbsp;sind&nbsp;und&nbsp;an&nbsp;guter&nbsp;Stelle&nbsp;sich&nbsp;befinden&nbsp;(gut),&nbsp;und&nbsp;wie&nbsp;viele&nbsp;an&nbsp;falscher&nbsp;Stelle&nbsp;sind&nbsp;(halbgut).<br>
+Unten&nbsp;werden&nbsp;nur&nbsp;die&nbsp;<a href="#Mastermind2">Mastermind2</a>-spezifische&nbsp;Argumente&nbsp;und&nbsp;Attribute&nbsp;aufgeführt,&nbsp;für&nbsp;die&nbsp;sonstigen&nbsp;bitte&nbsp;im&nbsp;<a href="games.game.html#Game">Game</a>&nbsp;schauen.<br>
+Hinweis:&nbsp;Einige&nbsp;der&nbsp;Methoden,&nbsp;insbesondere&nbsp;für&nbsp;die&nbsp;Strategien&nbsp;verwenden&nbsp;die&nbsp;Methoden&nbsp;der&nbsp;Klasse&nbsp;Mastermind&nbsp;wieder.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;__length&nbsp;(int):&nbsp;Die&nbsp;Anzahl&nbsp;Ziffern&nbsp;bzw.&nbsp;Dezimalstellen&nbsp;der&nbsp;Geheimzahl.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;__secretNumber&nbsp;(int):&nbsp;Die&nbsp;zu&nbsp;erratende&nbsp;Geheimzahl.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;__guessList:&nbsp;Die&nbsp;Liste&nbsp;der&nbsp;Züge,&nbsp;die&nbsp;jeweils&nbsp;aus&nbsp;3-er&nbsp;Tuplen&nbsp;bestehen:&nbsp;(Tipp,&nbsp;Gut,&nbsp;Halbgut)<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="games.mastermind2.html#Mastermind2">Mastermind2</a></dd>
+<dd><a href="games.game.html#Game">games.game.Game</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="Mastermind2-__init__"><strong>__init__</strong></a>(self, player1, player2)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-checkMove"><strong>checkMove</strong></a>(self, move)</dt><dd><tt>Das&nbsp;konkrete&nbsp;Spiel&nbsp;prüft,&nbsp;ob&nbsp;der&nbsp;gewählte&nbsp;Zug&nbsp;des&nbsp;aktuellen&nbsp;Spielers&nbsp;den&nbsp;Regeln&nbsp;und&nbsp;dem&nbsp;aktuellen&nbsp;Stand&nbsp;entspricht.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ValueError:&nbsp;Im&nbsp;Falle&nbsp;eines&nbsp;Problems&nbsp;wird&nbsp;ein&nbsp;ValueError&nbsp;mit&nbsp;entsprechendem&nbsp;Text&nbsp;geworfen.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-gamePanelToString"><strong>gamePanelToString</strong></a>(self, gamePanel, firstLine='')</dt><dd><tt>Das&nbsp;konkrete&nbsp;Spiel&nbsp;gibt&nbsp;das&nbsp;gamePanel&nbsp;als&nbsp;String&nbsp;zurück,&nbsp;damit&nbsp;es&nbsp;auch&nbsp;für&nbsp;Menschen&nbsp;einfach&nbsp;interpretierbar&nbsp;wird.</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="Mastermind2-compareNumbers"><strong>compareNumbers</strong></a>(guess, secret, numDigits=4)</dt><dd><tt>Vergleicht&nbsp;zwei&nbsp;Zahlen&nbsp;Ziffer&nbsp;für&nbsp;Ziffer&nbsp;und&nbsp;gibt&nbsp;zurück&nbsp;wie&nbsp;viele&nbsp;gleiche&nbsp;Ziffer&nbsp;an&nbsp;gleicher&nbsp;bzw.&nbsp;an&nbsp;unterschiedlicher&nbsp;Stelle&nbsp;sind.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-level2"><strong>level2</strong></a>(game)</dt><dd><tt>Strategie&nbsp;für&nbsp;einen&nbsp;mittelmässigen&nbsp;Computerspieler,&nbsp;der&nbsp;mit&nbsp;den&nbsp;Ziffern&nbsp;einzeln&nbsp;arbeitet.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-level3_"><strong>level3_</strong></a>()</dt><dd><tt>Gibt&nbsp;die&nbsp;gute&nbsp;Strategie&nbsp;von&nbsp;MastermindStrategy&nbsp;zurück.</tt></dd></dl>
+
+<hr>
+Readonly properties defined here:<br>
+<dl><dt><strong>gamePanel</strong></dt>
+<dd><tt>Das&nbsp;konkrete&nbsp;Spiel&nbsp;gibt&nbsp;das&nbsp;Spielfeld&nbsp;in&nbsp;seinem&nbsp;Rohmodell&nbsp;zurück,&nbsp;damit&nbsp;die&nbsp;Spieler-Callbacks&nbsp;daraus&nbsp;den&nbsp;Spielstand&nbsp;vollständig&nbsp;erkunden&nbsp;können.<br>
+Warnung:&nbsp;Bei&nbsp;Listen&nbsp;oder&nbsp;noch&nbsp;komplexeren&nbsp;Strukturen&nbsp;muss&nbsp;eine&nbsp;Kopie&nbsp;zurückgegeben,&nbsp;damit&nbsp;der&nbsp;Spielstand&nbsp;von&nbsp;aussen&nbsp;unveränderbar&nbsp;bleibt!</tt></dd>
+</dl>
+<hr>
+Methods inherited from <a href="games.game.html#Game">games.game.Game</a>:<br>
+<dl><dt><a name="Mastermind2-getName"><strong>getName</strong></a>(self)</dt><dd><tt>Gibt&nbsp;den&nbsp;Namen&nbsp;des&nbsp;Spiels&nbsp;zurück.&nbsp;Falls&nbsp;Varianten&nbsp;oder&nbsp;Parameter&nbsp;angezeigt&nbsp;werden&nbsp;sollen,&nbsp;dann&nbsp;muss&nbsp;diese&nbsp;Methode&nbsp;im&nbsp;konkreten&nbsp;Spiel&nbsp;überschrieben&nbsp;werden.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-getPlayerNames"><strong>getPlayerNames</strong></a>(self)</dt><dd><tt>Gibt&nbsp;das&nbsp;Spiel&nbsp;und&nbsp;den&nbsp;Namen&nbsp;der&nbsp;gegeneinander&nbsp;antretenden&nbsp;Spieler/Strategien&nbsp;zurück.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-getStateString"><strong>getStateString</strong></a>(self, index)</dt><dd><tt>Gibt&nbsp;den&nbsp;Spielstand&nbsp;als&nbsp;String&nbsp;nach&nbsp;dem&nbsp;gewählten&nbsp;Zug&nbsp;zurück.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-isLastMoveWrong"><strong>isLastMoveWrong</strong></a>(self)</dt><dd><tt>Gibt&nbsp;zurück,&nbsp;ob&nbsp;der&nbsp;letzte&nbsp;Zug&nbsp;vor&nbsp;dem&nbsp;Spielende&nbsp;ungültig&nbsp;war&nbsp;oder&nbsp;nicht.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-play"><strong>play</strong></a>(self)</dt><dd><tt>Startet&nbsp;das&nbsp;Spiel&nbsp;und&nbsp;ruft&nbsp;alternierend&nbsp;beide&nbsp;Spieler-Strategien&nbsp;auf,&nbsp;bis&nbsp;eine&nbsp;gewinnt&nbsp;oder&nbsp;das&nbsp;Spiel&nbsp;mit&nbsp;unentschieden&nbsp;endet.<br>
+Die&nbsp;Züge&nbsp;werden&nbsp;in&nbsp;einer&nbsp;Schleife&nbsp;abgearbeitet,&nbsp;solange&nbsp;es&nbsp;kein&nbsp;Gewinner&nbsp;(oder&nbsp;unentschiedenes&nbsp;Spielende)&nbsp;gibt:<br>
+1.&nbsp;__nextMove&nbsp;wird&nbsp;um&nbsp;1&nbsp;erhöht&nbsp;und&nbsp;der&nbsp;__playerCallback&nbsp;vom&nbsp;__nextPlayer&nbsp;wird&nbsp;aufgerufen.&nbsp;Dieser&nbsp;Antwortet&nbsp;mit&nbsp;einem&nbsp;'move'.<br>
+2.&nbsp;Der&nbsp;'move'&nbsp;wird&nbsp;geprüft,&nbsp;ob&nbsp;er&nbsp;den&nbsp;Regeln&nbsp;und&nbsp;dem&nbsp;aktuellen&nbsp;Stand&nbsp;entspricht.&nbsp;Falls&nbsp;nicht&nbsp;(ValueError),&nbsp;dann&nbsp;endet&nbsp;das&nbsp;Spiel&nbsp;mit&nbsp;dem&nbsp;Sieg&nbsp;des&nbsp;anderen&nbsp;Spielers.<br>
+3.&nbsp;Der&nbsp;'move'&nbsp;wird&nbsp;ausgeführt&nbsp;in&nbsp;_doMove(),&nbsp;dessen&nbsp;return-Wert&nbsp;der&nbsp;nächste&nbsp;Spieler&nbsp;angibt.&nbsp;In&nbsp;manchen&nbsp;Spielen&nbsp;kann&nbsp;ein&nbsp;Spieler&nbsp;noch&nbsp;ein-&nbsp;oder&nbsp;mehrmals&nbsp;ziehen.<br>
+4.&nbsp;Es&nbsp;wird&nbsp;geprüft&nbsp;ob&nbsp;das&nbsp;Spiel&nbsp;beendet&nbsp;ist&nbsp;(_checkEnd()).&nbsp;Falls&nbsp;ja,&nbsp;speichern&nbsp;wir&nbsp;den&nbsp;Resultat&nbsp;ab&nbsp;und&nbsp;die&nbsp;Methode&nbsp;wird&nbsp;beendet,&nbsp;sonst&nbsp;kommt&nbsp;der&nbsp;nächste&nbsp;Zug.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-setPrintMoves"><strong>setPrintMoves</strong></a>(self, printMoves)</dt><dd><tt>Setzt&nbsp;den&nbsp;Wert&nbsp;von&nbsp;_printMoves,&nbsp;der&nbsp;angibt&nbsp;ob&nbsp;die&nbsp;jeweiligen&nbsp;Züge&nbsp;direkt&nbsp;mit&nbsp;print()&nbsp;ausgeschrieben&nbsp;werden&nbsp;sollen&nbsp;oder&nbsp;nicht.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-stateToString"><strong>stateToString</strong></a>(self, state)</dt><dd><tt>Gibt&nbsp;den&nbsp;Spielstand&nbsp;nach&nbsp;einem&nbsp;Zug&nbsp;in&nbsp;kompakter/ausdruckbarer&nbsp;Form&nbsp;zurück.</tt></dd></dl>
+
+<hr>
+Static methods inherited from <a href="games.game.html#Game">games.game.Game</a>:<br>
+<dl><dt><a name="Mastermind2-human"><strong>human</strong></a>(game)</dt><dd><tt>Ein&nbsp;Callback&nbsp;für&nbsp;einen&nbsp;menschlichen&nbsp;Spieler,&nbsp;der&nbsp;den&nbsp;Benutzer&nbsp;um&nbsp;ihren&nbsp;Zug&nbsp;fragt.<br>
+Dieser&nbsp;Callback&nbsp;darf&nbsp;in&nbsp;jedem&nbsp;Spiel&nbsp;generell&nbsp;verwendet&nbsp;werden,&nbsp;weil&nbsp;er&nbsp;den&nbsp;gewählten&nbsp;Zug&nbsp;zuerst&nbsp;mit&nbsp;game.<a href="#Mastermind2-checkMove">checkMove</a>()&nbsp;überprüft.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-playMany"><strong>playMany</strong></a>(createGame, player1, player2, count=100)</dt><dd><tt>Führt&nbsp;ein&nbsp;Spiel&nbsp;(<a href="games.game.html#Game">Game</a>)&nbsp;mehrmals&nbsp;aus&nbsp;und&nbsp;gibt&nbsp;nachher&nbsp;eine&nbsp;Statistik&nbsp;aus.<br>
+Für&nbsp;jedes&nbsp;ausgeführte&nbsp;Spiel&nbsp;gibt&nbsp;es&nbsp;fairerweise&nbsp;auch&nbsp;eine&nbsp;Revanche,&nbsp;wo&nbsp;die&nbsp;Reihenfolge&nbsp;der&nbsp;beiden&nbsp;Spieler&nbsp;getauscht&nbsp;wird.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;createGame:&nbsp;eine&nbsp;Funktion&nbsp;oder&nbsp;Lambda,&nbsp;die&nbsp;ein&nbsp;Instanz&nbsp;des&nbsp;gewählten&nbsp;Spiels&nbsp;mit&nbsp;den&nbsp;angegeben&nbsp;beiden&nbsp;Spielern&nbsp;erstellen&nbsp;kann<br>
+&nbsp;&nbsp;&nbsp;&nbsp;player1:&nbsp;Eine&nbsp;Funktion,&nbsp;die&nbsp;die&nbsp;Strategie&nbsp;des&nbsp;ersten&nbsp;Spielers&nbsp;ausführt.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;player2:&nbsp;Eine&nbsp;Funktion,&nbsp;die&nbsp;die&nbsp;Strategie&nbsp;des&nbsp;zweiten&nbsp;Spielers&nbsp;ausführt.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;count&nbsp;(int):&nbsp;Anzahl&nbsp;der&nbsp;Spiele&nbsp;die&nbsp;durchgespielt&nbsp;werden&nbsp;sollen.&nbsp;Eigentlich&nbsp;werden&nbsp;doppelt&nbsp;so&nbsp;viele&nbsp;Spiele&nbsp;ausgeführt,&nbsp;wegen&nbsp;den&nbsp;Revanchen.</tt></dd></dl>
+
+<dl><dt><a name="Mastermind2-playOne"><strong>playOne</strong></a>(createGame, player1, player2, printMoves=False)</dt><dd><tt>Führt&nbsp;ein&nbsp;Spiel&nbsp;(<a href="games.game.html#Game">Game</a>)&nbsp;einmal&nbsp;aus&nbsp;und&nbsp;erlaubt&nbsp;es&nbsp;nachher&nbsp;die&nbsp;Züge&nbsp;einzeln&nbsp;anzuschauen.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;createGame:&nbsp;eine&nbsp;Funktion&nbsp;oder&nbsp;Lambda,&nbsp;die&nbsp;ein&nbsp;Instanz&nbsp;des&nbsp;gewählten&nbsp;Spiels&nbsp;mit&nbsp;den&nbsp;angegeben&nbsp;beiden&nbsp;Spielern&nbsp;erstellen&nbsp;kann<br>
+&nbsp;&nbsp;&nbsp;&nbsp;player1:&nbsp;Eine&nbsp;Funktion,&nbsp;die&nbsp;die&nbsp;Strategie&nbsp;des&nbsp;ersten&nbsp;Spielers&nbsp;ausführt.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;player2:&nbsp;Eine&nbsp;Funktion,&nbsp;die&nbsp;die&nbsp;Strategie&nbsp;des&nbsp;zweiten&nbsp;Spielers&nbsp;ausführt.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;printMoves&nbsp;(bool):&nbsp;Gibt&nbsp;an,&nbsp;ob&nbsp;die&nbsp;Züge&nbsp;bzw.&nbsp;Spielstände&nbsp;auf&nbsp;die&nbsp;Konsole&nbsp;ausgegeben&nbsp;werden&nbsp;sollen&nbsp;oder&nbsp;nicht.</tt></dd></dl>
+
+<hr>
+Readonly properties inherited from <a href="games.game.html#Game">games.game.Game</a>:<br>
+<dl><dt><strong>nextMove</strong></dt>
+<dd><tt>Gibt&nbsp;zurück,&nbsp;wievielter&nbsp;Zug&nbsp;gerade&nbsp;kommt,&nbsp;oder&nbsp;bei&nbsp;Spielende&nbsp;die&nbsp;Anzahl&nbsp;insgesamt&nbsp;gemachter&nbsp;Züge.</tt></dd>
+</dl>
+<dl><dt><strong>nextPlayer</strong></dt>
+<dd><tt>Gibt&nbsp;den&nbsp;Spieler&nbsp;(1&nbsp;oder&nbsp;2)&nbsp;zurück,&nbsp;dessen&nbsp;Zug&nbsp;gerade&nbsp;kommt.&nbsp;Wenn&nbsp;das&nbsp;Spiel&nbsp;schon&nbsp;beendet&nbsp;wurde,&nbsp;ist&nbsp;der&nbsp;Wert&nbsp;0&nbsp;(unentschieden),&nbsp;-1&nbsp;oder&nbsp;-2.</tt></dd>
+</dl>
+<hr>
+Data descriptors inherited from <a href="games.game.html#Game">games.game.Game</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

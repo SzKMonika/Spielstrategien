@@ -1,4 +1,5 @@
-"""Dieses Modul beinhaltet die Klasse Game."""
+"""Dieses Modul beinhaltet die Klasse Game und eine umgebungsabhängige Initialiasierung, die die Funktionen
+println, clr und waitForKey so aufsetzt, dass diese sowohl in TigerJython wie auch in Python (VS Code) funktionieren."""
 import os, sys, time
 
 # -------------------- class Game --------------------
