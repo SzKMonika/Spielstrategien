@@ -1,10 +1,9 @@
-"""Dieses Modul beinhaltet die Klasse Game und eine umgebungsabhängige Initialiasierung, die die Funktionen
-println, clr und waitForKey so aufsetzt, dass diese sowohl in TigerJython wie auch in Python (VS Code) funktionieren."""
+"""Dieses Modul beinhaltet die Klasse Game."""
 import os, sys, time
 
 # -------------------- class Game --------------------
-class Game(object):
-    """Die Game Klasse ist die gemeinsame Hauptklasse für alle Zweipersonen-Spiele und ist somit der Kern des Frameworks.
+class Game():
+    """Die Game Klasse ist die gemeinsame Hauptklasse für alle Zweipersonen-Spiele und ist somit der Kern des kleinen Frameworks.
     Hier wird der Ablauf der Spiele generell definiert (siehe play()). Manche Methoden (wie checkMove(), _doMove() und _checkEnd())
     müssen in den konkreten Spielklassen überschrieben bzw. implementiert werden.
 
@@ -174,109 +173,3 @@ class Game(object):
                 move = None
                 exc = str(e) + "! "
         return move
-
-    # -------------------- Spielausführung --------------------   
-    @staticmethod
-    def playOne(createGame, player1, player2, printMoves = False):
-        """Führt ein Spiel (Game) einmal aus und erlaubt es nachher die Züge einzeln anzuschauen.
-        
-        Args:
-            createGame: eine Funktion oder Lambda, die ein Instanz des gewählten Spiels mit den angegeben beiden Spielern erstellen kann
-            player1: Eine Funktion, die die Strategie des ersten Spielers ausführt.
-            player2: Eine Funktion, die die Strategie des zweiten Spielers ausführt.
-            printMoves (bool): Gibt an, ob die Züge bzw. Spielstände auf die Konsole ausgegeben werden sollen oder nicht.
-        """
-        game = createGame(player1, player2)
-        game.setPrintMoves(printMoves)
-        game.play()
-        # Das Spiel ist nun zu Ende, jetzt soll der Benutzer die Züge einzeln anschauen können.
-        if IS_JYTHON:
-            gconsole.makeConsole()
-        println("Benutze die Pfeiltasten um jeden Spielzug einzeln anzuschauen, und q um zu beenden!")
-        keyPressed = waitForKey()
-        index = 0
-        while keyPressed != 'q' and keyPressed != 81:
-            clr()
-            println(game.getName() + ": " + game.getPlayerNames())
-            println('')
-            println(game.getStateString(index))
-            time.sleep(0.2)
-            keyPressed = waitForKey()
-            if keyPressed == 37 or keyPressed == 'nach-links':
-                index -= 1
-            if keyPressed == 39 or keyPressed == 'nach-rechts':
-                index += 1
-            if keyPressed == 40 or keyPressed == 'nach-unten':
-                index = 0
-        if IS_JYTHON:
-            gconsole.dispose()
-
-    @staticmethod
-    def playMany(createGame, player1, player2, count = 100):
-        """Führt ein Spiel (Game) mehrmals aus und gibt nachher eine Statistik aus.
-        Für jedes ausgeführte Spiel gibt es fairerweise auch eine Revanche, wo die Reihenfolge der beiden Spieler getauscht wird.
-
-        Args:
-            createGame: eine Funktion oder Lambda, die ein Instanz des gewählten Spiels mit den angegeben beiden Spielern erstellen kann
-            player1: Eine Funktion, die die Strategie des ersten Spielers ausführt.
-            player2: Eine Funktion, die die Strategie des zweiten Spielers ausführt.
-            count (int): Anzahl der Spiele die durchgespielt werden sollen. Eigentlich werden doppelt so viele Spiele ausgeführt, wegen den Revanchen. 
-        """
-        start = time.time()
-        game1stats = [0, 0, 0]
-        game1wrongmove = [0, 0, 0]
-        game2stats = [0, 0, 0]
-        game2wrongmove = [0, 0, 0]
-        if IS_JYTHON:
-            gconsole.makeConsole()
-
-        for _ in range(1, count+1):
-            game1 = createGame(player1, player2)
-            game1.setPrintMoves(False)
-            game1.play()
-            winner = -game1.nextPlayer
-            game1stats[winner] += 1
-            if game1.isLastMoveWrong():
-                game1wrongmove[winner] += 1
-            game2 = createGame(player2, player1)
-            game2.setPrintMoves(False)
-            game2.play()
-            # Im game2 sind die Spieler umgekehrt, darum arbeiten wir einfach mit negativem Gewinner bzw. Index
-            winner = game2.nextPlayer
-            game2stats[winner] += 1
-            if game2.isLastMoveWrong():
-                game2wrongmove[winner] += 1
-            if IS_JYTHON:
-                time.sleep(0.1)
-            clr()
-            out = game1.getName() + ": " + game1.getPlayerNames() + " \n"
-            out += ("\n  Erster Zug    |  Unentschieden  |    Spieler (1) gewinnt     |    Spieler (2) gewinnt")
-            out += ("\n    durch       |                 | (davon wegen falschem Zug) | (davon wegen falschem Zug)")
-            out += ("\n----------------+-----------------+----------------------------+----------------------------")
-            out += ("\n  Spieler (1)   |      {:^5}      |           {:^5}            |           {:^5}".format(game1stats[0], game1stats[1], game1stats[2]))
-            out += ("\n                |                 |          ({:^5})           |          ({:^5})".format(game1wrongmove[1], game1wrongmove[2]))
-            out += ("\n----------------+-----------------+----------------------------+----------------------------")
-            out += ("\n  Spieler (2)   |      {:^5}      |           {:^5}            |           {:^5}".format(game2stats[0], game2stats[1], game2stats[2]))
-            out += ("\n                |                 |          ({:^5})           |          ({:^5})".format(game2wrongmove[1], game2wrongmove[2]))
-            out += ("\n\n(Zeit: {:5.3f} s)".format(time.time() - start))
-            println(out)
-        if IS_JYTHON:
-            waitForKey()
-            gconsole.dispose()
-
-# -------------------- Umgebung-abhängige Initialisierung --------------------   
-IS_PYTHON3 = sys.version_info[0] > 2
-
-IS_JYTHON = sys.executable.endswith("jython.exe") or sys.platform.startswith("java")
-
-if IS_JYTHON:
-    import gconsole
-    println = gconsole.gprintln
-    waitForKey = gconsole.getKeyCodeWait
-    clr = gconsole.clear
-else:
-    import builtins
-    import keyboard # pip3 install keyboard / https://stackoverflow.com/questions/24072790/how-to-detect-key-presses
-    println = builtins.print
-    waitForKey = keyboard.read_key
-    clr = (lambda: os.system('clear')) if os.name == 'posix' else (lambda: os.system('cls')) # https://www.scaler.com/topics/how-to-clear-screen-in-python/

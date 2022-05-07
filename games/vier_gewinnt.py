@@ -152,6 +152,9 @@ class VierGewinnt(Game):
         """Strategie für einen mittelmässigen Computerspieler."""
         maxRow = 6
         maxCol = 7
+        # Wenn wir keinen besseren Zug finden werden, dann wählen wir die mittlere Spalte ausser
+        # wenn es voll ist. Im letzteren Fall rufen wir die Strategie level1() auf.
+        move = (maxCol + 1)//2 if VierGewinnt.countTokensIn(game.getColumn((maxCol + 1)//2)) < maxRow else VierGewinnt.level1(game)
 
         for col in range(1, maxCol + 1):
             row = VierGewinnt.countTokensIn(game.getColumn(col)) + 1
@@ -162,16 +165,16 @@ class VierGewinnt(Game):
                 return col
             # Dann prüfen wir ob der Gegner hier gewinnen könnte
             elif VierGewinnt.hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
-                return col
-        return (maxCol + 1)//2 if VierGewinnt.countTokensIn(game.getColumn((maxCol + 1)//2)) < maxRow else VierGewinnt.level1(game)
+                move = col
+        return move
 
     @staticmethod
     def level4(game):
         """Strategie für einen smarten Computerspieler."""
         maxRow = 6
         maxCol = 7
-        selectedCol = 0
-        selectedValue = 0
+        move = 0
+        moveValue = 0
         for col in range(1, maxCol + 1):
             row = VierGewinnt.countTokensIn(game.getColumn(col)) + 1
             if row > maxRow:
@@ -181,15 +184,15 @@ class VierGewinnt(Game):
                 return col
             # Dann prüfen wir ob der Gegner hier gewinnen könnte
             elif VierGewinnt.hasWinnerWithTokenIn(game, row, col, -game.getTokenForNextPlayer()):
-                selectedCol = col
-                selectedValue = sys.maxsize
+                move = col
+                moveValue = sys.maxsize
             # Ansonsten merken wir die Stelle mit dem grössten Wert...
-            elif selectedValue < VierGewinnt.getPlaceValue(row, col, maxRow, maxCol):
+            elif moveValue < VierGewinnt.getPlaceValue(row, col, maxRow, maxCol):
                 # ...und prüfen, dass der Gegner im nächsten Zug in der gleichen Spalte nicht gewinnnen kann
                 if not(row < maxRow and VierGewinnt.hasWinnerWithTokenIn(game, row + 1, col, -game.getTokenForNextPlayer())):
-                    selectedCol = col
-                    selectedValue = VierGewinnt.getPlaceValue(row, col, maxRow, maxCol)
-        return selectedCol
+                    move = col
+                    moveValue = VierGewinnt.getPlaceValue(row, col, maxRow, maxCol)
+        return move
 
     @staticmethod
     def hasWinnerWithTokenIn(game, row, col, token, maxCol = 7):

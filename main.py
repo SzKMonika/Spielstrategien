@@ -2,6 +2,7 @@
 
 import inspect, random, sys
 import games.game
+import games.executor
 from games.nim import Nim
 from games.nim_multi import NimMulti
 from games.kalaha import Kalaha
@@ -77,10 +78,8 @@ if __name__ == "__main__":
             strategy1 = eval(strategiesDict[player1] + ("()" if strategiesDict[player1].endswith("_") else ""))
             strategy2 = eval(strategiesDict[player2] + ("()" if strategiesDict[player2].endswith("_") else ""))
             # Wir starten 1 oder mehrere Durchläufe des gewählten Spiels mit den gewählten Strategien
-            if count <= 1:
-                games.game.Game.playOne(eval(gamesDict[game]), strategy1, strategy2)
-            else:
-                games.game.Game.playMany(eval(gamesDict[game]), strategy1, strategy2, count)
+            executor = games.executor.Executor(eval(gamesDict[game]), strategy1, strategy2)
+            executor.play(count)
         # Wenn wir Mastermind spielen...
         else:
             # dann stellen wir zuerst separat die Strategien für Spieler 1 und Spieler 2 zusammen...

@@ -152,7 +152,7 @@ class Kalaha(Game):
         """Strategie für einen ziemlich smarten Computerspieler."""
         pit = game.gamePanel
         move = 0
-        moveValue = -15
+        moveValue = -50
         for i in range(1, len(pit[game.nextPlayer - 1])):
             stones = pit[game.nextPlayer - 1][i]
             if stones > 0:
