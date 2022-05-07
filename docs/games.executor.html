@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module games.executor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="games.html"><font color="#ffffff">games</font></a>.executor</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cdev%5Cspielstrategien%5Cgames%5Cexecutor.py">c:\dev\spielstrategien\games\executor.py</a></font></td></tr></table>
+    <p><tt>Dieses&nbsp;Modul&nbsp;beinhaltet&nbsp;die&nbsp;Klasse&nbsp;<a href="#Executor">Executor</a>&nbsp;und&nbsp;eine&nbsp;umgebungsabhängige&nbsp;Initialiasierung,&nbsp;die&nbsp;die&nbsp;Funktionen<br>
+println,&nbsp;clr&nbsp;und&nbsp;waitForKey&nbsp;so&nbsp;aufsetzt,&nbsp;dass&nbsp;diese&nbsp;sowohl&nbsp;in&nbsp;TigerJython&nbsp;wie&nbsp;auch&nbsp;in&nbsp;Python&nbsp;(VS&nbsp;Code)&nbsp;funktionieren.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="builtins.html">builtins</a><br>
+<a href="keyboard.html">keyboard</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="games.executor.html#Executor">Executor</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Executor">class <strong>Executor</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Executor">Executor</a>(gameCreator,&nbsp;player1,&nbsp;player2)<br>
+&nbsp;<br>
+Die&nbsp;<a href="#Executor">Executor</a>&nbsp;Klasse&nbsp;kann&nbsp;eine&nbsp;konkrete&nbsp;Subklasse&nbsp;von&nbsp;Game&nbsp;einmal&nbsp;oder&nbsp;mehrmals&nbsp;ausführen.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;gameCreator:&nbsp;eine&nbsp;Funktion&nbsp;oder&nbsp;Lambda,&nbsp;die&nbsp;eine&nbsp;Instanz&nbsp;des&nbsp;gewählten&nbsp;Spiels&nbsp;mit&nbsp;den&nbsp;angegeben&nbsp;beiden&nbsp;Spielern&nbsp;erstellen&nbsp;kann<br>
+&nbsp;&nbsp;&nbsp;&nbsp;player1:&nbsp;Eine&nbsp;Funktion,&nbsp;die&nbsp;die&nbsp;Strategie&nbsp;des&nbsp;ersten&nbsp;Spielers&nbsp;ausführt.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;player2:&nbsp;Eine&nbsp;Funktion,&nbsp;die&nbsp;die&nbsp;Strategie&nbsp;des&nbsp;zweiten&nbsp;Spielers&nbsp;ausführt.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_gameCreator:&nbsp;Der&nbsp;Wert&nbsp;vom&nbsp;Argument&nbsp;gameCreator.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_player1:&nbsp;Der&nbsp;Wert&nbsp;vom&nbsp;Argument&nbsp;player1.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_player2:&nbsp;Der&nbsp;Wert&nbsp;vom&nbsp;Argument&nbsp;player2.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Executor-__init__"><strong>__init__</strong></a>(self, gameCreator, player1, player2)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="Executor-play"><strong>play</strong></a>(self, count)</dt><dd><tt>Führt&nbsp;ein&nbsp;Spiel&nbsp;(Game)&nbsp;ein-&nbsp;oder&nbsp;mehrmals&nbsp;aus,&nbsp;abhängig&nbsp;vom&nbsp;Argument&nbsp;count.</tt></dd></dl>
+
+<dl><dt><a name="Executor-playMany"><strong>playMany</strong></a>(self, count=100)</dt><dd><tt>Führt&nbsp;ein&nbsp;Spiel&nbsp;(Game)&nbsp;mehrmals&nbsp;aus&nbsp;und&nbsp;gibt&nbsp;nachher&nbsp;eine&nbsp;Statistik&nbsp;aus.<br>
+Für&nbsp;jedes&nbsp;ausgeführte&nbsp;Spiel&nbsp;gibt&nbsp;es&nbsp;fairerweise&nbsp;auch&nbsp;eine&nbsp;Revanche,&nbsp;wo&nbsp;die&nbsp;Reihenfolge&nbsp;der&nbsp;beiden&nbsp;Spieler&nbsp;getauscht&nbsp;wird.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;count&nbsp;(int):&nbsp;Anzahl&nbsp;der&nbsp;Spiele&nbsp;die&nbsp;durchgespielt&nbsp;werden&nbsp;sollen.&nbsp;Eigentlich&nbsp;werden&nbsp;doppelt&nbsp;so&nbsp;viele&nbsp;Spiele&nbsp;ausgeführt,&nbsp;wegen&nbsp;den&nbsp;Revanchen.</tt></dd></dl>
+
+<dl><dt><a name="Executor-playOne"><strong>playOne</strong></a>(self, printMoves=False)</dt><dd><tt>Führt&nbsp;ein&nbsp;Spiel&nbsp;(Game)&nbsp;einmal&nbsp;aus&nbsp;und&nbsp;erlaubt&nbsp;es&nbsp;nachher&nbsp;die&nbsp;Züge&nbsp;einzeln&nbsp;anzuschauen.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;printMoves&nbsp;(bool):&nbsp;Gibt&nbsp;an,&nbsp;ob&nbsp;die&nbsp;Züge&nbsp;bzw.&nbsp;Spielstände&nbsp;auf&nbsp;die&nbsp;Konsole&nbsp;ausgegeben&nbsp;werden&nbsp;sollen&nbsp;oder&nbsp;nicht.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><strong>clr</strong> <em>lambda</em> (...)</dt></dl>
+ <dl><dt><a name="-println"><strong>println</strong></a> = print(...)</dt><dd><tt>print(value,&nbsp;...,&nbsp;sep='&nbsp;',&nbsp;end='\n',&nbsp;file=sys.stdout,&nbsp;flush=False)<br>
+&nbsp;<br>
+Prints&nbsp;the&nbsp;values&nbsp;to&nbsp;a&nbsp;stream,&nbsp;or&nbsp;to&nbsp;sys.stdout&nbsp;by&nbsp;default.<br>
+Optional&nbsp;keyword&nbsp;arguments:<br>
+file:&nbsp;&nbsp;a&nbsp;file-like&nbsp;<a href="builtins.html#object">object</a>&nbsp;(stream);&nbsp;defaults&nbsp;to&nbsp;the&nbsp;current&nbsp;sys.stdout.<br>
+sep:&nbsp;&nbsp;&nbsp;string&nbsp;inserted&nbsp;between&nbsp;values,&nbsp;default&nbsp;a&nbsp;space.<br>
+end:&nbsp;&nbsp;&nbsp;string&nbsp;appended&nbsp;after&nbsp;the&nbsp;last&nbsp;value,&nbsp;default&nbsp;a&nbsp;newline.<br>
+flush:&nbsp;whether&nbsp;to&nbsp;forcibly&nbsp;flush&nbsp;the&nbsp;stream.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>IS_JYTHON</strong> = False<br>
+<strong>IS_PYTHON3</strong> = True</td></tr></table>
+</body></html>

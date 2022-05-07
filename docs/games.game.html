@@ -9,8 +9,7 @@
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="games.html"><font color="#ffffff">games</font></a>.game</strong></big></big></font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cdev%5Cspielstrategien%5Cgames%5Cgame.py">c:\dev\spielstrategien\games\game.py</a></font></td></tr></table>
-    <p><tt>Dieses&nbsp;Modul&nbsp;beinhaltet&nbsp;die&nbsp;Klasse&nbsp;<a href="#Game">Game</a>&nbsp;und&nbsp;eine&nbsp;umgebungsabhängige&nbsp;Initialiasierung,&nbsp;die&nbsp;die&nbsp;Funktionen<br>
-println,&nbsp;clr&nbsp;und&nbsp;waitForKey&nbsp;so&nbsp;aufsetzt,&nbsp;dass&nbsp;diese&nbsp;sowohl&nbsp;in&nbsp;TigerJython&nbsp;wie&nbsp;auch&nbsp;in&nbsp;Python&nbsp;(VS&nbsp;Code)&nbsp;funktionieren.</tt></p>
+    <p><tt>Dieses&nbsp;Modul&nbsp;beinhaltet&nbsp;die&nbsp;Klasse&nbsp;<a href="#Game">Game</a>.</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -18,10 +17,8 @@ println,&nbsp;clr&nbsp;und&nbsp;waitForKey&nbsp;so&nbsp;aufsetzt,&nbsp;dass&nbsp
 <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="builtins.html">builtins</a><br>
-<a href="keyboard.html">keyboard</a><br>
-</td><td width="25%" valign=top><a href="os.html">os</a><br>
-<a href="sys.html">sys</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
 </td><td width="25%" valign=top><a href="time.html">time</a><br>
 </td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -47,7 +44,7 @@ println,&nbsp;clr&nbsp;und&nbsp;waitForKey&nbsp;so&nbsp;aufsetzt,&nbsp;dass&nbsp
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt><a href="#Game">Game</a>(player1,&nbsp;player2,&nbsp;printMoves=False)<br>
 &nbsp;<br>
-Die&nbsp;<a href="#Game">Game</a>&nbsp;Klasse&nbsp;ist&nbsp;die&nbsp;gemeinsame&nbsp;Hauptklasse&nbsp;für&nbsp;alle&nbsp;Zweipersonen-Spiele&nbsp;und&nbsp;ist&nbsp;somit&nbsp;der&nbsp;Kern&nbsp;des&nbsp;Frameworks.<br>
+Die&nbsp;<a href="#Game">Game</a>&nbsp;Klasse&nbsp;ist&nbsp;die&nbsp;gemeinsame&nbsp;Hauptklasse&nbsp;für&nbsp;alle&nbsp;Zweipersonen-Spiele&nbsp;und&nbsp;ist&nbsp;somit&nbsp;der&nbsp;Kern&nbsp;des&nbsp;kleinen&nbsp;Frameworks.<br>
 Hier&nbsp;wird&nbsp;der&nbsp;Ablauf&nbsp;der&nbsp;Spiele&nbsp;generell&nbsp;definiert&nbsp;(siehe&nbsp;<a href="#Game-play">play</a>()).&nbsp;Manche&nbsp;Methoden&nbsp;(wie&nbsp;<a href="#Game-checkMove">checkMove</a>(),&nbsp;_doMove()&nbsp;und&nbsp;_checkEnd())<br>
 müssen&nbsp;in&nbsp;den&nbsp;konkreten&nbsp;Spielklassen&nbsp;überschrieben&nbsp;bzw.&nbsp;implementiert&nbsp;werden.<br>
 &nbsp;<br>
@@ -98,23 +95,6 @@ Static methods defined here:<br>
 <dl><dt><a name="Game-human"><strong>human</strong></a>(game)</dt><dd><tt>Ein&nbsp;Callback&nbsp;für&nbsp;einen&nbsp;menschlichen&nbsp;Spieler,&nbsp;der&nbsp;den&nbsp;Benutzer&nbsp;um&nbsp;ihren&nbsp;Zug&nbsp;fragt.<br>
 Dieser&nbsp;Callback&nbsp;darf&nbsp;in&nbsp;jedem&nbsp;Spiel&nbsp;generell&nbsp;verwendet&nbsp;werden,&nbsp;weil&nbsp;er&nbsp;den&nbsp;gewählten&nbsp;Zug&nbsp;zuerst&nbsp;mit&nbsp;game.<a href="#Game-checkMove">checkMove</a>()&nbsp;überprüft.</tt></dd></dl>
 
-<dl><dt><a name="Game-playMany"><strong>playMany</strong></a>(createGame, player1, player2, count=100)</dt><dd><tt>Führt&nbsp;ein&nbsp;Spiel&nbsp;(<a href="#Game">Game</a>)&nbsp;mehrmals&nbsp;aus&nbsp;und&nbsp;gibt&nbsp;nachher&nbsp;eine&nbsp;Statistik&nbsp;aus.<br>
-Für&nbsp;jedes&nbsp;ausgeführte&nbsp;Spiel&nbsp;gibt&nbsp;es&nbsp;fairerweise&nbsp;auch&nbsp;eine&nbsp;Revanche,&nbsp;wo&nbsp;die&nbsp;Reihenfolge&nbsp;der&nbsp;beiden&nbsp;Spieler&nbsp;getauscht&nbsp;wird.<br>
-&nbsp;<br>
-Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;createGame:&nbsp;eine&nbsp;Funktion&nbsp;oder&nbsp;Lambda,&nbsp;die&nbsp;ein&nbsp;Instanz&nbsp;des&nbsp;gewählten&nbsp;Spiels&nbsp;mit&nbsp;den&nbsp;angegeben&nbsp;beiden&nbsp;Spielern&nbsp;erstellen&nbsp;kann<br>
-&nbsp;&nbsp;&nbsp;&nbsp;player1:&nbsp;Eine&nbsp;Funktion,&nbsp;die&nbsp;die&nbsp;Strategie&nbsp;des&nbsp;ersten&nbsp;Spielers&nbsp;ausführt.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;player2:&nbsp;Eine&nbsp;Funktion,&nbsp;die&nbsp;die&nbsp;Strategie&nbsp;des&nbsp;zweiten&nbsp;Spielers&nbsp;ausführt.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;count&nbsp;(int):&nbsp;Anzahl&nbsp;der&nbsp;Spiele&nbsp;die&nbsp;durchgespielt&nbsp;werden&nbsp;sollen.&nbsp;Eigentlich&nbsp;werden&nbsp;doppelt&nbsp;so&nbsp;viele&nbsp;Spiele&nbsp;ausgeführt,&nbsp;wegen&nbsp;den&nbsp;Revanchen.</tt></dd></dl>
-
-<dl><dt><a name="Game-playOne"><strong>playOne</strong></a>(createGame, player1, player2, printMoves=False)</dt><dd><tt>Führt&nbsp;ein&nbsp;Spiel&nbsp;(<a href="#Game">Game</a>)&nbsp;einmal&nbsp;aus&nbsp;und&nbsp;erlaubt&nbsp;es&nbsp;nachher&nbsp;die&nbsp;Züge&nbsp;einzeln&nbsp;anzuschauen.<br>
-&nbsp;<br>
-Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;createGame:&nbsp;eine&nbsp;Funktion&nbsp;oder&nbsp;Lambda,&nbsp;die&nbsp;ein&nbsp;Instanz&nbsp;des&nbsp;gewählten&nbsp;Spiels&nbsp;mit&nbsp;den&nbsp;angegeben&nbsp;beiden&nbsp;Spielern&nbsp;erstellen&nbsp;kann<br>
-&nbsp;&nbsp;&nbsp;&nbsp;player1:&nbsp;Eine&nbsp;Funktion,&nbsp;die&nbsp;die&nbsp;Strategie&nbsp;des&nbsp;ersten&nbsp;Spielers&nbsp;ausführt.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;player2:&nbsp;Eine&nbsp;Funktion,&nbsp;die&nbsp;die&nbsp;Strategie&nbsp;des&nbsp;zweiten&nbsp;Spielers&nbsp;ausführt.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;printMoves&nbsp;(bool):&nbsp;Gibt&nbsp;an,&nbsp;ob&nbsp;die&nbsp;Züge&nbsp;bzw.&nbsp;Spielstände&nbsp;auf&nbsp;die&nbsp;Konsole&nbsp;ausgegeben&nbsp;werden&nbsp;sollen&nbsp;oder&nbsp;nicht.</tt></dd></dl>
-
 <hr>
 Readonly properties defined here:<br>
 <dl><dt><strong>gamePanel</strong></dt>
@@ -135,29 +115,5 @@ Data descriptors defined here:<br>
 <dl><dt><strong>__weakref__</strong></dt>
 <dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
 </dl>
-</td></tr></table></td></tr></table><p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#eeaa77">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
-    
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><strong>clr</strong> <em>lambda</em> (...)</dt></dl>
- <dl><dt><a name="-println"><strong>println</strong></a> = print(...)</dt><dd><tt>print(value,&nbsp;...,&nbsp;sep='&nbsp;',&nbsp;end='\n',&nbsp;file=sys.stdout,&nbsp;flush=False)<br>
-&nbsp;<br>
-Prints&nbsp;the&nbsp;values&nbsp;to&nbsp;a&nbsp;stream,&nbsp;or&nbsp;to&nbsp;sys.stdout&nbsp;by&nbsp;default.<br>
-Optional&nbsp;keyword&nbsp;arguments:<br>
-file:&nbsp;&nbsp;a&nbsp;file-like&nbsp;<a href="builtins.html#object">object</a>&nbsp;(stream);&nbsp;defaults&nbsp;to&nbsp;the&nbsp;current&nbsp;sys.stdout.<br>
-sep:&nbsp;&nbsp;&nbsp;string&nbsp;inserted&nbsp;between&nbsp;values,&nbsp;default&nbsp;a&nbsp;space.<br>
-end:&nbsp;&nbsp;&nbsp;string&nbsp;appended&nbsp;after&nbsp;the&nbsp;last&nbsp;value,&nbsp;default&nbsp;a&nbsp;newline.<br>
-flush:&nbsp;whether&nbsp;to&nbsp;forcibly&nbsp;flush&nbsp;the&nbsp;stream.</tt></dd></dl>
-</td></tr></table><p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#55aa55">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
-    
-<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><strong>IS_JYTHON</strong> = False<br>
-<strong>IS_PYTHON3</strong> = True</td></tr></table>
+</td></tr></table></td></tr></table>
 </body></html>
