@@ -1,5 +1,5 @@
-"""Dieses Modul beinhaltet die Klasse Executor und eine umgebungsabhängige Initialiasierung, die die Funktionen
-println, clr und waitForKey so aufsetzt, dass diese sowohl in TigerJython wie auch in Python (VS Code) funktionieren."""
+"""Dieses Modul beinhaltet die Klasse Executor und eine umgebungsabhängige Initialiasierung, die den Variablen println, clr und waitForKey
+eine der Umgebung entsprechende Funktion zuweist, damit die Spielausführung sowohl in TigerJython wie auch in Python (VS Code) funktioniert."""
 import os, sys, time
 
 # -------------------- class Game --------------------

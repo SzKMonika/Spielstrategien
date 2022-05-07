@@ -1,8 +1,8 @@
 # Einführung
 
-Dieses Projekt bietet ein Framework um Spielalgorithmen bei verschiedenen endlichen 2-Personen Spielen mit perfekter Information auszuprobieren.
+Dieses Projekt bietet ein kleines Framework um Spielalgorithmen bei verschiedenen endlichen 2-Personen Spielen mit perfekter Information auszuprobieren.
 Eine generelle Vereinbarung ist, dass bei einem ungültigen Zug, der gegen die Regeln verstösst, der andere Spieler gewinnt.
-Aktuell werden nachfolgende Spiele unterstützt.
+Die aktuell verfügbaren Spiele werden weiter unten kurz beschrieben. Durch das Framework ist es möglich neue ähnliche Spiele relativ einfach hinzuzufügen und in der gleichen Art und Weise spielbar zu machen.
 
 ## Wie spielt man?
 Das Code wurde in Python geschrieben und kann sowohl in [TigerJython](https://www.tigerjython.ch/) als auch in [Visual Studio Code](https://code.visualstudio.com/) ausgeführt werden. Das Code ist in einem [GitHub Repository](https://github.com/SzKMonika/Spielstrategien) verfügbar und kann auch direkt [als ZIP-Datei heruntergeladen](https://github.com/SzKMonika/Spielstrategien/archive/refs/heads/main.zip) werden.
