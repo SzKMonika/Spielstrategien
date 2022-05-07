@@ -49,13 +49,13 @@ Hier&nbsp;wird&nbsp;der&nbsp;Ablauf&nbsp;der&nbsp;Spiele&nbsp;generell&nbsp;defi
 müssen&nbsp;in&nbsp;den&nbsp;konkreten&nbsp;Spielklassen&nbsp;überschrieben&nbsp;bzw.&nbsp;implementiert&nbsp;werden.<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;player1:&nbsp;Eine&nbsp;Callback-Funktion&nbsp;die&nbsp;in&nbsp;<a href="#Game-play">play</a>()&nbsp;aufgerufen&nbsp;wird,&nbsp;um&nbsp;die&nbsp;Züge&nbsp;des&nbsp;Spieler&nbsp;1&nbsp;zu&nbsp;ermitteln.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;player2:&nbsp;Eine&nbsp;Callback-Funktion&nbsp;die&nbsp;in&nbsp;<a href="#Game-play">play</a>()&nbsp;aufgerufen&nbsp;wird,&nbsp;um&nbsp;die&nbsp;Züge&nbsp;des&nbsp;Spieler&nbsp;2&nbsp;zu&nbsp;ermitteln.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;player1:&nbsp;Eine&nbsp;Funktion&nbsp;die&nbsp;in&nbsp;<a href="#Game-play">play</a>()&nbsp;aufgerufen&nbsp;wird,&nbsp;um&nbsp;die&nbsp;Züge&nbsp;des&nbsp;Spieler&nbsp;1&nbsp;zu&nbsp;ermitteln.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;player2:&nbsp;Eine&nbsp;Funktion&nbsp;die&nbsp;in&nbsp;<a href="#Game-play">play</a>()&nbsp;aufgerufen&nbsp;wird,&nbsp;um&nbsp;die&nbsp;Züge&nbsp;des&nbsp;Spieler&nbsp;2&nbsp;zu&nbsp;ermitteln.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;printMoves&nbsp;(bool):&nbsp;Gibt&nbsp;an,&nbsp;ob&nbsp;die&nbsp;einzelne&nbsp;Züge&nbsp;während&nbsp;des&nbsp;Spiels&nbsp;via&nbsp;print()&nbsp;ausgeschrieben&nbsp;werden&nbsp;sollen,&nbsp;oder&nbsp;nicht<br>
 &nbsp;<br>
 Attributes:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;__playerCallback:&nbsp;Ein&nbsp;Tuple&nbsp;aus&nbsp;den&nbsp;eingegeben&nbsp;player1&nbsp;und&nbsp;player2&nbsp;Callback-Funktionen.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;__playerName:&nbsp;Ein&nbsp;Tuple,&nbsp;das&nbsp;die&nbsp;Namen&nbsp;der&nbsp;player1&nbsp;und&nbsp;player2&nbsp;Callback-Funktionen&nbsp;und&nbsp;somit&nbsp;den&nbsp;zugewiesenen&nbsp;Spielernamen&nbsp;enthält.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;__playerCallback:&nbsp;Ein&nbsp;Tuple&nbsp;aus&nbsp;den&nbsp;eingegeben&nbsp;player1&nbsp;und&nbsp;player2&nbsp;Funktionen.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;__playerName:&nbsp;Ein&nbsp;Tuple,&nbsp;das&nbsp;die&nbsp;Namen&nbsp;der&nbsp;player1&nbsp;und&nbsp;player2&nbsp;Funktionen&nbsp;und&nbsp;somit&nbsp;den&nbsp;zugewiesenen&nbsp;Spielernamen&nbsp;enthält.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;_printMoves&nbsp;(bool):&nbsp;Der&nbsp;Wert&nbsp;vom&nbsp;printMoves&nbsp;Argument.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;__nextPlayer&nbsp;(int):&nbsp;Gibt&nbsp;an,&nbsp;welcher&nbsp;Spieler&nbsp;gerade&nbsp;am&nbsp;Zug&nbsp;ist&nbsp;(1&nbsp;oder&nbsp;2).&nbsp;Bei&nbsp;Spielende&nbsp;wird&nbsp;es&nbsp;0&nbsp;bei&nbsp;unentschieden&nbsp;bzw.&nbsp;-1&nbsp;oder&nbsp;-2&nbsp;abhängig&nbsp;davon&nbsp;wer&nbsp;gewonnen&nbsp;hat.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;__nextMove&nbsp;(int):&nbsp;Gibt&nbsp;an,&nbsp;welcher&nbsp;Zug&nbsp;kommt.&nbsp;Der&nbsp;erste&nbsp;Zug&nbsp;hat&nbsp;den&nbsp;Index&nbsp;1.<br>
@@ -92,13 +92,13 @@ Die&nbsp;Züge&nbsp;werden&nbsp;in&nbsp;einer&nbsp;Schleife&nbsp;abgearbeitet,&n
 
 <hr>
 Static methods defined here:<br>
-<dl><dt><a name="Game-human"><strong>human</strong></a>(game)</dt><dd><tt>Ein&nbsp;Callback&nbsp;für&nbsp;einen&nbsp;menschlichen&nbsp;Spieler,&nbsp;der&nbsp;den&nbsp;Benutzer&nbsp;um&nbsp;ihren&nbsp;Zug&nbsp;fragt.<br>
-Dieser&nbsp;Callback&nbsp;darf&nbsp;in&nbsp;jedem&nbsp;Spiel&nbsp;generell&nbsp;verwendet&nbsp;werden,&nbsp;weil&nbsp;er&nbsp;den&nbsp;gewählten&nbsp;Zug&nbsp;zuerst&nbsp;mit&nbsp;game.<a href="#Game-checkMove">checkMove</a>()&nbsp;überprüft.</tt></dd></dl>
+<dl><dt><a name="Game-human"><strong>human</strong></a>(game)</dt><dd><tt>Eine&nbsp;Funktion&nbsp;für&nbsp;einen&nbsp;menschlichen&nbsp;Spieler,&nbsp;der&nbsp;den&nbsp;Benutzer&nbsp;um&nbsp;ihren&nbsp;Zug&nbsp;fragt.<br>
+Diese&nbsp;Funktion&nbsp;darf&nbsp;in&nbsp;jedem&nbsp;Spiel&nbsp;generell&nbsp;verwendet&nbsp;werden,&nbsp;weil&nbsp;er&nbsp;den&nbsp;gewählten&nbsp;Zug&nbsp;zuerst&nbsp;mit&nbsp;game.<a href="#Game-checkMove">checkMove</a>()&nbsp;überprüft.</tt></dd></dl>
 
 <hr>
 Readonly properties defined here:<br>
 <dl><dt><strong>gamePanel</strong></dt>
-<dd><tt>Das&nbsp;konkrete&nbsp;Spiel&nbsp;gibt&nbsp;das&nbsp;Spielfeld&nbsp;in&nbsp;seinem&nbsp;Rohmodell&nbsp;zurück,&nbsp;damit&nbsp;die&nbsp;Spieler-Callbacks&nbsp;daraus&nbsp;den&nbsp;Spielstand&nbsp;vollständig&nbsp;erkunden&nbsp;können.<br>
+<dd><tt>Das&nbsp;konkrete&nbsp;Spiel&nbsp;gibt&nbsp;das&nbsp;Spielfeld&nbsp;in&nbsp;seinem&nbsp;Rohmodell&nbsp;zurück,&nbsp;damit&nbsp;die&nbsp;Spieler-Funktionen&nbsp;daraus&nbsp;den&nbsp;Spielstand&nbsp;vollständig&nbsp;erkunden&nbsp;können.<br>
 Warnung:&nbsp;Bei&nbsp;Listen&nbsp;oder&nbsp;noch&nbsp;komplexeren&nbsp;Strukturen&nbsp;muss&nbsp;eine&nbsp;Kopie&nbsp;zurückgegeben,&nbsp;damit&nbsp;der&nbsp;Spielstand&nbsp;von&nbsp;aussen&nbsp;unveränderbar&nbsp;bleibt!</tt></dd>
 </dl>
 <dl><dt><strong>nextMove</strong></dt>

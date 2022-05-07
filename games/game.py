@@ -8,13 +8,13 @@ class Game():
     müssen in den konkreten Spielklassen überschrieben bzw. implementiert werden.
 
     Args:
-        player1: Eine Callback-Funktion die in play() aufgerufen wird, um die Züge des Spieler 1 zu ermitteln.
-        player2: Eine Callback-Funktion die in play() aufgerufen wird, um die Züge des Spieler 2 zu ermitteln.
+        player1: Eine Funktion die in play() aufgerufen wird, um die Züge des Spieler 1 zu ermitteln.
+        player2: Eine Funktion die in play() aufgerufen wird, um die Züge des Spieler 2 zu ermitteln.
         printMoves (bool): Gibt an, ob die einzelne Züge während des Spiels via print() ausgeschrieben werden sollen, oder nicht
 
     Attributes:
-        __playerCallback: Ein Tuple aus den eingegeben player1 und player2 Callback-Funktionen.
-        __playerName: Ein Tuple, das die Namen der player1 und player2 Callback-Funktionen und somit den zugewiesenen Spielernamen enthält.
+        __playerCallback: Ein Tuple aus den eingegeben player1 und player2 Funktionen.
+        __playerName: Ein Tuple, das die Namen der player1 und player2 Funktionen und somit den zugewiesenen Spielernamen enthält.
         _printMoves (bool): Der Wert vom printMoves Argument.
         __nextPlayer (int): Gibt an, welcher Spieler gerade am Zug ist (1 oder 2). Bei Spielende wird es 0 bei unentschieden bzw. -1 oder -2 abhängig davon wer gewonnen hat.
         __nextMove (int): Gibt an, welcher Zug kommt. Der erste Zug hat den Index 1.
@@ -44,7 +44,7 @@ class Game():
 
     @property
     def gamePanel(self):
-        """Das konkrete Spiel gibt das Spielfeld in seinem Rohmodell zurück, damit die Spieler-Callbacks daraus den Spielstand vollständig erkunden können.
+        """Das konkrete Spiel gibt das Spielfeld in seinem Rohmodell zurück, damit die Spieler-Funktionen daraus den Spielstand vollständig erkunden können.
         Warnung: Bei Listen oder noch komplexeren Strukturen muss eine Kopie zurückgegeben, damit der Spielstand von aussen unveränderbar bleibt!
         """
         return None
@@ -152,8 +152,8 @@ class Game():
     # -------------------- Menschlicher Spieler --------------------   
     @staticmethod
     def human(game):
-        """Ein Callback für einen menschlichen Spieler, der den Benutzer um ihren Zug fragt.
-        Dieser Callback darf in jedem Spiel generell verwendet werden, weil er den gewählten Zug zuerst mit game.checkMove() überprüft.
+        """Eine Funktion für einen menschlichen Spieler, der den Benutzer um ihren Zug fragt.
+        Diese Funktion darf in jedem Spiel generell verwendet werden, weil er den gewählten Zug zuerst mit game.checkMove() überprüft.
         """
         move = None
         exc = "" # Beschreibung der Fehler bei falscher Eingabe

@@ -82,7 +82,7 @@ Static methods defined here:<br>
 <hr>
 Readonly properties defined here:<br>
 <dl><dt><strong>gamePanel</strong></dt>
-<dd><tt>Das&nbsp;konkrete&nbsp;Spiel&nbsp;gibt&nbsp;das&nbsp;Spielfeld&nbsp;in&nbsp;seinem&nbsp;Rohmodell&nbsp;zurück,&nbsp;damit&nbsp;die&nbsp;Spieler-Callbacks&nbsp;daraus&nbsp;den&nbsp;Spielstand&nbsp;vollständig&nbsp;erkunden&nbsp;können.<br>
+<dd><tt>Das&nbsp;konkrete&nbsp;Spiel&nbsp;gibt&nbsp;das&nbsp;Spielfeld&nbsp;in&nbsp;seinem&nbsp;Rohmodell&nbsp;zurück,&nbsp;damit&nbsp;die&nbsp;Spieler-Funktionen&nbsp;daraus&nbsp;den&nbsp;Spielstand&nbsp;vollständig&nbsp;erkunden&nbsp;können.<br>
 Warnung:&nbsp;Bei&nbsp;Listen&nbsp;oder&nbsp;noch&nbsp;komplexeren&nbsp;Strukturen&nbsp;muss&nbsp;eine&nbsp;Kopie&nbsp;zurückgegeben,&nbsp;damit&nbsp;der&nbsp;Spielstand&nbsp;von&nbsp;aussen&nbsp;unveränderbar&nbsp;bleibt!</tt></dd>
 </dl>
 <dl><dt><strong>lastOneLoses</strong></dt>
@@ -111,8 +111,8 @@ Die&nbsp;Züge&nbsp;werden&nbsp;in&nbsp;einer&nbsp;Schleife&nbsp;abgearbeitet,&n
 
 <hr>
 Static methods inherited from <a href="games.game.html#Game">games.game.Game</a>:<br>
-<dl><dt><a name="NimMulti-human"><strong>human</strong></a>(game)</dt><dd><tt>Ein&nbsp;Callback&nbsp;für&nbsp;einen&nbsp;menschlichen&nbsp;Spieler,&nbsp;der&nbsp;den&nbsp;Benutzer&nbsp;um&nbsp;ihren&nbsp;Zug&nbsp;fragt.<br>
-Dieser&nbsp;Callback&nbsp;darf&nbsp;in&nbsp;jedem&nbsp;Spiel&nbsp;generell&nbsp;verwendet&nbsp;werden,&nbsp;weil&nbsp;er&nbsp;den&nbsp;gewählten&nbsp;Zug&nbsp;zuerst&nbsp;mit&nbsp;game.<a href="#NimMulti-checkMove">checkMove</a>()&nbsp;überprüft.</tt></dd></dl>
+<dl><dt><a name="NimMulti-human"><strong>human</strong></a>(game)</dt><dd><tt>Eine&nbsp;Funktion&nbsp;für&nbsp;einen&nbsp;menschlichen&nbsp;Spieler,&nbsp;der&nbsp;den&nbsp;Benutzer&nbsp;um&nbsp;ihren&nbsp;Zug&nbsp;fragt.<br>
+Diese&nbsp;Funktion&nbsp;darf&nbsp;in&nbsp;jedem&nbsp;Spiel&nbsp;generell&nbsp;verwendet&nbsp;werden,&nbsp;weil&nbsp;er&nbsp;den&nbsp;gewählten&nbsp;Zug&nbsp;zuerst&nbsp;mit&nbsp;game.<a href="#NimMulti-checkMove">checkMove</a>()&nbsp;überprüft.</tt></dd></dl>
 
 <hr>
 Readonly properties inherited from <a href="games.game.html#Game">games.game.Game</a>:<br>

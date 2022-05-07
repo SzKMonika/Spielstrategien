@@ -102,7 +102,7 @@ class VierGewinnt(Game):
 
     @staticmethod
     def countSameTokensIn(line):
-        """Gibt an, wie viele gleiche Tokens benachbart in einer Reihe von Zahlen vorkommen."""
+        """Gibt an, wie viele gleiche Tokens (+/-1) benachbart in einer Linie/Liste von Zahlen vorkommen."""
         sum = maxSum = minSum = 0
         for token in line:
             sum = sum + token if token*sum > 0 else token
