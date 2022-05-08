@@ -22,6 +22,8 @@ Kalaha:
 - game.gamePanel ist eine Tuple mit 2 Listen (für die zwei Muldenreihen) mit jeweils 7 ganzen Zahlen.
                  Beide Listen haben auf Index 0 die Anzahl Steine in der Gewinnmulde, und unter Index 1 bis 6
                  befinden sich die Anzahl Steine in den Spielmulden, und zwar immer von der Gewinnmulde gezählt.
+- game.getPitListForNextPlayer(): Gibt den Inhalt der Muldenreihe des aktuellen Spielers als eine Liste von Zahlen zurück.
+- game.getPitListForOtherPlayer(): Gibt den Inhalt der Muldenreihe des anderen Spielers als eine Liste von Zahlen zurück.
 
 VierGewinnt:
 - game.gamePanel ist eine zweidimensionale Liste von ganzen Zahlen, die jeweils den Wert

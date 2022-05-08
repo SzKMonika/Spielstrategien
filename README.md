@@ -12,7 +12,7 @@ Für Visual Studio Code gibt es noch einige Voraussetzungen, damit alles gut fun
 * Optional kann man auch noch die GitLens-Erweiterung installieren, ist aber nicht notwendig.
 * Zuletzt sollte man in dem Verzeichnis, wohin man dieses Code heruntergeladen hat, folgenden Befehl in einem Terminal ausführen: `pip install -r requirements.txt` (das installiert das benötigte keyboard Package).
 
-Die eigenen Strategien müssen in die Datei `strategy.py` geschrieben werden als Methoden. Die Methoden haben immer ein Argument (`game`) und der Name muss abhängig vom Spiel mit *nim_*, *nimMulti_*, *kalaha_*, *vierGewinnt_* oder *mastermind_* anfangen. Nachdem die gewünschten eigenen Strategien erstellt und gespeichert wurden, kann man das Framework mittels `main.py` starten und dort durch entsprechende Eingabe von Zahlen konfigurieren und das ausgewählte Spiel mit den gewählten Strategien laufen lassen.
+Die eigenen Strategien müssen in die Datei `strategy.py` geschrieben werden als Funktionen. Die Funktionen haben immer ein Argument (`game`) und der Name muss abhängig vom Spiel mit *nim_*, *nimMulti_*, *kalaha_*, *vierGewinnt_* oder *mastermind_* anfangen. Nachdem die gewünschten eigenen Strategien erstellt und gespeichert wurden, kann man das Framework mittels `main.py` starten und dort durch entsprechende Eingabe von Zahlen konfigurieren und das ausgewählte Spiel mit den gewählten Strategien laufen lassen.
 
 Die Strategien selber können durch das Argument `game` auf die Properties und evtl. Hilfsmethoden der einzelnen Spiele zugreifen. Weitere Details dazu sind in [strategy.py](docs/strategy.html) und in den einzelnen Modulen unter [games](docs/games.html) beschrieben.
 
