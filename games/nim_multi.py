@@ -35,7 +35,7 @@ class NimMulti(Game):
 
     def checkMove(self, move):
         if not isinstance(move, tuple):
-            raise ValueError("Es müssen zwei mit Komma getrennten ganze Zahlen angegeben werden!")
+            raise ValueError("Es müssen zwei mit Komma getrennte ganze Zahlen in Klammern angegeben werden!")
         if move[0] < 1 or move[0] > len(self.__sticksList):
             raise ValueError("Gewählte Reihe " + str(move[0]) + " ist ungültig!")
         if move[1] < 1 or move[1] > self.__sticksList[move[0] - 1]:
