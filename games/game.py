@@ -2,7 +2,7 @@
 import os, sys, time
 
 # -------------------- class Game --------------------
-class Game():
+class Game(object):
     """Die Game Klasse ist die gemeinsame Hauptklasse für alle Zweipersonen-Spiele und ist somit der Kern des kleinen Frameworks.
     Hier wird der Ablauf der Spiele generell definiert (siehe play()). Manche Methoden (wie checkMove(), _doMove() und _checkEnd())
     müssen in den konkreten Spielklassen überschrieben bzw. implementiert werden.
